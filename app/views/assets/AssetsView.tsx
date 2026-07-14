@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { Plus, Wallet, DollarSign, Percent, Briefcase, Trash2, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import type { AppUser, Product, Asset, Goal } from "~/types";
 import { GOAL_TYPE_CONFIG } from "~/data";
@@ -37,11 +37,11 @@ export function AssetsView({
   const [detailAssetId, setDetailAssetId] = useState<string | null>(null);
   const [confirmRemoveId, setConfirmRemoveId] = useState<string | null>(null);
 
-  const myAssets = assets.filter((a) => a.userId === user.id);
-  const totalValue = myAssets.reduce((s, a) => s + a.currentValue, 0);
-  const totalCost = myAssets.reduce((s, a) => s + a.amount, 0);
-  const totalGain = totalValue - totalCost;
-  const totalRetPct = totalCost > 0 ? (totalGain / totalCost) * 100 : 0;
+  const myAssets = useMemo(() => assets.filter((a) => a.userId === user.id), [assets, user.id]);
+  const totalValue = useMemo(() => myAssets.reduce((s, a) => s + a.currentValue, 0), [myAssets]);
+  const totalCost = useMemo(() => myAssets.reduce((s, a) => s + a.amount, 0), [myAssets]);
+  const totalGain = useMemo(() => totalValue - totalCost, [totalValue, totalCost]);
+  const totalRetPct = useMemo(() => (totalCost > 0 ? (totalGain / totalCost) * 100 : 0), [totalGain, totalCost]);
 
   const saveAsset = (data: Omit<Asset, "id">) => {
     const p = products.find((pr) => pr.id === data.productId)!;

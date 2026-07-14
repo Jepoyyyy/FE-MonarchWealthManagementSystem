@@ -1,14 +1,15 @@
-import { useMemo } from "react";
-import { Wallet, DollarSign, TrendingUp, Briefcase, ArrowUpRight, ArrowDownRight, Layers, Star, ChevronRight } from "lucide-react";
-import { AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import React, { useMemo, Suspense } from "react";
+import { Wallet, DollarSign, TrendingUp, Briefcase, ChevronRight } from "lucide-react";
 import type { AppUser, Product, Asset, View } from "~/types";
 import { maxRiskForProfile, riskLabel, fmt, fmtPct, fmtFull, genHistory } from "~/utils";
 import { ProductTypeBadge } from "~/components/ui/ProductTypeBadge";
 import { RiskLevelBadge } from "~/components/ui/RiskLevelBadge";
 import { PageHeader } from "~/components/ui/PageHeader";
 import { StatCard } from "~/components/ui/StatCard";
-import { Badge } from "~/components/ui/Badge";
 import { Btn } from "~/components/ui/Btn";
+
+const DashboardPerfChart = React.lazy(() => import("~/components/charts/DashboardPerfChart"));
+const DashboardPieChart = React.lazy(() => import("~/components/charts/DashboardPieChart"));
 
 interface DashboardViewProps {
   user: AppUser;
@@ -69,104 +70,23 @@ export function DashboardView({ user, products, assets, onNavigate }: DashboardV
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Performance Chart */}
-        <div className="lg:col-span-2 bg-card rounded-xl p-4 md:p-6 border border-border">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h3 className="font-semibold text-foreground">Portfolio Performance</h3>
-              <p className="text-xs text-muted-foreground">Jan – Jul 2024</p>
-            </div>
-            <Badge className={pnl >= 0 ? "bg-emerald-100 text-emerald-700 border-emerald-200" : "bg-red-100 text-red-700 border-red-200"}>
-              {pnl >= 0 ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
-              {fmtPct(pnlPct)}
-            </Badge>
-          </div>
-          <ResponsiveContainer width="100%" height={200}>
-            <AreaChart data={history} margin={{ top: 5, right: 5, bottom: 0, left: 0 }}>
-              <defs>
-                <linearGradient id="dashPortfolioGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#1a3a5c" stopOpacity={0.15} />
-                  <stop offset="95%" stopColor="#1a3a5c" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" />
-              <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#6b7a8f" }} axisLine={false} tickLine={false} />
-              <YAxis
-                tick={{ fontSize: 10, fill: "#6b7a8f" }}
-                axisLine={false}
-                tickLine={false}
-                tickFormatter={(v) => fmt(v).replace("IDR ", "")}
-                width={60}
-              />
-              <Tooltip
-                formatter={(v: any) => [fmtFull(v), "Value"]}
-                contentStyle={{ fontSize: 12, borderRadius: 8, border: "1px solid var(--border)" }}
-              />
-              <Area type="monotone" dataKey="value" stroke="#1a3a5c" strokeWidth={2} fill="url(#dashPortfolioGrad)" />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
+        <Suspense fallback={<div className="lg:col-span-2 h-64 bg-muted animate-pulse rounded-xl" />}>
+          <DashboardPerfChart data={history} pnlPct={pnlPct} fmt={fmtFull} />
+        </Suspense>
 
         {/* Allocation Pie */}
-        <div className="bg-card rounded-xl p-4 md:p-6 border border-border">
-          <h3 className="font-semibold mb-4 text-foreground">Allocation</h3>
-          {allocationData.length > 0 ? (
-            <>
-              <ResponsiveContainer width="100%" height={150}>
-                <PieChart>
-                  <Pie
-                    data={allocationData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={45}
-                    outerRadius={70}
-                    dataKey="value"
-                    stroke="none"
-                  >
-                    {allocationData.map((_, i) => (
-                      <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    formatter={(v: any) => [fmt(v), "Value"]}
-                    contentStyle={{ fontSize: 11, borderRadius: 8 }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="flex flex-col gap-2 mt-3">
-                {allocationData.map((d, i) => (
-                  <div key={i} className="flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="w-2 h-2 rounded-full"
-                        style={{ background: PIE_COLORS[i % PIE_COLORS.length] }}
-                      />
-                      <span className="text-muted-foreground truncate max-w-[110px]">{d.name}</span>
-                    </div>
-                    <span
-                      className="font-medium text-foreground"
-                      style={{ fontFamily: "var(--font-mono)" }}
-                    >
-                      {((d.value / totalValue) * 100).toFixed(0)}%
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </>
-          ) : (
-            <div className="h-[180px] flex items-center justify-center text-center">
-              <div>
-                <Briefcase size={32} className="text-muted-foreground mx-auto mb-2" />
-                <p className="text-xs text-muted-foreground">No holdings yet</p>
-                <Btn size="sm" variant="secondary" className="mt-3" onClick={() => onNavigate("/products")}>
-                  Browse Products
-                </Btn>
-              </div>
-            </div>
-          )}
-        </div>
+        <Suspense fallback={<div className="h-64 bg-muted animate-pulse rounded-xl" />}>
+          <DashboardPieChart
+            data={allocationData.map((d, i) => ({
+              name: d.name,
+              value: Math.round((d.value / totalValue) * 100),
+              color: PIE_COLORS[i % PIE_COLORS.length],
+            }))}
+          />
+        </Suspense>
       </div>
 
-      {/* Recommendations widget */}
+            {/* Recommendations widget */}
       <div className="bg-card rounded-xl p-4 md:p-6 border border-border">
         <div className="flex items-center justify-between mb-4">
           <div>

@@ -1,11 +1,13 @@
-import { useMemo } from "react";
+import React, { useMemo, Suspense } from "react";
 import { DollarSign, Users, Layers, Activity } from "lucide-react";
-import { AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import type { AppUser, Product, Asset, AuditLog, Goal } from "~/types";
 import { fmt, fmtDate, genHistory, categoryBadge } from "~/utils";
 import { PageHeader } from "~/components/ui/PageHeader";
 import { StatCard } from "~/components/ui/StatCard";
 import { Badge } from "~/components/ui/Badge";
+
+const DashboardPerfChart = React.lazy(() => import("~/components/charts/DashboardPerfChart"));
+const DashboardPieChart = React.lazy(() => import("~/components/charts/DashboardPieChart"));
 
 interface AdminDashboardViewProps {
   users: AppUser[];
@@ -40,72 +42,13 @@ export function AdminDashboardView({ users, products, assets, logs }: AdminDashb
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-card rounded-xl p-4 md:p-6 border border-border">
-          <h3 className="font-semibold mb-1 text-foreground">AUM Trend</h3>
-          <p className="text-xs text-muted-foreground mb-4">Total assets under management</p>
-          <ResponsiveContainer width="100%" height={200}>
-            <AreaChart data={aumHistory}>
-              <defs>
-                <linearGradient id="adminAumGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#b8860b" stopOpacity={0.2} />
-                  <stop offset="95%" stopColor="#b8860b" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" />
-              <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#6b7a8f" }} axisLine={false} tickLine={false} />
-              <YAxis
-                tick={{ fontSize: 10, fill: "#6b7a8f" }}
-                axisLine={false}
-                tickLine={false}
-                tickFormatter={(v) => fmt(v).replace("IDR ", "")}
-                width={60}
-              />
-              <Tooltip
-                formatter={(v: any) => [fmt(v), "AUM"]}
-                contentStyle={{ fontSize: 12, borderRadius: 8 }}
-              />
-              <Area type="monotone" dataKey="value" stroke="#b8860b" strokeWidth={2} fill="url(#adminAumGrad)" />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
+        <Suspense fallback={<div className="lg:col-span-2 h-64 bg-muted animate-pulse rounded-xl" />}>
+          <DashboardPerfChart data={aumHistory} pnlPct={0} fmt={fmt} />
+        </Suspense>
 
-        <div className="bg-card rounded-xl p-4 md:p-6 border border-border">
-          <h3 className="font-semibold mb-4 text-foreground">Risk Profile Distribution</h3>
-          <ResponsiveContainer width="100%" height={140}>
-            <PieChart>
-              <Pie
-                data={profileDist}
-                cx="50%"
-                cy="50%"
-                innerRadius={40}
-                outerRadius={65}
-                dataKey="value"
-                stroke="none"
-              >
-                {profileDist.map((d, i) => (
-                  <Cell key={i} fill={d.color} />
-                ))}
-              </Pie>
-              <Tooltip contentStyle={{ fontSize: 11, borderRadius: 8 }} />
-            </PieChart>
-          </ResponsiveContainer>
-          <div className="flex flex-col gap-2 mt-3">
-            {profileDist.map((d) => (
-              <div key={d.name} className="flex items-center justify-between text-xs">
-                <div className="flex items-center gap-2">
-                  <div className="w-2.5 h-2.5 rounded-full" style={{ background: d.color }} />
-                  <span className="text-muted-foreground">{d.name}</span>
-                </div>
-                <span
-                  className="font-semibold text-foreground"
-                  style={{ fontFamily: "var(--font-mono)" }}
-                >
-                  {d.value}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
+        <Suspense fallback={<div className="h-64 bg-muted animate-pulse rounded-xl" />}>
+          <DashboardPieChart data={profileDist} />
+        </Suspense>
       </div>
 
       {/* Recent logs */}

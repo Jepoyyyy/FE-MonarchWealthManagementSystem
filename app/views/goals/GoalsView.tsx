@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { Plus, Wallet, TrendingDown, DollarSign, Target, TrendingUp, Calculator, Star } from "lucide-react";
 import type { AppUser, Goal, FinancialProfile, Asset, Product } from "~/types";
 import { fmt } from "~/utils";
@@ -35,31 +35,39 @@ export function GoalsView({
   const [editGoal, setEditGoal] = useState<Goal | null>(null);
   const [calcDraft, setCalcDraft] = useState<FinancialProfile | null>(null);
 
-  const totalExpenses = Object.values(finProfile.expenses).reduce((a, b) => a + b, 0);
-  const surplus = finProfile.monthlyIncome - totalExpenses;
-  const totalAllocated = goals.reduce((s, g) => s + g.monthlyContribution, 0);
-  const unallocated = surplus - totalAllocated;
+  const totalExpenses = useMemo(
+    () => Object.values(finProfile.expenses).reduce((a, b) => a + b, 0),
+    [finProfile.expenses]
+  );
+  const surplus = useMemo(() => finProfile.monthlyIncome - totalExpenses, [finProfile.monthlyIncome, totalExpenses]);
+  const totalAllocated = useMemo(() => goals.reduce((s, g) => s + g.monthlyContribution, 0), [goals]);
+  const unallocated = useMemo(() => surplus - totalAllocated, [surplus, totalAllocated]);
 
-  const myAssets = assets.filter((a) => a.userId === user.id);
-  const portfolioValue = myAssets.reduce((s, a) => s + a.currentValue, 0);
-  const portfolioReturn =
-    portfolioValue > 0
-      ? parseFloat(
-          myAssets
-            .reduce((s, a) => {
-              const p = products.find((pr) => pr.id === a.productId);
-              return s + (p ? (a.currentValue / portfolioValue) * p.annualReturn : 0);
-            }, 0)
-            .toFixed(2)
-        )
-      : null;
+  const myAssets = useMemo(() => assets.filter((a) => a.userId === user.id), [assets, user.id]);
+  const portfolioValue = useMemo(() => myAssets.reduce((s, a) => s + a.currentValue, 0), [myAssets]);
+  const portfolioReturn = useMemo(
+    () =>
+      portfolioValue > 0
+        ? parseFloat(
+            myAssets
+              .reduce((s, a) => {
+                const p = products.find((pr) => pr.id === a.productId);
+                return s + (p ? (a.currentValue / portfolioValue) * p.annualReturn : 0);
+              }, 0)
+              .toFixed(2)
+          )
+        : null,
+    [myAssets, portfolioValue, products]
+  );
 
-  const priorityGoal = goals.find((g) => g.isPriority);
-  const otherGoals = goals.filter((g) => !g.isPriority);
+  const priorityGoal = useMemo(() => goals.find((g) => g.isPriority), [goals]);
+  const otherGoals = useMemo(() => goals.filter((g) => !g.isPriority), [goals]);
 
-  const isAutoAlloc = goals.length >= 2 && !!priorityGoal;
-  const primaryPct =
-    isAutoAlloc && surplus > 0 ? Math.round((priorityGoal!.monthlyContribution / surplus) * 100) : 50;
+  const isAutoAlloc = useMemo(() => goals.length >= 2 && !!priorityGoal, [goals.length, priorityGoal]);
+  const primaryPct = useMemo(
+    () => (isAutoAlloc && surplus > 0 ? Math.round((priorityGoal!.monthlyContribution / surplus) * 100) : 50),
+    [isAutoAlloc, surplus, priorityGoal]
+  );
 
   React.useEffect(() => {
     const currentPriority = goals.find((g) => g.isPriority);
@@ -136,25 +144,33 @@ export function GoalsView({
     setGoals((prev) => prev.filter((g) => g.id !== id));
   };
 
-  const updateIncome = (val: string) =>
-    setCalcDraft((cur) => ({ ...(cur ?? finProfile), monthlyIncome: parseFloat(val) || 0 }));
-  const updateExpense = (key: string, val: string) =>
-    setCalcDraft((cur) => ({
-      ...(cur ?? finProfile),
-      expenses: { ...(cur ?? finProfile).expenses, [key]: parseFloat(val) || 0 },
-    }));
-  const handleSaveCalc = () => {
+  const updateIncome = useCallback(
+    (val: string) => setCalcDraft((cur) => ({ ...(cur ?? finProfile), monthlyIncome: parseFloat(val) || 0 })),
+    [finProfile]
+  );
+  const updateExpense = useCallback(
+    (key: string, val: string) =>
+      setCalcDraft((cur) => ({
+        ...(cur ?? finProfile),
+        expenses: { ...(cur ?? finProfile).expenses, [key]: parseFloat(val) || 0 },
+      })),
+    [finProfile]
+  );
+  const handleSaveCalc = useCallback(() => {
     if (calcDraft) setFinProfile(calcDraft);
     setCalcDraft(null);
     toast.success("Data kalkulator berhasil disimpan");
-  };
+  }, [calcDraft, setFinProfile, toast]);
 
-  const avgFunded =
-    goals.length > 0
-      ? Math.round(
-          goals.reduce((s, g) => s + Math.min((g.currentSaved / g.targetAmount) * 100, 100), 0) / goals.length
-        )
-      : 0;
+  const avgFunded = useMemo(
+    () =>
+      goals.length > 0
+        ? Math.round(
+            goals.reduce((s, g) => s + Math.min((g.currentSaved / g.targetAmount) * 100, 100), 0) / goals.length
+          )
+        : 0,
+    [goals]
+  );
 
   return (
     <div className="space-y-6">
