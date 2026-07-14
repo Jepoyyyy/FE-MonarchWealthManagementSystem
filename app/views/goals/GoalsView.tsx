@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import { Calculator, Plus, Wallet, TrendingDown, DollarSign, Target, TrendingUp, Check, Star } from "lucide-react";
-import type { AppUser, Goal, FinancialProfile, Asset, Product, GoalType } from "~/types";
-import { GOAL_TYPE_CONFIG } from "~/data";
-import { fmt, riskLabel } from "~/utils";
+import { Plus, Wallet, TrendingDown, DollarSign, Target, TrendingUp, Calculator, Star } from "lucide-react";
+import type { AppUser, Goal, FinancialProfile, Asset, Product } from "~/types";
+import { fmt } from "~/utils";
 import { PageHeader } from "~/components/ui/PageHeader";
 import { StatCard } from "~/components/ui/StatCard";
-import { InputField } from "~/components/ui/InputField";
 import { Btn } from "~/components/ui/Btn";
 import { GoalCard } from "./GoalCard";
 import { GoalFormModal } from "./GoalFormModal";
+import { WealthCalculator } from "./WealthCalculator";
 
 interface GoalsViewProps {
   user: AppUser;
@@ -35,17 +34,6 @@ export function GoalsView({
   const [showAddGoal, setShowAddGoal] = useState(false);
   const [editGoal, setEditGoal] = useState<Goal | null>(null);
   const [calcDraft, setCalcDraft] = useState<FinancialProfile | null>(null);
-
-  const EXPENSE_LABELS: Record<string, string> = {
-    housing: "Housing / Rent",
-    food: "Food & Groceries",
-    transport: "Transport",
-    utilities: "Utilities",
-    healthcare: "Healthcare",
-    entertainment: "Entertainment",
-    insurance: "Insurance",
-    other: "Other",
-  };
 
   const totalExpenses = Object.values(finProfile.expenses).reduce((a, b) => a + b, 0);
   const surplus = finProfile.monthlyIncome - totalExpenses;
@@ -207,230 +195,24 @@ export function GoalsView({
 
       {/* Income & Expense Calculator */}
       {showCalc && (
-        <div className="bg-card rounded-xl border border-border overflow-hidden">
-          <div
-            className="flex items-center justify-between px-6 py-4 border-b border-border"
-          >
-            <div className="flex items-center gap-2">
-              <Calculator size={16} className="text-primary" />
-              <h3 className="font-semibold text-foreground">Wealth Calculator</h3>
-            </div>
-            <div className="flex items-center gap-4 text-xs">
-              <span className="text-muted-foreground">Surplus available to invest:</span>
-              <span
-                className={`font-bold text-sm ${surplus >= 0 ? "text-emerald-600" : "text-red-500"}`}
-                style={{ fontFamily: "var(--font-mono)" }}
-              >
-                {surplus >= 0 ? "+" : ""}
-                {fmt(surplus)}/mo
-              </span>
-              <Btn size="sm" onClick={handleSaveCalc} disabled={!calcDraft}>
-                <Check size={14} /> Simpan
-              </Btn>
-            </div>
-          </div>
-          <div className="p-6">
-            <div className="grid lg:grid-cols-2 gap-6">
-              {/* Income */}
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                  <h4 className="text-sm font-semibold text-foreground">Monthly Income</h4>
-                </div>
-                <InputField
-                  label="Gross Monthly Income (IDR)"
-                  type="number"
-                  value={(calcDraft ?? finProfile).monthlyIncome || ""}
-                  onChange={(e) => updateIncome(e.target.value)}
-                  placeholder="e.g. 15000000"
-                  icon={<DollarSign size={14} />}
-                />
-                {portfolioReturn !== null && (
-                  <div
-                    className="mt-3 flex items-center justify-between px-3 py-2.5 rounded-lg bg-muted border border-border"
-                  >
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <Calculator size={13} />
-                      <span>Actual portfolio return (weighted avg.)</span>
-                    </div>
-                    <span
-                      className="text-sm font-bold text-accent"
-                      style={{ fontFamily: "var(--font-mono)" }}
-                    >
-                      {portfolioReturn}% p.a.
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              {/* Expenses */}
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-2 h-2 rounded-full bg-red-400" />
-                  <h4 className="text-sm font-semibold text-foreground">Monthly Expenses</h4>
-                </div>
-                <div className="grid grid-cols-2 gap-2.5">
-                  {Object.entries((calcDraft ?? finProfile).expenses).map(([key, val]) => (
-                    <div key={key} className="flex flex-col gap-1">
-                      <label className="text-xs text-muted-foreground">{EXPENSE_LABELS[key]}</label>
-                      <input
-                        type="number"
-                        value={val || ""}
-                        onChange={(e) => updateExpense(key, e.target.value)}
-                        placeholder="0"
-                        className="w-full px-2.5 py-2 rounded-md border text-xs focus:outline-none focus:ring-2 focus:ring-primary/20"
-                        style={{
-                          borderColor: "var(--border)",
-                          background: "var(--input-background)",
-                          color: "var(--foreground)",
-                          fontFamily: "var(--font-mono)",
-                        }}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Allocation summary */}
-            <div className="mt-5 p-4 rounded-xl bg-muted">
-              <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-                Monthly Surplus Allocation
-              </h4>
-              <div className="flex flex-col gap-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-foreground">Investable surplus</span>
-                  <span
-                    className="font-semibold text-foreground"
-                    style={{ fontFamily: "var(--font-mono)" }}
-                  >
-                    {fmt(Math.max(surplus, 0))}
-                  </span>
-                </div>
-                <div className="w-full h-3 rounded-full overflow-hidden bg-border">
-                  <div
-                    className="h-3 rounded-full"
-                    style={{
-                      width: `${surplus > 0 ? Math.min((totalAllocated / surplus) * 100, 100) : 0}%`,
-                      background: unallocated < 0 ? "#ef4444" : "var(--primary)",
-                    }}
-                  />
-                </div>
-
-                {/* Auto-allocation */}
-                {isAutoAlloc && surplus > 0 && (
-                  <div
-                    className="mt-2 p-3 rounded-lg border border-border bg-card"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <label className="text-xs font-semibold flex items-center gap-1.5 text-foreground">
-                        <Star size={11} className="text-amber-500" />
-                        {priorityGoal!.name} — primary allocation
-                      </label>
-                      <span
-                        className="text-xs font-bold"
-                        style={{ fontFamily: "var(--font-mono)", color: priorityGoal!.color }}
-                      >
-                        {primaryPct}%
-                      </span>
-                    </div>
-                    <input
-                      type="range"
-                      min={0}
-                      max={100}
-                      step={5}
-                      value={primaryPct}
-                      onChange={(e) => handleAutoAlloc(parseInt(e.target.value))}
-                      className="w-full accent-primary h-1.5 rounded-full cursor-pointer"
-                    />
-                    <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                      <span>0%</span>
-                      <span>100%</span>
-                    </div>
-                    <div className="mt-2 space-y-1 text-xs">
-                      <div className="flex justify-between text-foreground">
-                        <span className="flex items-center gap-1">
-                          <div
-                            className="w-1.5 h-1.5 rounded-full"
-                            style={{ background: priorityGoal!.color }}
-                          />{" "}
-                          {priorityGoal!.name}
-                        </span>
-                        <span className="font-semibold" style={{ fontFamily: "var(--font-mono)" }}>
-                          {fmt(priorityGoal!.monthlyContribution)}
-                        </span>
-                      </div>
-                      {otherGoals.map((g) => (
-                        <div key={g.id} className="flex justify-between text-muted-foreground">
-                          <span className="flex items-center gap-1">
-                            <div
-                              className="w-1.5 h-1.5 rounded-full"
-                              style={{ background: g.color }}
-                            />{" "}
-                            {g.name}
-                          </span>
-                          <span style={{ fontFamily: "var(--font-mono)" }}>
-                            {fmt(g.monthlyContribution)}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                    <p
-                      className="text-xs text-muted-foreground mt-2 pt-2 border-t border-border"
-                    >
-                      Other goals split the remaining{" "}
-                      <span className="font-semibold">
-                        {fmt(Math.max(0, surplus - priorityGoal!.monthlyContribution))}
-                      </span>{" "}
-                      equally (
-                      {fmt(
-                        Math.floor(
-                          Math.max(0, surplus - priorityGoal!.monthlyContribution) /
-                            (otherGoals.length || 1)
-                        )
-                      )}
-                      /ea)
-                    </p>
-                  </div>
-                )}
-
-                {/* Manual allocation */}
-                {!isAutoAlloc &&
-                  goals.map((g) => (
-                    <div key={g.id} className="flex justify-between text-xs text-muted-foreground">
-                      <span className="flex items-center gap-1.5">
-                        <div
-                          className="w-1.5 h-1.5 rounded-full"
-                          style={{ background: g.color }}
-                        />
-                        {g.name}
-                      </span>
-                      <span style={{ fontFamily: "var(--font-mono)" }}>
-                        {fmt(g.monthlyContribution)}
-                      </span>
-                    </div>
-                  ))}
-
-                <div
-                  className="flex justify-between text-xs font-semibold border-t border-border pt-2"
-                >
-                  <span style={{ color: unallocated < 0 ? "#ef4444" : "var(--foreground)" }}>
-                    {goals.length === 0 ? "Not yet allocated" : "Unallocated"}
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: "var(--font-mono)",
-                      color: unallocated < 0 ? "#ef4444" : "#10b981",
-                    }}
-                  >
-                    {unallocated >= 0 ? "+" : ""}
-                    {fmt(unallocated)}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <WealthCalculator
+          surplus={surplus}
+          totalExpenses={totalExpenses}
+          portfolioReturn={portfolioReturn}
+          finProfile={finProfile}
+          calcDraft={calcDraft}
+          updateIncome={updateIncome}
+          updateExpense={updateExpense}
+          handleSaveCalc={handleSaveCalc}
+          totalAllocated={totalAllocated}
+          unallocated={unallocated}
+          isAutoAlloc={isAutoAlloc}
+          priorityGoal={priorityGoal}
+          primaryPct={primaryPct}
+          otherGoals={otherGoals}
+          goals={goals}
+          handleAutoAlloc={handleAutoAlloc}
+        />
       )}
 
       {/* No goals state */}
