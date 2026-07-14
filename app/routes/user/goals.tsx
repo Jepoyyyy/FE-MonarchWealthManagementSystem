@@ -1,0 +1,32 @@
+import { useEffect } from "react";
+import { useOutletContext, useNavigate } from "react-router";
+import type { LayoutContextType } from "~/routes/layout";
+import { GoalsView } from "~/views/goals/GoalsView";
+
+export default function GoalsRoute() {
+  const context = useOutletContext<LayoutContextType>();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (context.currentUser && context.currentUser.role === "admin") {
+      navigate("/admin", { replace: true });
+    }
+  }, [context.currentUser, navigate]);
+
+  if (!context.currentUser || context.currentUser.role === "admin") {
+    return null;
+  }
+
+  return (
+    <GoalsView
+      user={context.currentUser}
+      goals={context.goals}
+      setGoals={context.setGoals}
+      finProfile={context.finProfile}
+      setFinProfile={context.setFinProfile}
+      assets={context.assets}
+      products={context.products}
+      toast={context.toast}
+    />
+  );
+}

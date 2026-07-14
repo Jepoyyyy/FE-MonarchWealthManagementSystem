@@ -1,18 +1,22 @@
 import type { LucideIcon } from "lucide-react";
+import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 
 interface StatCardProps {
-  title: string;
+  title?: string;
+  label?: string; // mapping to title for monolith compatibility
   value: string | number;
   unit?: "currency" | "percent" | "count";
-  icon?: LucideIcon;
+  icon?: LucideIcon | React.ReactNode;
+  sub?: string;
+  trend?: "up" | "down" | "neutral";
 }
 
-export function StatCard({ title, value, unit, icon: Icon }: StatCardProps) {
+export function StatCard({ title, label, value, unit, icon, sub, trend }: StatCardProps) {
+  const displayTitle = title || label || "";
+
   const formatValue = (val: string | number, unitType?: string): string => {
-    // If value is already a string, return as-is
     if (typeof val === "string") return val;
 
-    // Handle numeric formatting
     switch (unitType) {
       case "currency":
         return new Intl.NumberFormat("id-ID", {
@@ -37,19 +41,37 @@ export function StatCard({ title, value, unit, icon: Icon }: StatCardProps) {
     }
   };
 
+  const renderIcon = () => {
+    if (!icon) return null;
+    if (typeof icon === "function") {
+      const IconComp = icon as LucideIcon;
+      return <IconComp className="h-5 w-5 text-gray-400" />;
+    }
+    return icon;
+  };
+
   return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-      <div className="flex items-start justify-between mb-2">
-        <h3 className="text-sm font-medium text-gray-500">
-          {title}
-        </h3>
-        {Icon && (
-          <Icon className="h-5 w-5 text-gray-400" />
+    <div className="bg-card rounded-xl border border-border shadow-sm p-5 flex flex-col gap-3">
+      <div className="flex items-center justify-between">
+        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+          {displayTitle}
+        </span>
+        <span className="text-muted-foreground">{renderIcon()}</span>
+      </div>
+      <div>
+        <p className="text-2xl font-bold tracking-tight text-foreground" style={{ fontFamily: "var(--font-mono)" }}>
+          {formatValue(value, unit)}
+        </p>
+        {sub && (
+          <p className={`text-xs mt-1.5 flex items-center gap-1 ${
+            trend === "up" ? "text-emerald-600 font-medium" : trend === "down" ? "text-red-500 font-medium" : "text-muted-foreground"
+          }`}>
+            {trend === "up" && <ArrowUpRight size={12} />}
+            {trend === "down" && <ArrowDownRight size={12} />}
+            {sub}
+          </p>
         )}
       </div>
-      <p className="text-2xl font-bold text-gray-900 ">
-        {formatValue(value, unit)}
-      </p>
     </div>
   );
 }

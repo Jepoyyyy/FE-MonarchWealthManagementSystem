@@ -1,0 +1,134 @@
+import React, { useState } from "react";
+import { Mail, Lock, Eye, EyeOff, AlertTriangle } from "lucide-react";
+import type { AppUser, AuditLog, View } from "~/types";
+import { AuthShell } from "~/components/ui/AuthShell";
+import { InputField } from "~/components/ui/InputField";
+import { Btn } from "~/components/ui/Btn";
+import { Shield } from "lucide-react";
+
+interface LoginViewProps {
+  users: AppUser[];
+  onLogin: (u: AppUser) => void;
+  onNavigate: (v: View) => void;
+  addLog: (l: Omit<AuditLog, "id">) => void;
+}
+
+export function LoginView({ users, onLogin, onNavigate, addLog }: LoginViewProps) {
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+  const [showPass, setShowPass] = useState(false);
+  const [error, setError] = useState("");
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const user = users.find((u) => u.email === email && u.password === pass);
+    if (!user) {
+      setError("Invalid email or password.");
+      return;
+    }
+    if (user.status === "suspended") {
+      addLog({
+        userId: user.id,
+        userName: user.name,
+        action: "LOGIN_FAILED",
+        details: "Login blocked — account is suspended",
+        timestamp: new Date().toISOString(),
+        category: "auth",
+      });
+      setError("Your account has been suspended. Contact support.");
+      return;
+    }
+    addLog({
+      userId: user.id,
+      userName: user.name,
+      action: "LOGIN",
+      details: `Successful login`,
+      timestamp: new Date().toISOString(),
+      category: "auth",
+    });
+    onLogin(user);
+  };
+
+  return (
+    <AuthShell>
+      <div className="mb-8">
+        <div className="flex items-center gap-2 mb-6 lg:hidden">
+          <Shield size={20} className="text-primary" />
+          <span className="font-semibold" style={{ fontFamily: "var(--font-serif)" }}>
+            WealthMS
+          </span>
+        </div>
+        <h2 className="text-2xl font-bold text-foreground" style={{ fontFamily: "var(--font-serif)" }}>
+          Welcome back
+        </h2>
+        <p className="text-muted-foreground text-sm mt-1">Sign in to your account to continue</p>
+      </div>
+      <form onSubmit={submit} className="flex flex-col gap-4">
+        <InputField
+          label="Email address"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="you@example.com"
+          icon={<Mail size={15} />}
+          required
+        />
+        <div className="flex flex-col gap-1.5 w-full">
+          <label className="text-sm font-medium text-foreground">Password</label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground flex items-center justify-center">
+              <Lock size={15} />
+            </span>
+            <input
+              type={showPass ? "text" : "password"}
+              value={pass}
+              onChange={(e) => setPass(e.target.value)}
+              className="w-full pl-10 pr-10 py-2.5 rounded-md border text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary"
+              style={{
+                borderColor: "var(--border)",
+                background: "var(--input-background)",
+                color: "var(--foreground)",
+              }}
+              placeholder="Enter your password"
+              required
+            />
+            <Btn
+              variant="unstyled"
+              type="button"
+              onClick={() => setShowPass((s) => !s)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground flex items-center justify-center"
+            >
+              {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
+            </Btn>
+          </div>
+        </div>
+        {error && (
+          <p className="text-xs text-red-500 flex items-center gap-1">
+            <AlertTriangle size={12} />
+            {error}
+          </p>
+        )}
+        <Btn type="submit" className="w-full mt-2">
+          Sign In
+        </Btn>
+      </form>
+      <div className="mt-6 pt-6 border-t border-border">
+        <p className="text-sm text-center text-muted-foreground">
+          Don't have an account?{" "}
+          <Btn
+            variant="unstyled"
+            onClick={() => onNavigate("register")}
+            className="font-medium hover:underline text-primary"
+          >
+            Create one
+          </Btn>
+        </p>
+        <div className="mt-4 p-3 rounded-lg text-xs text-muted-foreground" style={{ background: "var(--muted)" }}>
+          <p className="font-medium mb-1">Demo accounts:</p>
+          <p>Admin: admin@wms.id / Admin123!</p>
+          <p>User: budi@example.com / User123!</p>
+        </div>
+      </div>
+    </AuthShell>
+  );
+}

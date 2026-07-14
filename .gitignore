@@ -1,6 +1,13 @@
 .DS_Store
 .env
 /node_modules/
+/.opencode/
+/.claude/
+/docs/
+/.opencode/
+/.hermes/
+AGENTS.md
+CHANGES.md
 
 # React Router
 /.react-router/
