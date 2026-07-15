@@ -18,6 +18,6 @@ export default function AdminAuditRoute() {
   }
 
   return (
-    <AdminAuditView logs={context.logs} />
+    <AdminAuditView />
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, Suspense } from "react";
+import React, { useState, useMemo, Suspense, useEffect } from "react";
 import { Target, TrendingUp, Calendar, DollarSign, Percent, AlertTriangle, Wallet, Clock, BarChart3 } from "lucide-react";
 import type { AppUser, Goal, Asset, Product, FinancialProfile } from "~/types";
 import { fmt, fmtDate, genHistory, projectedDate, fmtPct, fmtDuration, fmtFull } from "~/utils";
@@ -7,21 +7,26 @@ import { ProductTypeBadge } from "~/components/ui/ProductTypeBadge";
 import { PageHeader } from "~/components/ui/PageHeader";
 import { StatCard } from "~/components/ui/StatCard";
 import { Badge } from "~/components/ui/Badge";
+import { usePortfolioStore } from "~/stores/portofolioStore";
 
 const ProgressGoalChart = React.lazy(() => import("~/components/charts/ProgressGoalChart"));
 
 interface ProgressViewProps {
   user: AppUser;
   products: Product[];
-  assets: Asset[];
   goals: Goal[];
   finProfile: FinancialProfile;
 }
 
-export function ProgressView({ user, products, assets, goals, finProfile }: ProgressViewProps) {
-  const myAssets = assets.filter((a) => a.userId === user.id);
-  const totalValue = myAssets.reduce((s, a) => s + a.currentValue, 0);
-  const totalCost = myAssets.reduce((s, a) => s + a.amount, 0);
+export function ProgressView({ user, products, goals, finProfile }: ProgressViewProps) {
+  const { assets: myAssets, pnlData, fetchPortfolio } = usePortfolioStore();
+
+  useEffect(() => {
+    fetchPortfolio();
+  }, [fetchPortfolio]);
+
+  const totalValue = pnlData.reduce((s, a) => s + a.currentValue, 0);
+  const totalCost = pnlData.reduce((s, a) => s + (a.units * a.avgPrice), 0);
   const portfolioGain = totalValue - totalCost;
 
   const earliestMs =
@@ -271,13 +276,13 @@ export function ProgressView({ user, products, assets, goals, finProfile }: Prog
       <div className="bg-card rounded-xl p-4 md:p-6 border border-border">
         <h3 className="font-semibold mb-4 text-foreground">Position Breakdown</h3>
         <div className="flex flex-col gap-3">
-          {myAssets.map((a) => {
-            const p = products.find((pr) => pr.id === a.productId);
+          {pnlData.map((pnl) => {
+            const p = products.find((pr) => pr.id === pnl.productId);
             if (!p) return null;
-            const ret = ((a.currentValue - a.amount) / a.amount) * 100;
-            const share = totalValue > 0 ? (a.currentValue / totalValue) * 100 : 0;
+            const ret = pnl.potentialPnlPercent;
+            const share = totalValue > 0 ? (pnl.currentValue / totalValue) * 100 : 0;
             return (
-              <div key={a.id}>
+              <div key={pnl.assetId}>
                 <div className="flex items-center justify-between mb-1 text-xs">
                   <div className="flex items-center gap-2">
                     <ProductTypeBadge type={p.type} />
@@ -298,7 +303,7 @@ export function ProgressView({ user, products, assets, goals, finProfile }: Prog
                         textAlign: "right",
                       }}
                     >
-                      {fmt(a.currentValue)}
+                      {fmt(pnl.currentValue)}
                     </span>
                   </div>
                 </div>
@@ -314,7 +319,7 @@ export function ProgressView({ user, products, assets, goals, finProfile }: Prog
               </div>
             );
           })}
-          {myAssets.length === 0 && (
+          {pnlData.length === 0 && (
             <p className="text-sm text-muted-foreground text-center py-6">No positions to display</p>
           )}
         </div>

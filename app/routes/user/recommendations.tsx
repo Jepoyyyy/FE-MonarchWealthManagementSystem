@@ -24,7 +24,6 @@ export default function RecommendationsRoute() {
       products={context.products}
       goals={context.goals}
       finProfile={context.finProfile}
-      setAssets={context.setAssets}
       addLog={context.addLog}
       toast={context.toast}
     />

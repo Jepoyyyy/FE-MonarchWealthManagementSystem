@@ -1,0 +1,35 @@
+- generic [ref=f4e2]:
+  - generic [ref=f4e3]:
+    - generic [ref=f4e4]:
+      - generic [ref=f4e5]: WealthMS
+      - generic [ref=f4e10]:
+        - heading "Grow your wealth with confidence." [level=1] [ref=f4e11]: Grow your wealthwith confidence.
+        - paragraph [ref=f4e12]: Personalized investment recommendations tailored to your risk profile across deposits, bonds, mutual funds, and equities.
+        - generic [ref=f4e13]:
+          - generic [ref=f4e14]: Risk-profiled recommendations
+          - generic [ref=f4e19]: Portfolio progress tracking
+          - generic [ref=f4e25]: Diversified product selection
+      - paragraph [ref=f4e32]: © 2024 WealthMS · JWT-secured · All transactions simulated
+    - generic [ref=f4e34]:
+      - generic [ref=f4e35]:
+        - heading "Welcome back" [level=2] [ref=f4e36]
+        - paragraph [ref=f4e37]: Sign in to your account to continue
+      - generic [ref=f4e38]:
+        - generic [ref=f4e39]:
+          - generic [ref=f4e40]: Email address
+          - textbox "you@example.com" [ref=f4e46]
+        - generic [ref=f4e47]:
+          - generic [ref=f4e48]: Password
+          - generic [ref=f4e49]:
+            - textbox "Enter your password" [ref=f4e54]
+            - button [ref=f4e55]
+        - button "Sign In" [ref=f4e59]
+      - generic [ref=f4e60]:
+        - paragraph [ref=f4e61]:
+          - text: Don't have an account?
+          - button "Create one" [active] [ref=f4e62]
+        - generic [ref=f4e63]:
+          - paragraph [ref=f4e64]: "Demo accounts:"
+          - paragraph [ref=f4e65]: "Admin: admin@wms.id / Admin123!"
+          - paragraph [ref=f4e66]: "User: budi@example.com / User123!"
+  - region "Notifications alt+T"

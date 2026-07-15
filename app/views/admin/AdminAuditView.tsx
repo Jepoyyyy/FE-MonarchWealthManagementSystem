@@ -1,20 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, UserCheck, XCircle, CheckCircle, Activity } from "lucide-react";
 import type { AuditLog } from "~/types";
 import { fmtTs, categoryBadge } from "~/utils";
 import { PageHeader } from "~/components/ui/PageHeader";
 import { Btn } from "~/components/ui/Btn";
 import { Badge } from "~/components/ui/Badge";
+import { api } from "~/api/client";
 
 interface AdminAuditViewProps {
-  logs: AuditLog[];
+  logs?: AuditLog[]; // kept for compat but not strictly needed if we fetch all
 }
 
-export function AdminAuditView({ logs }: AdminAuditViewProps) {
+export function AdminAuditView({ logs: propLogs }: AdminAuditViewProps) {
   const [catFilter, setCatFilter] = useState<AuditLog["category"] | "all">("all");
   const [search, setSearch] = useState("");
+  const [logs, setLogs] = useState<AuditLog[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filtered = logs.filter((l) => {
+  useEffect(() => {
+    const fetchLogs = async () => {
+      try {
+        setLoading(true);
+        const res = await api.get("/api/v1/admin/audit-logs");
+        setLogs(res.data);
+      } catch (err) {
+        console.error("Failed to load audit logs:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchLogs();
+  }, []);
+
+  const displayLogs = logs.length > 0 ? logs : (propLogs || []);
+
+  const filtered = displayLogs.filter((l) => {
     if (catFilter !== "all" && l.category !== catFilter) return false;
     if (
       search &&
@@ -45,7 +65,7 @@ export function AdminAuditView({ logs }: AdminAuditViewProps) {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Audit Trail" subtitle={`${logs.length} total events recorded`} />
+      <PageHeader title="Audit Trail" subtitle={`${displayLogs.length} total events recorded`} />
 
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
@@ -95,7 +115,13 @@ export function AdminAuditView({ logs }: AdminAuditViewProps) {
             </tr>
           </thead>
           <tbody>
-            {filtered.length === 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan={5} className="px-4 py-10 text-center text-sm text-muted-foreground animate-pulse">
+                  Loading logs...
+                </td>
+              </tr>
+            ) : filtered.length === 0 ? (
               <tr>
                 <td colSpan={5} className="px-4 py-10 text-center text-sm text-muted-foreground">
                   No events match your filters

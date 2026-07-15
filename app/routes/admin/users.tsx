@@ -19,8 +19,6 @@ export default function AdminUsersRoute() {
 
   return (
     <AdminUsersView
-      users={context.users}
-      setUsers={context.setUsers}
       addLog={context.addLog}
       adminUser={context.currentUser}
       toast={context.toast}

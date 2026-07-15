@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { Plus, Wallet, TrendingDown, DollarSign, Target, TrendingUp, Calculator, Star } from "lucide-react";
 import type { AppUser, Goal, FinancialProfile, Asset, Product } from "~/types";
 import { fmt } from "~/utils";
@@ -8,11 +8,11 @@ import { Btn } from "~/components/ui/Btn";
 import { GoalCard } from "./GoalCard";
 import { GoalFormModal } from "./GoalFormModal";
 import { WealthCalculator } from "./WealthCalculator";
+import { useGoalsStore } from "~/stores/goalsStore";
+import { GoalApi } from "~/api/goals";
 
 interface GoalsViewProps {
   user: AppUser;
-  goals: Goal[];
-  setGoals: React.Dispatch<React.SetStateAction<Goal[]>>;
   finProfile: FinancialProfile;
   setFinProfile: React.Dispatch<React.SetStateAction<FinancialProfile>>;
   assets: Asset[];
@@ -22,8 +22,6 @@ interface GoalsViewProps {
 
 export function GoalsView({
   user,
-  goals,
-  setGoals,
   finProfile,
   setFinProfile,
   assets,
@@ -34,6 +32,12 @@ export function GoalsView({
   const [showAddGoal, setShowAddGoal] = useState(false);
   const [editGoal, setEditGoal] = useState<Goal | null>(null);
   const [calcDraft, setCalcDraft] = useState<FinancialProfile | null>(null);
+
+  const { goals, loading, fetchGoals } = useGoalsStore();
+
+  useEffect(() => {
+    fetchGoals();
+  }, [fetchGoals]);
 
   const totalExpenses = useMemo(
     () => Object.values(finProfile.expenses).reduce((a, b) => a + b, 0),
@@ -69,27 +73,6 @@ export function GoalsView({
     [isAutoAlloc, surplus, priorityGoal]
   );
 
-  React.useEffect(() => {
-    const currentPriority = goals.find((g) => g.isPriority);
-    const currentAutoAlloc = goals.length >= 2 && !!currentPriority;
-    if (!currentAutoAlloc || surplus <= 0 || !currentPriority) return;
-
-    const primaryAmt = currentPriority.monthlyContribution;
-    const remaining = Math.max(0, surplus - primaryAmt);
-    const currentOther = goals.filter((g) => !g.isPriority);
-    const otherCount = currentOther.length;
-    const eachOther = otherCount > 0 ? Math.floor(remaining / otherCount) : 0;
-
-    const needsUpdate = currentOther.some((g) => g.monthlyContribution !== eachOther);
-    if (needsUpdate) {
-      setGoals((prev) =>
-        prev.map((g) =>
-          g.isPriority ? g : { ...g, monthlyContribution: eachOther }
-        )
-      );
-    }
-  }, [goals, surplus]);
-
   const handleAutoAlloc = (pct: number) => {
     if (!priorityGoal || surplus <= 0) return;
     const p = Math.min(Math.max(pct, 0), 100);
@@ -98,50 +81,72 @@ export function GoalsView({
     const otherCount = goals.filter((g) => !g.isPriority).length;
     const eachOther = otherCount > 0 ? Math.floor(remaining / otherCount) : 0;
 
-    setGoals((prev) =>
-      prev.map((g) =>
-        g.isPriority ? { ...g, monthlyContribution: primaryAmt } : { ...g, monthlyContribution: eachOther }
-      )
-    );
-  };
-
-  const addGoal = (data: Omit<Goal, "id">) => {
-    const id = `g${Date.now()}`;
-    const updated = data.isPriority ? goals.map((g) => ({ ...g, isPriority: false })) : goals;
-    setGoals([...updated, { ...data, id }]);
-    toast.success("Goal berhasil ditambahkan", {
-      description: `"${data.name}" — target ${fmt(data.targetAmount)}`,
+    // Local state updating is removed since backend handles it, but for UI responsiveness we might want to re-fetch
+    goals.forEach(async (g) => {
+       const amt = g.isPriority ? primaryAmt : eachOther;
+       if (g.monthlyContribution !== amt) {
+          await GoalApi.update(g.id, { ...g, monthlyContribution: amt } as any);
+       }
     });
-    setShowAddGoal(false);
+    fetchGoals();
   };
 
-  const saveEdit = (data: Omit<Goal, "id">) => {
+  const addGoal = async (data: Omit<Goal, "id">) => {
+    try {
+      await GoalApi.create(data as any);
+      toast.success("Goal berhasil ditambahkan", {
+        description: `"${data.name}" — target ${fmt(data.targetAmount)}`,
+      });
+      setShowAddGoal(false);
+      fetchGoals();
+    } catch (err: any) {
+      toast.error("Gagal menambah goal", { description: err.message });
+    }
+  };
+
+  const saveEdit = async (data: Omit<Goal, "id">) => {
     if (!editGoal) return;
-    const finalData =
-      isAutoAlloc && !editGoal.isPriority && surplus > 0
-        ? {
-            ...data,
-            monthlyContribution: Math.floor(
-              Math.max(0, surplus - Math.round((surplus * primaryPct) / 100)) / (otherGoals.length || 1)
-            ),
-          }
-        : data;
-    const updated = finalData.isPriority
-      ? goals.map((g) => (g.id === editGoal.id ? { ...finalData, id: editGoal.id } : { ...g, isPriority: false }))
-      : goals.map((g) => (g.id === editGoal.id ? { ...finalData, id: editGoal.id } : g));
-    setGoals(updated);
-    toast.success("Goal berhasil diperbarui", { description: `"${finalData.name}"` });
-    setEditGoal(null);
+    try {
+      const finalData =
+        isAutoAlloc && !editGoal.isPriority && surplus > 0
+          ? {
+              ...data,
+              monthlyContribution: Math.floor(
+                Math.max(0, surplus - Math.round((surplus * primaryPct) / 100)) / (otherGoals.length || 1)
+              ),
+            }
+          : data;
+
+      await GoalApi.update(editGoal.id, finalData as any);
+      toast.success("Goal berhasil diperbarui", { description: `"${finalData.name}"` });
+      setEditGoal(null);
+      fetchGoals();
+    } catch (err: any) {
+      toast.error("Gagal memperbarui goal", { description: err.message });
+    }
   };
 
-  const setPriority = (id: string) => {
-    setGoals((prev) => prev.map((g) => ({ ...g, isPriority: g.id === id })));
-    const g = goals.find((x) => x.id === id);
-    toast.success("Priority goal diperbarui", { description: `"${g?.name}" sekarang menjadi prioritas` });
+  const setPriority = async (id: string) => {
+    try {
+      const g = goals.find((x) => x.id === id);
+      if (g) {
+         await GoalApi.update(g.id, { ...g, isPriority: true } as any);
+         toast.success("Priority goal diperbarui", { description: `"${g.name}" sekarang menjadi prioritas` });
+         fetchGoals();
+      }
+    } catch (err: any) {
+      toast.error("Gagal mengubah prioritas", { description: err.message });
+    }
   };
 
-  const deleteGoal = (id: string) => {
-    setGoals((prev) => prev.filter((g) => g.id !== id));
+  const deleteGoal = async (id: string) => {
+    try {
+      await GoalApi.delete(id);
+      fetchGoals();
+      toast.success("Goal berhasil dihapus");
+    } catch (err: any) {
+      toast.error("Gagal menghapus goal", { description: err.message });
+    }
   };
 
   const updateIncome = useCallback(

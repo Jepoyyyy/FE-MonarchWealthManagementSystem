@@ -19,8 +19,6 @@ export default function AdminProductsRoute() {
 
   return (
     <AdminProductsView
-      products={context.products}
-      setProducts={context.setProducts}
       addLog={context.addLog}
       adminUser={context.currentUser}
       toast={context.toast}

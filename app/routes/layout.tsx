@@ -16,6 +16,9 @@ import {
   INIT_FIN_PROFILE,
 } from "~/data";
 import { riskLabel } from "~/utils";
+import { useAuthStore } from "~/stores/authStore";
+import { useEffect } from "react";
+import { api } from "~/api/client";
 
 export interface LayoutContextType {
   currentUser: AppUser | null;
@@ -23,11 +26,8 @@ export interface LayoutContextType {
   users: AppUser[];
   setUsers: React.Dispatch<React.SetStateAction<AppUser[]>>;
   products: Product[];
-  setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
   assets: Asset[];
-  setAssets: React.Dispatch<React.SetStateAction<Asset[]>>;
   goals: Goal[];
-  setGoals: React.Dispatch<React.SetStateAction<Goal[]>>;
   finProfile: FinancialProfile;
   setFinProfile: React.Dispatch<React.SetStateAction<FinancialProfile>>;
   logs: AuditLog[];
@@ -36,18 +36,34 @@ export interface LayoutContextType {
 }
 
 export default function Layout() {
-  const [currentUser, setCurrentUser] = useState<AppUser | null>(null);
+  const authStoreUser = useAuthStore((state) => state.user);
+  const [currentUser, setCurrentUser] = useState<AppUser | null>(authStoreUser);
   const [authView, setAuthView] = useState<View>("login");
+
+  // Sync initial hydration from zustand
+  useEffect(() => {
+    if (authStoreUser && !currentUser) {
+      setCurrentUser(authStoreUser);
+      if (authStoreUser.role === "admin") {
+        setAuthView("admin-dashboard");
+      } else if (!authStoreUser.questionnaireCompleted) {
+        setAuthView("questionnaire");
+      } else {
+        setAuthView("dashboard");
+      }
+    }
+  }, [authStoreUser, currentUser]);
   const [users, setUsers] = useState<AppUser[]>(INIT_USERS);
-  const [products, setProducts] = useState<Product[]>(INIT_PRODUCTS);
-  const [assets, setAssets] = useState<Asset[]>(INIT_ASSETS);
+  const [products] = useState<Product[]>(INIT_PRODUCTS);
+  const [assets] = useState<Asset[]>(INIT_ASSETS);
   const [logs, setLogs] = useState<AuditLog[]>(INIT_LOGS);
-  const [goals, setGoals] = useState<Goal[]>(INIT_GOALS);
+  const [goals] = useState<Goal[]>(INIT_GOALS);
   const [finProfile, setFinProfile] = useState<FinancialProfile>(INIT_FIN_PROFILE);
   const [showResult, setShowResult] = useState(false);
   const [resultProfile, setResultProfile] = useState<{ profile: RiskProfile; score: number } | null>(null);
 
   const addLog = useCallback((l: Omit<AuditLog, "id">) => {
+    // Keep it here for compatibility with contexts, but views can also rely on backend audit trails
     setLogs((prev) => [{ ...l, id: `l${Date.now()}` }, ...prev]);
   }, []);
 
@@ -62,50 +78,37 @@ export default function Layout() {
     }
   };
 
-  const handleRegister = (name: string, email: string, pass: string) => {
-    const newUser: AppUser = {
-      id: `u${Date.now()}`,
-      name,
-      email,
-      password: pass,
-      role: "user",
-      status: "active",
-      riskProfile: null,
-      questionnaireCompleted: false,
-      createdAt: new Date().toISOString().split("T")[0],
-      totalAssets: 0,
-    };
-    setUsers((prev) => [...prev, newUser]);
-    addLog({
-      userId: newUser.id,
-      userName: newUser.name,
-      action: "REGISTER",
-      details: "New account created",
-      timestamp: new Date().toISOString(),
-      category: "auth",
-    });
-    setCurrentUser(newUser);
+  const handleRegister = (user: AppUser) => {
+    setCurrentUser(user);
     setAuthView("questionnaire");
   };
 
-  const handleQuestionnaire = (profile: RiskProfile, score: number) => {
+  const handleQuestionnaire = async (profile: RiskProfile, score: number, answers: { questionnaireAnswer: string; score: number }[]) => {
     if (!currentUser) return;
-    const updated = { ...currentUser, riskProfile: profile, questionnaireCompleted: true };
-    setCurrentUser(updated);
-    setUsers((prev) => prev.map((u) => (u.id === currentUser.id ? updated : u)));
-    addLog({
-      userId: currentUser.id,
-      userName: currentUser.name,
-      action: "QUESTIONNAIRE_COMPLETE",
-      details: `Risk profile set to ${riskLabel(profile)} (score: ${score}/10)`,
-      timestamp: new Date().toISOString(),
-      category: "questionnaire",
-    });
-    setResultProfile({ profile, score });
-    setShowResult(true);
+    try {
+      // Assuming a backend endpoint exists to update the questionnaire profile
+      await api.put("/api/v1/me/profiler", answers);
+      const updated = { ...currentUser, riskProfile: profile, questionnaireCompleted: true };
+      setCurrentUser(updated);
+      setUsers((prev) => prev.map((u) => (u.id === currentUser.id ? updated : u)));
+      addLog({
+        userId: currentUser.id,
+        userName: currentUser.name,
+        action: "QUESTIONNAIRE_COMPLETE",
+        details: `Risk profile set to ${riskLabel(profile)} (score: ${score}/10)`,
+        timestamp: new Date().toISOString(),
+        category: "questionnaire",
+      });
+      setResultProfile({ profile, score });
+      setShowResult(true);
+    } catch (err: any) {
+      toast.error("Gagal menyimpan profil", { description: err.message });
+    }
   };
 
   const handleLogout = () => {
+    import("~/api/auth").then(m => m.AuthApi.logout().catch(() => {}));
+    useAuthStore.getState().clearAuth();
     if (currentUser) {
       addLog({
         userId: currentUser.id,
@@ -122,7 +125,7 @@ export default function Layout() {
     setResultProfile(null);
   };
 
-  // Sync user total assets
+  // Sync user total assets - local fallback
   const syncedUser = useMemo(() => {
     if (!currentUser || currentUser.role === "admin") return currentUser;
     const myAssets = assets.filter((a) => a.userId === currentUser.id);
@@ -141,7 +144,7 @@ export default function Layout() {
     }
     return (
       <div className="w-full min-h-screen">
-        <LoginView users={users} onLogin={handleLogin} onNavigate={setAuthView} addLog={addLog} />
+        <LoginView onLogin={handleLogin} onNavigate={setAuthView} />
         <Toaster richColors position="top-right" duration={3000} />
       </div>
     );
@@ -184,11 +187,8 @@ export default function Layout() {
             users,
             setUsers,
             products,
-            setProducts,
             assets,
-            setAssets,
             goals,
-            setGoals,
             finProfile,
             setFinProfile,
             logs,

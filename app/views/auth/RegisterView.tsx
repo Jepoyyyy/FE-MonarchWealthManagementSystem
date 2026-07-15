@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Mail, Lock, Eye, EyeOff, AlertTriangle, UserIcon, Shield } from "lucide-react";
-import type { View } from "~/types";
+import type { AppUser, View } from "~/types";
 import { AuthShell } from "~/components/ui/AuthShell";
 import { InputField } from "~/components/ui/InputField";
 import { Btn } from "~/components/ui/Btn";
+import { AuthApi } from "~/api/auth";
+import { useAuthStore } from "~/stores/authStore";
 
 interface RegisterViewProps {
-  onRegister: (name: string, email: string, pass: string) => void;
+  onRegister: (user: AppUser) => void;
   onNavigate: (v: View) => void;
 }
 
@@ -17,9 +19,12 @@ export function RegisterView({ onRegister, onNavigate }: RegisterViewProps) {
   const [confirm, setConfirm] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+
     if (pass.length < 8) {
       setError("Password must be at least 8 characters.");
       return;
@@ -28,7 +33,27 @@ export function RegisterView({ onRegister, onNavigate }: RegisterViewProps) {
       setError("Passwords do not match.");
       return;
     }
-    onRegister(name, email, pass);
+
+    setLoading(true);
+
+    try {
+      const res = await AuthApi.register({ name, email, password: pass });
+      const { accessToken, refreshToken, user: authUser } = res.data;
+
+      // Save to Zustand store
+      useAuthStore.getState().setAuth(accessToken, refreshToken, authUser);
+
+      // Trigger root App state update
+      onRegister(authUser);
+    } catch (err: any) {
+      if (err.response?.status === 409) {
+        setError("An account with this email already exists.");
+      } else {
+        setError("An error occurred during registration. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -107,8 +132,8 @@ export function RegisterView({ onRegister, onNavigate }: RegisterViewProps) {
             {error}
           </p>
         )}
-        <Btn type="submit" className="w-full mt-2">
-          Create Account
+        <Btn type="submit" className="w-full mt-2" disabled={loading}>
+          {loading ? "Creating Account..." : "Create Account"}
         </Btn>
       </form>
       <p className="text-sm text-center text-muted-foreground mt-5">

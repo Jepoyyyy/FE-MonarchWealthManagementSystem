@@ -7,6 +7,9 @@ import { RiskLevelBadge } from "~/components/ui/RiskLevelBadge";
 import { PageHeader } from "~/components/ui/PageHeader";
 import { StatCard } from "~/components/ui/StatCard";
 import { Btn } from "~/components/ui/Btn";
+import { DashboardApi } from "~/api/dashboard";
+import { useEffect, useState } from "react";
+import { AssetApi } from "~/api/assets";
 
 const DashboardPerfChart = React.lazy(() => import("~/components/charts/DashboardPerfChart"));
 const DashboardPieChart = React.lazy(() => import("~/components/charts/DashboardPieChart"));
@@ -14,16 +17,38 @@ const DashboardPieChart = React.lazy(() => import("~/components/charts/Dashboard
 interface DashboardViewProps {
   user: AppUser;
   products: Product[];
-  assets: Asset[];
   onNavigate: (v: View | string) => void;
 }
 
-export function DashboardView({ user, products, assets, onNavigate }: DashboardViewProps) {
-  const myAssets = assets.filter((a) => a.userId === user.id);
-  const totalValue = myAssets.reduce((s, a) => s + a.currentValue, 0);
-  const totalCost = myAssets.reduce((s, a) => s + a.amount, 0);
-  const pnl = totalValue - totalCost;
-  const pnlPct = totalCost > 0 ? (pnl / totalCost) * 100 : 0;
+export function DashboardView({ user, products, onNavigate }: DashboardViewProps) {
+  const [dashData, setDashData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  // We still need the user's active assets to render the PieChart
+  const [myAssets, setMyAssets] = useState<Asset[]>([]);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const [dashRes, assetsRes] = await Promise.all([
+           DashboardApi.getUserDashboard(),
+           AssetApi.list()
+        ]);
+        setDashData(dashRes.data);
+        setMyAssets(assetsRes.data);
+      } catch (err) {
+        console.error("Dashboard error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
+
+  const totalValue = dashData ? dashData.totalAssets : 0;
+  const totalCost = dashData ? dashData.totalInvested : 0;
+  const pnl = dashData ? dashData.pnl : 0;
+  const pnlPct = dashData ? dashData.pnlPercent : 0;
   const history = useMemo(() => genHistory(totalValue || 50000000), [totalValue]);
 
   const maxRisk = maxRiskForProfile(user.riskProfile, false);
@@ -48,6 +73,14 @@ export function DashboardView({ user, products, assets, onNavigate }: DashboardV
         })}`}
       />
 
+      {loading && (
+        <div className="flex items-center justify-center p-12">
+          <div className="animate-pulse flex gap-2 items-center text-muted-foreground">
+             Loading dashboard...
+          </div>
+        </div>
+      )}
+      {!loading && <>
       {/* Stats grid */}
       <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
         <StatCard
@@ -65,13 +98,13 @@ export function DashboardView({ user, products, assets, onNavigate }: DashboardV
           icon={<TrendingUp size={16} />}
           trend={pnl >= 0 ? "up" : "down"}
         />
-        <StatCard label="Holdings" value={String(myAssets.length)} sub="active positions" icon={<Briefcase size={16} />} trend="neutral" />
+        <StatCard label="Holdings" value={String(dashData ? dashData.assetCount : myAssets.length)} sub="active positions" icon={<Briefcase size={16} />} trend="neutral" />
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Performance Chart */}
         <Suspense fallback={<div className="lg:col-span-2 h-64 bg-muted animate-pulse rounded-xl" />}>
-          <DashboardPerfChart data={history} pnlPct={pnlPct} fmt={fmtFull} />
+          <DashboardPerfChart data={dashData?.recentTransactions ? genHistory(totalValue || 50000000) : history} pnlPct={pnlPct} fmt={fmtFull} />
         </Suspense>
 
         {/* Allocation Pie */}
@@ -125,6 +158,7 @@ export function DashboardView({ user, products, assets, onNavigate }: DashboardV
           ))}
         </div>
       </div>
+      </>}
     </div>
   );
 }

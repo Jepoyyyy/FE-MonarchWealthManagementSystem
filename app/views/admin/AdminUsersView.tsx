@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Users, UserCheck, UserX } from "lucide-react";
 import type { AppUser, AuditLog, UserStatus } from "~/types";
 import { fmtDate, fmt, statusBadge } from "~/utils";
@@ -8,46 +8,75 @@ import { StatCard } from "~/components/ui/StatCard";
 import { Badge } from "~/components/ui/Badge";
 import { Btn } from "~/components/ui/Btn";
 import { ConfirmModal } from "~/components/ui/ConfirmModal";
+import { api } from "~/api/client";
 
 interface AdminUsersViewProps {
-  users: AppUser[];
-  setUsers: React.Dispatch<React.SetStateAction<AppUser[]>>;
   addLog: (l: Omit<AuditLog, "id">) => void;
   adminUser: AppUser;
   toast: any;
 }
 
 export function AdminUsersView({
-  users,
-  setUsers,
   addLog,
   adminUser,
   toast,
 }: AdminUsersViewProps) {
+  const [users, setUsers] = useState<AppUser[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get("/api/v1/admin/users");
+      setUsers(res.data);
+    } catch (err: any) {
+      toast.error("Failed to load users", { description: err.message });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
   const regularUsers = users.filter((u) => u.role === "user");
   const [confirmUserToggle, setConfirmUserToggle] = useState<{ id: string; next: UserStatus } | null>(null);
 
-  const toggleStatus = (id: string, next: UserStatus) => {
+  const toggleStatus = async (id: string, next: UserStatus) => {
     const u = users.find((us) => us.id === id)!;
-    setUsers((prev) => prev.map((us) => (us.id === id ? { ...us, status: next } : us)));
-    addLog({
-      userId: adminUser.id,
-      userName: adminUser.name,
-      action: next === "suspended" ? "SUSPEND_USER" : "ACTIVATE_USER",
-      details: `User '${u.name}' status changed to ${next}`,
-      timestamp: new Date().toISOString(),
-      category: "admin",
-    });
-    toast.success(`User ${next === "active" ? "diaktifkan" : "disuspend"}`, {
-      description: `${u.name} sekarang ${next === "active" ? "aktif" : "disuspend"}`,
-    });
-    setConfirmUserToggle(null);
+    try {
+      await api.patch(`/api/v1/admin/users/${id}/status`, { status: next });
+      addLog({
+        userId: adminUser.id,
+        userName: adminUser.name,
+        action: next === "suspended" ? "SUSPEND_USER" : "ACTIVATE_USER",
+        details: `User '${u.name}' status changed to ${next}`,
+        timestamp: new Date().toISOString(),
+        category: "admin",
+      });
+      toast.success(`User ${next === "active" ? "diaktifkan" : "disuspend"}`, {
+        description: `${u.name} sekarang ${next === "active" ? "aktif" : "disuspend"}`,
+      });
+      fetchUsers();
+    } catch (err: any) {
+      toast.error("Gagal mengubah status user", { description: err.message });
+    } finally {
+      setConfirmUserToggle(null);
+    }
   };
 
   return (
     <div className="space-y-6">
       <PageHeader title="User Management" subtitle={`${regularUsers.length} registered users`} />
 
+      {loading && (
+        <div className="flex items-center justify-center p-12 text-muted-foreground animate-pulse">
+           Loading users...
+        </div>
+      )}
+
+      {!loading && <>
       <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
         <StatCard label="Total Users" value={String(regularUsers.length)} icon={<Users size={16} />} />
         <StatCard
@@ -119,7 +148,7 @@ export function AdminUsersView({
                   className="px-4 py-3 text-xs font-semibold text-foreground"
                   style={{ fontFamily: "var(--font-mono)" }}
                 >
-                  {fmt(u.totalAssets)}
+                  {fmt(u.totalAssets || 0)}
                 </td>
                 <td className="px-4 py-3">
                   <Badge className={statusBadge(u.status)}>
@@ -168,6 +197,7 @@ export function AdminUsersView({
           </tbody>
         </table>
       </div>
+      </>}
     </div>
   );
 }

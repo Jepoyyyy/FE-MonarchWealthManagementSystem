@@ -20,8 +20,6 @@ export default function GoalsRoute() {
   return (
     <GoalsView
       user={context.currentUser}
-      goals={context.goals}
-      setGoals={context.setGoals}
       finProfile={context.finProfile}
       setFinProfile={context.setFinProfile}
       assets={context.assets}

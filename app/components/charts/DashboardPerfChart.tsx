@@ -2,11 +2,12 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 
 interface DashboardPerfChartProps {
   data: { month: string; value: number }[];
-  pnlPct: number;
+  pnlPct: number | undefined | null;
   fmt: (v: number) => string;
 }
 
 export default function DashboardPerfChart({ data, pnlPct, fmt }: DashboardPerfChartProps) {
+  const safePnlPct = pnlPct ?? 0;
   return (
     <div className="lg:col-span-2 bg-card rounded-xl p-4 md:p-6 border border-border">
       <div className="flex items-center justify-between mb-4">
@@ -16,10 +17,10 @@ export default function DashboardPerfChart({ data, pnlPct, fmt }: DashboardPerfC
         </div>
         <span
           className={`px-2 py-0.5 rounded-md text-xs font-semibold flex items-center gap-1 ${
-            pnlPct >= 0 ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"
+            safePnlPct >= 0 ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"
           }`}
         >
-          {pnlPct >= 0 ? "+" : ""}{pnlPct.toFixed(2)}%
+          {safePnlPct >= 0 ? "+" : ""}{safePnlPct.toFixed(2)}%
         </span>
       </div>
       <ResponsiveContainer width="100%" height={200}>

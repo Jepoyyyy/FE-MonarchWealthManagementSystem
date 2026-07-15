@@ -20,8 +20,6 @@ export default function ProductsRoute() {
   return (
     <ProductsView
       user={context.currentUser}
-      products={context.products}
-      setAssets={context.setAssets}
       addLog={context.addLog}
       toast={context.toast}
     />

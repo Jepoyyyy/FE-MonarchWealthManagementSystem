@@ -8,7 +8,7 @@ import { ConfirmModal } from "~/components/ui/ConfirmModal";
 import { AddTransactionModal } from "./AddTransactionModal";
 import { Btn } from "~/components/ui/Btn";
 import { useAssetDetail } from "~/hooks/useAssetDetail";
-import { PortfolioService } from "~/services/portfolio";
+import { usePortfolioStore } from "~/stores/portofolioStore";
 
 interface AssetDetailPageProps {
   asset: Asset;
@@ -50,6 +50,13 @@ export function AssetDetailPage({
     hasChanges,
     handleSave,
   } = useAssetDetail({ asset, product, onSave, onBack });
+
+  const { pnlData } = usePortfolioStore();
+  const pnl = pnlData.find(x => x.assetId === asset.id);
+  
+  const displayCurValNum = pnl ? pnl.currentValue : curValNum;
+  const displayPnlAmt = pnl ? pnl.potentialPnl : pnlAmt;
+  const displayPnlPct = pnl ? pnl.potentialPnlPercent : pnlPct;
 
   return (
     <div className="space-y-6">
@@ -187,10 +194,10 @@ export function AssetDetailPage({
               className="text-lg font-bold"
               style={{
                 fontFamily: "var(--font-mono)",
-                color: curValNum >= avgVal ? "var(--foreground)" : "#ef4444",
+                color: displayCurValNum >= avgVal ? "var(--foreground)" : "#ef4444",
               }}
             >
-              {isStock || isMF ? fmt(curValNum) : `${curValNum.toFixed(2)}%`}
+              {isStock || isMF ? fmt(displayCurValNum) : `${displayCurValNum.toFixed(2)}%`}
             </p>
             <p className="text-xs text-muted-foreground">
               {isStock ? "per share" : isMF ? "per unit / NAV" : isBond ? "of face value" : ""}
@@ -233,23 +240,23 @@ export function AssetDetailPage({
             <div className="flex items-center gap-2">
               <span
                 className={`flex items-center gap-0.5 text-xs font-bold px-2 py-1 rounded-full ${
-                  pnlAmt >= 0 ? "bg-emerald-500/10 text-emerald-600" : "bg-red-500/10 text-red-500"
+                  displayPnlAmt >= 0 ? "bg-emerald-500/10 text-emerald-600" : "bg-red-500/10 text-red-500"
                 }`}
               >
-                {pnlAmt >= 0 ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
-                {pnlAmt >= 0 ? "+" : ""}
-                {fmtPct(pnlPct)}
+                {displayPnlAmt >= 0 ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
+                {displayPnlAmt >= 0 ? "+" : ""}
+                {fmtPct(displayPnlPct)}
               </span>
             </div>
           </div>
           <div className="p-5 flex justify-between items-center bg-muted/30">
             <span className="text-xs text-muted-foreground">Est. Value Change</span>
             <span
-              className={`text-base font-bold ${pnlAmt >= 0 ? "text-emerald-600" : "text-red-500"}`}
+              className={`text-base font-bold ${displayPnlAmt >= 0 ? "text-emerald-600" : "text-red-500"}`}
               style={{ fontFamily: "var(--font-mono)" }}
             >
-              {pnlAmt >= 0 ? "+" : ""}
-              {fmt(pnlAmt)}
+              {displayPnlAmt >= 0 ? "+" : ""}
+              {fmt(displayPnlAmt)}
             </span>
           </div>
         </div>

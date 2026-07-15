@@ -75,20 +75,20 @@ export function TrackFormStep({
         </div>
       )}
 
-      {investableSurplus !== undefined && (
+      {picked && picked.minInvestment > 0 && (
         <div
           className="flex items-center justify-between px-3 py-2.5 rounded-lg"
           style={{
-            background: "rgba(16,185,129,0.08)",
-            border: "1px solid rgba(16,185,129,0.25)",
+            background: "rgba(59,130,246,0.08)",
+            border: "1px solid rgba(59,130,246,0.25)",
           }}
         >
-          <span className="text-xs font-medium text-emerald-700">Investable Surplus</span>
+          <span className="text-xs font-medium text-blue-700">Min Investment</span>
           <span
-            className="text-sm font-bold text-emerald-700"
+            className="text-sm font-bold text-blue-700"
             style={{ fontFamily: "var(--font-mono)" }}
           >
-            {fmt(investableSurplus)}
+            {fmt(picked.minInvestment)}
           </span>
         </div>
       )}
@@ -113,11 +113,6 @@ export function TrackFormStep({
             placeholder="e.g. 10000000"
             icon={<DollarSign size={14} />}
           />
-        )}
-        {investableSurplus !== undefined && parsedAmount > 0 && parsedAmount > investableSurplus && (
-          <p className="text-xs text-red-500 mt-1">
-            Exceeds surplus by {fmt(parsedAmount - investableSurplus)}
-          </p>
         )}
       </div>
 

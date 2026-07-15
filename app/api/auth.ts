@@ -1,8 +1,18 @@
 import { api } from "./client";
-import type { AppUser } from "~/types";
+import type { AppUser } from "../types";
+
+interface LoginPayload { email: string; password: string; }
+interface RegisterPayload { name: string; email: string; password: string; }
+interface AuthSuccessResponse { accessToken: string; refreshToken: string; user: AppUser; }
 
 export const AuthApi = {
-  login: (data: any) => api.post<{ token: string; refreshToken: string; user: AppUser }>("/login", data),
-  register: (data: any) => api.post<{ token: string; refreshToken: string; user: AppUser }>("/register", data),
-  logout: () => api.post("/logout"),
+  login: (data: LoginPayload) => 
+    api.post<AuthSuccessResponse>("/api/v1/auth/login", data),
+  register: (data: RegisterPayload) => 
+    api.post<AuthSuccessResponse>("/api/v1/auth/register", data),
+  logout: () => api.post("/api/v1/auth/logout"),
+  refresh: (refreshToken: string) =>
+    api.post("/api/v1/auth/refresh", {
+        refreshToken
+    }),
 };

@@ -4,6 +4,14 @@ import { defineConfig } from "vite";
 import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+      },
+    },
+  },
   plugins: [
     tailwindcss(),
     reactRouter(),

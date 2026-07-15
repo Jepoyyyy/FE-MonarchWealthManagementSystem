@@ -1,15 +1,22 @@
 import type { RiskProfile, ProductType, AuditLog, UserStatus } from "~/types";
 
-export const fmt = (n: number) => {
+export const fmt = (n: number | undefined | null) => {
+  if (n === undefined || n === null || isNaN(n)) return 'IDR 0';
   if (n >= 1e9) return `IDR ${(n / 1e9).toFixed(2)}B`;
   if (n >= 1e6) return `IDR ${(n / 1e6).toFixed(2)}M`;
   if (n >= 1e3) return `IDR ${(n / 1e3).toFixed(0)}K`;
   return `IDR ${n.toLocaleString()}`;
 };
 
-export const fmtFull = (n: number) => `IDR ${n.toLocaleString("id-ID")}`;
+export const fmtFull = (n: number | undefined | null) => {
+  if (n === undefined || n === null || isNaN(n)) return 'IDR 0';
+  return `IDR ${n.toLocaleString("id-ID")}`;
+};
 
-export const fmtPct = (n: number) => `${n >= 0 ? "+" : ""}${n.toFixed(2)}%`;
+export const fmtPct = (n: number | undefined | null) => {
+  if (n === undefined || n === null || isNaN(n)) return '0.00%';
+  return `${n >= 0 ? "+" : ""}${n.toFixed(2)}%`;
+};
 
 export const fmtDate = (s: string) =>
   new Date(s).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });

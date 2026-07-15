@@ -1,52 +1,50 @@
 import React, { useState } from "react";
 import { Mail, Lock, Eye, EyeOff, AlertTriangle } from "lucide-react";
-import type { AppUser, AuditLog, View } from "~/types";
+import type { AppUser, View } from "~/types";
 import { AuthShell } from "~/components/ui/AuthShell";
 import { InputField } from "~/components/ui/InputField";
 import { Btn } from "~/components/ui/Btn";
 import { Shield } from "lucide-react";
+import { AuthApi } from "~/api/auth";
+import { useAuthStore } from "~/stores/authStore";
 
 interface LoginViewProps {
-  users: AppUser[];
   onLogin: (u: AppUser) => void;
   onNavigate: (v: View) => void;
-  addLog: (l: Omit<AuditLog, "id">) => void;
 }
 
-export function LoginView({ users, onLogin, onNavigate, addLog }: LoginViewProps) {
+export function LoginView({ onLogin, onNavigate }: LoginViewProps) {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const user = users.find((u) => u.email === email && u.password === pass);
-    if (!user) {
-      setError("Invalid email or password.");
-      return;
+    setError("");
+    setLoading(true);
+    
+    try {
+      const res = await AuthApi.login({ email, password: pass });
+      const { accessToken, refreshToken, user: authUser } = res.data;
+
+      // Save to Zustand store
+      useAuthStore.getState().setAuth(accessToken, refreshToken, authUser);
+      
+      // Trigger root App state update to switch views
+      onLogin(authUser);
+    } catch (err: any) {
+      if (err.response?.status === 401) {
+        setError("Invalid email or password.");
+      } else if (err.response?.status === 403) {
+        setError("Your account has been suspended. Contact support.");
+      } else {
+        setError("An error occurred during login. Please try again.");
+      }
+    } finally {
+      setLoading(false);
     }
-    if (user.status === "suspended") {
-      addLog({
-        userId: user.id,
-        userName: user.name,
-        action: "LOGIN_FAILED",
-        details: "Login blocked — account is suspended",
-        timestamp: new Date().toISOString(),
-        category: "auth",
-      });
-      setError("Your account has been suspended. Contact support.");
-      return;
-    }
-    addLog({
-      userId: user.id,
-      userName: user.name,
-      action: "LOGIN",
-      details: `Successful login`,
-      timestamp: new Date().toISOString(),
-      category: "auth",
-    });
-    onLogin(user);
   };
 
   return (
@@ -108,8 +106,8 @@ export function LoginView({ users, onLogin, onNavigate, addLog }: LoginViewProps
             {error}
           </p>
         )}
-        <Btn type="submit" className="w-full mt-2">
-          Sign In
+        <Btn type="submit" className="w-full mt-2" disabled={loading}>
+          {loading ? "Signing In..." : "Sign In"}
         </Btn>
       </form>
       <div className="mt-6 pt-6 border-t border-border">

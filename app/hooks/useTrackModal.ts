@@ -90,11 +90,11 @@ export function useTrackModal({
       setErr("Enter the amount you invested.");
       return;
     }
-    if (investableSurplus !== undefined && amt > investableSurplus) {
-      setErr(`Amount exceeds your investable surplus of ${amount}.`);
+    if (isStock && (!quantity || parseFloat(quantity) <= 0)) {
+      setErr("Enter the quantity (lot).");
       return;
     }
-    const qtyVal = isDeposit ? amt : parseFloat(quantity) || undefined;
+    const qtyVal = isDeposit ? amt : (parseFloat(quantity) || amt);
     const currentValNum = isDeposit ? amt : parseFloat(currentVal);
     onSave({
       userId: user.id,

@@ -12,6 +12,6 @@ interface ProductUpdateDTO {
 }
 
 export const ProductApi = {
-  list: () => api.get<Product[]>("/api/v1/products"),
+  list: () => api.get<Product[]>("/api/v1/products?size=1000"),
   update: (id: string, dto: ProductUpdateDTO) => api.put<Product>(`/api/v1/products/${id}`, dto),
 };

@@ -21,7 +21,6 @@ export default function ProgressRoute() {
     <ProgressView
       user={context.currentUser}
       products={context.products}
-      assets={context.assets}
       goals={context.goals}
       finProfile={context.finProfile}
     />

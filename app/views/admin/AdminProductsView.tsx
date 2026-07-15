@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CheckCircle, XCircle, EyeOff, Eye } from "lucide-react";
 import type { Product, AppUser, AuditLog } from "~/types";
 import { fmt, statusBadge } from "~/utils";
@@ -8,45 +8,60 @@ import { RiskLevelBadge } from "~/components/ui/RiskLevelBadge";
 import { PageHeader } from "~/components/ui/PageHeader";
 import { Badge } from "~/components/ui/Badge";
 import { ConfirmModal } from "~/components/ui/ConfirmModal";
+import { useProductsStore } from "~/stores/productsStore";
+import { ProductApi } from "~/api/products";
 
 interface AdminProductsViewProps {
-  products: Product[];
-  setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
   addLog: (l: Omit<AuditLog, "id">) => void;
   adminUser: AppUser;
   toast: any;
 }
 
 export function AdminProductsView({
-  products,
-  setProducts,
   addLog,
   adminUser,
   toast,
 }: AdminProductsViewProps) {
   const [toggleConfirm, setToggleConfirm] = useState<{ id: string; action: "show" | "hide" } | null>(null);
 
-  const toggleProduct = (id: string, next: boolean) => {
+  const { products, loading, fetchProducts } = useProductsStore();
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
+
+  const toggleProduct = async (id: string, next: boolean) => {
     const p = products.find((pr) => pr.id === id)!;
-    setProducts((prev) => prev.map((pr) => (pr.id === id ? { ...pr, visible: next } : pr)));
-    addLog({
-      userId: adminUser.id,
-      userName: adminUser.name,
-      action: next ? "SHOW_PRODUCT" : "HIDE_PRODUCT",
-      details: `Product '${p.name}' set to ${next ? "visible" : "hidden"}`,
-      timestamp: new Date().toISOString(),
-      category: "admin",
-    });
-    toast.success(`Product ${next ? "ditampilkan" : "disembunyikan"}`, {
-      description: `"${p.name}" sekarang ${next ? "visible" : "hidden"}`,
-    });
-    setToggleConfirm(null);
+    try {
+      await ProductApi.update(id, { visible: next });
+      addLog({
+        userId: adminUser.id,
+        userName: adminUser.name,
+        action: next ? "SHOW_PRODUCT" : "HIDE_PRODUCT",
+        details: `Product '${p.name}' set to ${next ? "visible" : "hidden"}`,
+        timestamp: new Date().toISOString(),
+        category: "admin",
+      });
+      toast.success(`Product ${next ? "ditampilkan" : "disembunyikan"}`, {
+        description: `"${p.name}" sekarang ${next ? "visible" : "hidden"}`,
+      });
+      fetchProducts();
+    } catch (err: any) {
+       toast.error("Gagal mengubah visibilitas", { description: err.message });
+    } finally {
+      setToggleConfirm(null);
+    }
   };
 
   return (
     <div className="space-y-6">
       <PageHeader title="Product Management" subtitle="Control product visibility across all user risk profiles" />
 
+      {loading ? (
+        <div className="flex justify-center p-12 text-muted-foreground animate-pulse">
+           Loading products...
+        </div>
+      ) : (
       <div className="bg-card rounded-xl border border-border overflow-x-auto">
         <table className="w-full text-sm min-w-[600px]">
           <thead>
@@ -144,6 +159,7 @@ export function AdminProductsView({
           </tbody>
         </table>
       </div>
+      )}
     </div>
   );
 }

@@ -6,7 +6,7 @@ import { useQuestionnaire } from "~/hooks/useQuestionnaire";
 
 interface QuestionnaireViewProps {
   user: AppUser;
-  onComplete: (profile: RiskProfile, score: number) => void;
+  onComplete: (profile: RiskProfile, score: number, answers: { questionnaireAnswer: string; score: number }[]) => void;
 }
 
 export function QuestionnaireView({ user, onComplete }: QuestionnaireViewProps) {

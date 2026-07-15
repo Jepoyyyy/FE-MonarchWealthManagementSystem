@@ -1,0 +1,2 @@
+[      97ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ http://localhost:5173/:0
+[     130ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://localhost:5173/node_modules/.vite/deps/sonner.js?v=7f4bbe05:0

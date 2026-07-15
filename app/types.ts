@@ -152,7 +152,7 @@ export interface GoalSettingDTO {
 
 export interface GoalRegistrationDTO {
   name: string;
-  type: "vehicle" | "vacation" | "property" | "retirement" | "savings" | "custom";
+  type: string;
   targetAmount: number;
   currentSaved: number;
   monthlyContribution: number;

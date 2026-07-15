@@ -37,7 +37,7 @@ export function AssetsView({
   const [detailAssetId, setDetailAssetId] = useState<string | null>(null);
   const [confirmRemoveId, setConfirmRemoveId] = useState<string | null>(null);
 
-  const myAssets = useMemo(() => assets.filter((a) => a.userId === user.id), [assets, user.id]);
+  const myAssets = useMemo(() => (assets || []).filter((a) => a.userId === user.id), [assets, user.id]);
   const totalValue = useMemo(() => myAssets.reduce((s, a) => s + a.currentValue, 0), [myAssets]);
   const totalCost = useMemo(() => myAssets.reduce((s, a) => s + a.amount, 0), [myAssets]);
   const totalGain = useMemo(() => totalValue - totalCost, [totalValue, totalCost]);
@@ -196,8 +196,7 @@ export function AssetsView({
             </thead>
             <tbody>
               {myAssets.map((a) => {
-                const p = products.find((pr) => pr.id === a.productId);
-                if (!p) return null;
+                const p = products.find((pr) => pr.id === a.productId) || { name: 'Unknown', issuer: 'Unknown', type: 'stock', riskLevel: 1 };
                 const qty = a.quantity ?? a.amount;
                 const ret = ((a.currentValue - a.amount) / a.amount) * 100;
                 const isStock2 = p.type === "stock";

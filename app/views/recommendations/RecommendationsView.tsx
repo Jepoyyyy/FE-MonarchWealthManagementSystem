@@ -7,8 +7,10 @@ import { PageHeader } from "~/components/ui/PageHeader";
 import { ScoreRing } from "~/components/ui/ScoreRing";
 import { SubScore } from "~/components/ui/SubScore";
 import { RecommendationCard } from "~/components/ui/RecommendationCard";
-import { Btn } from "~/components/ui/Btn";
 import { TrackModal } from "~/views/products/TrackModal";
+import { useRecommendationsStore } from "~/stores/recommendationsStore";
+import { useEffect } from "react";
+import { AssetApi } from "~/api/assets";
 
 interface RecommendationsViewProps {
   user: AppUser;
@@ -16,7 +18,6 @@ interface RecommendationsViewProps {
   products: Product[];
   goals: Goal[];
   finProfile: FinancialProfile;
-  setAssets: React.Dispatch<React.SetStateAction<Asset[]>>;
   addLog: (l: any) => void;
   toast: any;
 }
@@ -27,37 +28,43 @@ export function RecommendationsView({
   products,
   goals,
   finProfile,
-  setAssets,
   addLog,
   toast,
 }: RecommendationsViewProps) {
   const myAssets = assets.filter((a) => a.userId === user.id);
   const [trackingProduct, setTrackingProduct] = useState<Product | null>(null);
 
+  const { recommendations, loading, fetchRecommendations } = useRecommendationsStore();
+
+  useEffect(() => {
+    fetchRecommendations();
+  }, [fetchRecommendations]);
+
   const score = useMemo(
     () => calcHealthScore(user, myAssets, products, goals, finProfile),
     [user, myAssets, products, goals, finProfile]
   );
-  const recs = useMemo(
-    () => generateRecommendations(user, myAssets, products, goals, finProfile),
-    [user, myAssets, products, goals, finProfile]
-  );
+  const recs = recommendations;
 
   const scoreColor = score.total >= 70 ? "#10b981" : score.total >= 45 ? "#f59e0b" : "#ef4444";
 
-  const saveTracked = (data: Omit<Asset, "id">) => {
+  const saveTracked = async (data: Omit<Asset, "id">) => {
     const p = products.find((pr) => pr.id === data.productId)!;
-    setAssets((prev) => [...prev, { ...data, id: `a${Date.now()}` }]);
-    addLog({
-      userId: user.id,
-      userName: user.name,
-      action: "ADD_ASSET",
-      details: `Tracked ${p.name} — ${fmtFull(data.amount)} (from recommendation)`,
-      timestamp: new Date().toISOString(),
-      category: "portfolio",
-    });
-    toast.success("Rekomendasi ditindaklanjuti", { description: `${p.name} — ${fmtFull(data.amount)}` });
-    setTrackingProduct(null);
+    try {
+      await AssetApi.create(data as any);
+      addLog({
+        userId: user.id,
+        userName: user.name,
+        action: "ADD_ASSET",
+        details: `Tracked ${p.name} — ${fmtFull(data.amount)} (from recommendation)`,
+        timestamp: new Date().toISOString(),
+        category: "portfolio",
+      });
+      toast.success("Rekomendasi ditindaklanjuti", { description: `${p.name} — ${fmtFull(data.amount)}` });
+      setTrackingProduct(null);
+    } catch (err: any) {
+      toast.error("Gagal menyimpan aset", { description: err.message });
+    }
   };
 
   const highCount = recs.filter((r) => r.priority === "high").length;
@@ -163,7 +170,11 @@ export function RecommendationsView({
       </div>
 
       {/* Rec list */}
-      {recs.length === 0 ? (
+      {loading && recs.length === 0 ? (
+        <div className="bg-card rounded-xl border border-border p-12 flex flex-col items-center justify-center text-center animate-pulse text-muted-foreground">
+          Analyzing portfolio...
+        </div>
+      ) : recs.length === 0 ? (
         <div className="bg-card rounded-xl border border-border flex flex-col items-center justify-center py-20 text-center">
           <CheckCircle size={40} className="text-emerald-500 mb-3" />
           <p className="font-semibold text-lg text-foreground" style={{ fontFamily: "var(--font-serif)" }}>
