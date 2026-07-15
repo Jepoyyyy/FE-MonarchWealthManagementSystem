@@ -1,15 +1,15 @@
-import React, { useMemo, Suspense } from "react";
+import React, { useMemo, Suspense, useEffect, useState } from "react";
 import { Wallet, DollarSign, TrendingUp, Briefcase, ChevronRight } from "lucide-react";
-import type { AppUser, Product, Asset, View } from "~/types";
-import { maxRiskForProfile, riskLabel, fmt, fmtPct, fmtFull, genHistory } from "~/utils";
+import type { AppUser, Product, View } from "~/types";
+import type { UserDashboardDTO } from "~/types";
+import { maxRiskForProfile, riskLabel, fmt, fmtPct, fmtFull } from "~/utils";
 import { ProductTypeBadge } from "~/components/ui/ProductTypeBadge";
 import { RiskLevelBadge } from "~/components/ui/RiskLevelBadge";
 import { PageHeader } from "~/components/ui/PageHeader";
 import { StatCard } from "~/components/ui/StatCard";
 import { Btn } from "~/components/ui/Btn";
 import { DashboardApi } from "~/api/dashboard";
-import { useEffect, useState } from "react";
-import { AssetApi } from "~/api/assets";
+import { toast } from "sonner";
 
 const DashboardPerfChart = React.lazy(() => import("~/components/charts/DashboardPerfChart"));
 const DashboardPieChart = React.lazy(() => import("~/components/charts/DashboardPieChart"));
@@ -20,24 +20,30 @@ interface DashboardViewProps {
   onNavigate: (v: View | string) => void;
 }
 
-export function DashboardView({ user, products, onNavigate }: DashboardViewProps) {
-  const [dashData, setDashData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+const PIE_COLORS = ["#1a3a5c", "#b8860b", "#10b981", "#f59e0b", "#6366f1", "#ef4444"];
 
-  // We still need the user's active assets to render the PieChart
-  const [myAssets, setMyAssets] = useState<Asset[]>([]);
+function parseNum(v: number | string | undefined | null): number {
+  if (v == null) return 0;
+  if (typeof v === "number") return v;
+  return parseFloat(v) || 0;
+}
+
+export function DashboardView({ user, products, onNavigate }: DashboardViewProps) {
+  const [dashData, setDashData] = useState<UserDashboardDTO | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const load = async () => {
       try {
-        const [dashRes, assetsRes] = await Promise.all([
-           DashboardApi.getUserDashboard(),
-           AssetApi.list()
-        ]);
-        setDashData(dashRes.data);
-        setMyAssets(assetsRes.data);
-      } catch (err) {
+        setError(null);
+        const res = await DashboardApi.getUserDashboard();
+        setDashData(res.data);
+      } catch (err: any) {
+        const msg = err?.message || "Failed to load dashboard";
         console.error("Dashboard error:", err);
+        setError(msg);
+        toast.error(msg);
       } finally {
         setLoading(false);
       }
@@ -45,21 +51,36 @@ export function DashboardView({ user, products, onNavigate }: DashboardViewProps
     load();
   }, []);
 
-  const totalValue = dashData ? dashData.totalAssets : 0;
-  const totalCost = dashData ? dashData.totalInvested : 0;
-  const pnl = dashData ? dashData.pnl : 0;
-  const pnlPct = dashData ? dashData.pnlPercent : 0;
-  const history = useMemo(() => genHistory(totalValue || 50000000), [totalValue]);
+  const totalValue = parseNum(dashData?.portofolio?.value);
+  const totalCost = parseNum(dashData?.portofolio?.invested);
+  const pnl = totalValue - totalCost;
+  const pnlPct = totalCost > 0 ? (pnl / totalCost) * 100 : 0;
+  const assetCount = dashData?.portofolio?.holdings ?? 0;
+
+  const perfData = useMemo(() => {
+    const raw = dashData?.performance ?? [];
+    // backend sends 0-padded months; take non-zero tail or all if no non-zero
+    const lastNonZero = raw.reduce((acc, d, i) => (d.value > 0 ? i : acc), -1);
+    const trimmed = lastNonZero >= 0 ? raw.slice(0, lastNonZero + 1) : raw;
+    // map month number to label for the chart
+    const labels = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return trimmed.map((d) => ({ month: labels[d.month] ?? String(d.month), value: d.value }));
+  }, [dashData]);
 
   const maxRisk = maxRiskForProfile(user.riskProfile, false);
-  const recommended = products.filter((p) => p.visible && p.riskLevel <= maxRisk).slice(0, 4);
+  const recommended = useMemo(
+    () => products.filter((p) => p.visible && p.riskLevel <= maxRisk).slice(0, 4),
+    [products, maxRisk]
+  );
 
-  const allocationData = myAssets.map((a) => {
-    const p = products.find((pr) => pr.id === a.productId);
-    return { name: p?.name.split("–")[0].trim() ?? "Unknown", value: a.currentValue, type: p?.type };
-  });
-
-  const PIE_COLORS = ["#1a3a5c", "#b8860b", "#10b981", "#f59e0b", "#6366f1", "#ef4444"];
+  const pieData = useMemo(() => {
+    const items = dashData?.portofolio?.items ?? [];
+    return items.map((item, i) => ({
+      name: item.name,
+      value: totalValue > 0 ? Math.round((item.value / totalValue) * 100) : 0,
+      color: PIE_COLORS[i % PIE_COLORS.length],
+    }));
+  }, [dashData, totalValue]);
 
   return (
     <div className="space-y-6">
@@ -80,7 +101,18 @@ export function DashboardView({ user, products, onNavigate }: DashboardViewProps
           </div>
         </div>
       )}
-      {!loading && <>
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl p-4 text-sm">
+          {error}
+          <button
+            onClick={() => window.location.reload()}
+            className="ml-3 underline text-red-800 hover:no-underline"
+          >
+            Retry
+          </button>
+        </div>
+      )}
+      {!loading && !error && <>
       {/* Stats grid */}
       <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
         <StatCard
@@ -98,24 +130,30 @@ export function DashboardView({ user, products, onNavigate }: DashboardViewProps
           icon={<TrendingUp size={16} />}
           trend={pnl >= 0 ? "up" : "down"}
         />
-        <StatCard label="Holdings" value={String(dashData ? dashData.assetCount : myAssets.length)} sub="active positions" icon={<Briefcase size={16} />} trend="neutral" />
+        <StatCard label="Holdings" value={String(assetCount)} sub="active positions" icon={<Briefcase size={16} />} trend="neutral" />
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Performance Chart */}
         <Suspense fallback={<div className="lg:col-span-2 h-64 bg-muted animate-pulse rounded-xl" />}>
-          <DashboardPerfChart data={dashData?.recentTransactions ? genHistory(totalValue || 50000000) : history} pnlPct={pnlPct} fmt={fmtFull} />
+          {perfData.length > 0 && perfData.some((d) => d.value > 0) ? (
+            <DashboardPerfChart data={perfData} pnlPct={pnlPct} fmt={fmtFull} />
+          ) : (
+            <div className="lg:col-span-2 bg-card rounded-xl p-4 md:p-6 border border-border flex items-center justify-center text-muted-foreground text-sm">
+              Start investing to see your portfolio performance.
+            </div>
+          )}
         </Suspense>
 
         {/* Allocation Pie */}
         <Suspense fallback={<div className="h-64 bg-muted animate-pulse rounded-xl" />}>
-          <DashboardPieChart
-            data={allocationData.map((d, i) => ({
-              name: d.name,
-              value: Math.round((d.value / totalValue) * 100),
-              color: PIE_COLORS[i % PIE_COLORS.length],
-            }))}
-          />
+          {pieData.length > 0 && totalValue > 0 ? (
+            <DashboardPieChart data={pieData} />
+          ) : (
+            <div className="bg-card rounded-xl p-4 md:p-6 border border-border flex items-center justify-center text-muted-foreground text-sm">
+              No assets yet.
+            </div>
+          )}
         </Suspense>
       </div>
 

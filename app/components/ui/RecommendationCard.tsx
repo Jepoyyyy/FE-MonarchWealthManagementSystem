@@ -5,7 +5,7 @@ import { Btn } from "./Btn";
 import { ProductTypeBadge } from "./ProductTypeBadge";
 import { RiskLevelBadge } from "./RiskLevelBadge";
 import { FormattedAmount } from "./FormattedAmount";
-import { PRIORITY_CONFIG } from "~/data";
+import { PRIORITY_CONFIG } from "~/config/recommendation";
 
 interface RecommendationCardProps {
   recommendation: Recommendation;

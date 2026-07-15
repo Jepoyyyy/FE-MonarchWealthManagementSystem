@@ -10,19 +10,30 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_api_assets",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "assets.ts"
+    },
+    {
+      "label": "toAssetPayload()",
+      "file_type": "code",
+      "source_file": "app/api/assets.ts",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "app_api_assets_toassetpayload",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
+      "norm_label": "toassetpayload()"
     },
     {
       "label": "AssetApi",
       "file_type": "code",
       "source_file": "app/api/assets.ts",
-      "source_location": "L4",
+      "source_location": "L21",
       "_origin": "ast",
       "id": "app_api_assets_assetapi",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "assetapi"
     },
     {
@@ -98,9 +109,31 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "app_api_client_api",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "api"
+    },
+    {
+      "label": "failedQueue",
+      "file_type": "code",
+      "source_file": "app/api/client.ts",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "app_api_client_failedqueue",
+      "community": 1,
+      "community_name": "Authentication & Forms",
+      "norm_label": "failedqueue"
+    },
+    {
+      "label": "processQueue()",
+      "file_type": "code",
+      "source_file": "app/api/client.ts",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "app_api_client_processqueue",
+      "community": 1,
+      "community_name": "Authentication & Forms",
+      "norm_label": "processqueue()"
     },
     {
       "label": "dashboard.ts",
@@ -109,8 +142,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_api_dashboard",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "dashboard.ts"
     },
     {
@@ -120,8 +153,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "app_api_dashboard_dashboardapi",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "dashboardapi"
     },
     {
@@ -131,8 +164,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_api_goals",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "goals.ts"
     },
     {
@@ -142,8 +175,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "app_api_goals_goalapi",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "goalapi"
     },
     {
@@ -153,8 +186,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_api_products",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 4,
+      "community_name": "Product",
       "norm_label": "products.ts"
     },
     {
@@ -164,8 +197,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "app_api_products_productupdatedto",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 4,
+      "community_name": "Product",
       "norm_label": "productupdatedto"
     },
     {
@@ -175,8 +208,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "app_api_products_productapi",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 4,
+      "community_name": "Product",
       "norm_label": "productapi"
     },
     {
@@ -186,8 +219,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_api_recommendations",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "recommendations.ts"
     },
     {
@@ -197,8 +230,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "app_api_recommendations_recommendationapi",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "recommendationapi"
     },
     {
@@ -395,8 +428,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_components_layout_applayout",
-      "community": 11,
-      "community_name": "Admin Audit & Utils",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "applayout.tsx"
     },
     {
@@ -406,8 +439,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "app_components_layout_applayout_applayoutprops",
-      "community": 11,
-      "community_name": "Admin Audit & Utils",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "applayoutprops"
     },
     {
@@ -417,8 +450,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "app_components_layout_applayout_applayout",
-      "community": 11,
-      "community_name": "Admin Audit & Utils",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "applayout()"
     },
     {
@@ -428,8 +461,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_components_layout_sidebar",
-      "community": 11,
-      "community_name": "Admin Audit & Utils",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "sidebar.tsx"
     },
     {
@@ -439,8 +472,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "app_components_layout_sidebar_sidebarprops",
-      "community": 11,
-      "community_name": "Admin Audit & Utils",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "sidebarprops"
     },
     {
@@ -450,8 +483,8 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "app_components_layout_sidebar_sidebar",
-      "community": 11,
-      "community_name": "Admin Audit & Utils",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "sidebar()"
     },
     {
@@ -461,8 +494,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_components_layout_index",
-      "community": 11,
-      "community_name": "Admin Audit & Utils",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "index.ts"
     },
     {
@@ -505,8 +538,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_components_ui_badge",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "badge.tsx"
     },
     {
@@ -516,8 +549,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_components_ui_badge_badgeprops",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "badgeprops"
     },
     {
@@ -527,8 +560,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "app_components_ui_badge_variantclasses",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "variantclasses"
     },
     {
@@ -538,8 +571,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "app_components_ui_badge_badge",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "badge()"
     },
     {
@@ -549,8 +582,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_components_ui_btn",
-      "community": 11,
-      "community_name": "Admin Audit & Utils",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "btn.tsx"
     },
     {
@@ -560,8 +593,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_components_ui_btn_btnprops",
-      "community": 11,
-      "community_name": "Admin Audit & Utils",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "btnprops"
     },
     {
@@ -571,8 +604,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "app_components_ui_btn_variantclasses",
-      "community": 11,
-      "community_name": "Admin Audit & Utils",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "variantclasses"
     },
     {
@@ -582,8 +615,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "app_components_ui_btn_sizeclasses",
-      "community": 11,
-      "community_name": "Admin Audit & Utils",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "sizeclasses"
     },
     {
@@ -593,8 +626,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "app_components_ui_btn_btn",
-      "community": 11,
-      "community_name": "Admin Audit & Utils",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "btn()"
     },
     {
@@ -604,8 +637,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_components_ui_confirmmodal",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "confirmmodal.tsx"
     },
     {
@@ -615,8 +648,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "app_components_ui_confirmmodal_confirmmodalprops",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "confirmmodalprops"
     },
     {
@@ -626,8 +659,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "app_components_ui_confirmmodal_confirmmodal",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "confirmmodal()"
     },
     {
@@ -637,8 +670,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_components_ui_formattedamount",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "formattedamount.tsx"
     },
     {
@@ -648,8 +681,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "app_components_ui_formattedamount_formattedamountprops",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "formattedamountprops"
     },
     {
@@ -659,8 +692,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "app_components_ui_formattedamount_formattedamount",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "formattedamount()"
     },
     {
@@ -703,8 +736,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_components_ui_pageheader",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "pageheader.tsx"
     },
     {
@@ -714,8 +747,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "app_components_ui_pageheader_pageheaderprops",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "pageheaderprops"
     },
     {
@@ -725,8 +758,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "app_components_ui_pageheader_pageheader",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "pageheader()"
     },
     {
@@ -736,8 +769,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_components_ui_productcard",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "productcard.tsx"
     },
     {
@@ -747,8 +780,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "app_components_ui_productcard_productcardprops",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 4,
+      "community_name": "Product",
       "norm_label": "productcardprops"
     },
     {
@@ -758,8 +791,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "app_components_ui_productcard_productcard",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "productcard()"
     },
     {
@@ -769,8 +802,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_components_ui_producttypebadge",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "producttypebadge.tsx"
     },
     {
@@ -780,8 +813,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "app_components_ui_producttypebadge_producttypebadgeprops",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "producttypebadgeprops"
     },
     {
@@ -791,8 +824,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "app_components_ui_producttypebadge_typelabels",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "typelabels"
     },
     {
@@ -802,8 +835,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "app_components_ui_producttypebadge_typeicons",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "typeicons"
     },
     {
@@ -813,8 +846,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "app_components_ui_producttypebadge_producttypebadge",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "producttypebadge()"
     },
     {
@@ -824,8 +857,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_components_ui_recommendationcard",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "recommendationcard.tsx"
     },
     {
@@ -835,8 +868,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "app_components_ui_recommendationcard_recommendationcardprops",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "recommendationcardprops"
     },
     {
@@ -846,8 +879,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "app_components_ui_recommendationcard_category_icon",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "category_icon"
     },
     {
@@ -857,8 +890,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "app_components_ui_recommendationcard_recommendationcard",
-      "community": 7,
-      "community_name": "TypeScript Configuration",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "recommendationcard()"
     },
     {
@@ -868,8 +901,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_components_ui_riskbadge",
-      "community": 8,
-      "community_name": "AdminUsersView.tsx",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "riskbadge.tsx"
     },
     {
@@ -890,8 +923,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "app_components_ui_riskbadge_riskbadgeclasses",
-      "community": 8,
-      "community_name": "AdminUsersView.tsx",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "riskbadgeclasses"
     },
     {
@@ -901,8 +934,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "app_components_ui_riskbadge_risklabels",
-      "community": 8,
-      "community_name": "AdminUsersView.tsx",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "risklabels"
     },
     {
@@ -912,8 +945,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "app_components_ui_riskbadge_riskdotclasses",
-      "community": 8,
-      "community_name": "AdminUsersView.tsx",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "riskdotclasses"
     },
     {
@@ -923,8 +956,8 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "app_components_ui_riskbadge_riskbadge",
-      "community": 8,
-      "community_name": "AdminUsersView.tsx",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "riskbadge()"
     },
     {
@@ -934,8 +967,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_components_ui_risklevelbadge",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "risklevelbadge.tsx"
     },
     {
@@ -945,8 +978,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "app_components_ui_risklevelbadge_risklevelbadgeprops",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "risklevelbadgeprops"
     },
     {
@@ -956,8 +989,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "app_components_ui_risklevelbadge_levelbadgeclasses",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "levelbadgeclasses"
     },
     {
@@ -967,8 +1000,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "app_components_ui_risklevelbadge_levellabels",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "levellabels"
     },
     {
@@ -978,8 +1011,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "app_components_ui_risklevelbadge_risklevelbadge",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "risklevelbadge()"
     },
     {
@@ -989,8 +1022,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_components_ui_scorering",
-      "community": 7,
-      "community_name": "TypeScript Configuration",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "scorering.tsx"
     },
     {
@@ -1000,8 +1033,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "app_components_ui_scorering_scoreringprops",
-      "community": 7,
-      "community_name": "TypeScript Configuration",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "scoreringprops"
     },
     {
@@ -1011,8 +1044,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "app_components_ui_scorering_scorering",
-      "community": 7,
-      "community_name": "TypeScript Configuration",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "scorering()"
     },
     {
@@ -1022,8 +1055,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_components_ui_statcard",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "statcard.tsx"
     },
     {
@@ -1033,8 +1066,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "app_components_ui_statcard_statcardprops",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "statcardprops"
     },
     {
@@ -1044,8 +1077,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "app_components_ui_statcard_statcard",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "statcard()"
     },
     {
@@ -1055,8 +1088,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_components_ui_subscore",
-      "community": 7,
-      "community_name": "TypeScript Configuration",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "subscore.tsx"
     },
     {
@@ -1066,8 +1099,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "app_components_ui_subscore_subscoreprops",
-      "community": 7,
-      "community_name": "TypeScript Configuration",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "subscoreprops"
     },
     {
@@ -1077,8 +1110,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "app_components_ui_subscore_subscore",
-      "community": 7,
-      "community_name": "TypeScript Configuration",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "subscore()"
     },
     {
@@ -1121,8 +1154,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_data",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "data.tsx"
     },
     {
@@ -1132,8 +1165,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "app_data_init_products",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "init_products"
     },
     {
@@ -1143,8 +1176,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "app_data_init_users",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "init_users"
     },
     {
@@ -1154,8 +1187,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "app_data_init_assets",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "init_assets"
     },
     {
@@ -1165,8 +1198,8 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "app_data_init_logs",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "init_logs"
     },
     {
@@ -1176,8 +1209,8 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "app_data_questionnaire",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "questionnaire"
     },
     {
@@ -1187,8 +1220,8 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "app_data_goal_type_config",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "goal_type_config"
     },
     {
@@ -1198,8 +1231,8 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "app_data_goal_max_months",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "goal_max_months"
     },
     {
@@ -1209,8 +1242,8 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "app_data_goal_fast_months",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "goal_fast_months"
     },
     {
@@ -1220,8 +1253,8 @@
       "source_location": "L104",
       "_origin": "ast",
       "id": "app_data_goal_product_types",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "goal_product_types"
     },
     {
@@ -1231,8 +1264,8 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "app_data_init_fin_profile",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "init_fin_profile"
     },
     {
@@ -1242,8 +1275,8 @@
       "source_location": "L127",
       "_origin": "ast",
       "id": "app_data_init_goals",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "init_goals"
     },
     {
@@ -1253,8 +1286,8 @@
       "source_location": "L150",
       "_origin": "ast",
       "id": "app_data_expense_labels",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "expense_labels"
     },
     {
@@ -1264,8 +1297,8 @@
       "source_location": "L161",
       "_origin": "ast",
       "id": "app_data_priority_config",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "priority_config"
     },
     {
@@ -1275,8 +1308,8 @@
       "source_location": "L168",
       "_origin": "ast",
       "id": "app_data_product_seed_prices",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "product_seed_prices"
     },
     {
@@ -1286,8 +1319,8 @@
       "source_location": "L175",
       "_origin": "ast",
       "id": "app_data_deposittenors",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "deposittenors"
     },
     {
@@ -1319,8 +1352,8 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "app_engine_calchealthscore",
-      "community": 7,
-      "community_name": "TypeScript Configuration",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "calchealthscore()"
     },
     {
@@ -1341,8 +1374,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_hooks_index",
-      "community": 4,
-      "community_name": "Product",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "index.ts"
     },
     {
@@ -1352,8 +1385,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_hooks_useassetdetail",
-      "community": 4,
-      "community_name": "Product",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "useassetdetail.ts"
     },
     {
@@ -1374,9 +1407,31 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "app_hooks_useassetdetail_useassetdetail",
-      "community": 4,
-      "community_name": "Product",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "useassetdetail()"
+    },
+    {
+      "label": "useAuthManager.ts",
+      "file_type": "code",
+      "source_file": "app/hooks/useAuthManager.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_hooks_useauthmanager",
+      "community": 1,
+      "community_name": "Authentication & Forms",
+      "norm_label": "useauthmanager.ts"
+    },
+    {
+      "label": "useAuthManager()",
+      "file_type": "code",
+      "source_file": "app/hooks/useAuthManager.ts",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "app_hooks_useauthmanager_useauthmanager",
+      "community": 1,
+      "community_name": "Authentication & Forms",
+      "norm_label": "useauthmanager()"
     },
     {
       "label": "useQuestionnaire.ts",
@@ -1385,8 +1440,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_hooks_usequestionnaire",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "usequestionnaire.ts"
     },
     {
@@ -1396,8 +1451,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "app_hooks_usequestionnaire_usequestionnaire",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "usequestionnaire()"
     },
     {
@@ -1407,8 +1462,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_hooks_usetrackmodal",
-      "community": 4,
-      "community_name": "Product",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "usetrackmodal.ts"
     },
     {
@@ -1418,8 +1473,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "app_hooks_usetrackmodal_usetrackmodalprops",
-      "community": 4,
-      "community_name": "Product",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "usetrackmodalprops"
     },
     {
@@ -1429,8 +1484,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "app_hooks_usetrackmodal_usetrackmodal",
-      "community": 7,
-      "community_name": "TypeScript Configuration",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "usetrackmodal()"
     },
     {
@@ -1506,8 +1561,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_routes_admin_audit",
-      "community": 30,
-      "community_name": "AdminAuditView.tsx",
+      "community": 3,
+      "community_name": "types.ts",
       "norm_label": "audit.tsx"
     },
     {
@@ -1517,8 +1572,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "app_routes_admin_audit_adminauditroute",
-      "community": 30,
-      "community_name": "AdminAuditView.tsx",
+      "community": 3,
+      "community_name": "types.ts",
       "norm_label": "adminauditroute()"
     },
     {
@@ -1528,8 +1583,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_routes_admin_dashboard",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "dashboard.tsx"
     },
     {
@@ -1539,8 +1594,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "app_routes_admin_dashboard_admindashboardroute",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "admindashboardroute()"
     },
     {
@@ -1550,8 +1605,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_routes_admin_products",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 4,
+      "community_name": "Product",
       "norm_label": "products.tsx"
     },
     {
@@ -1561,8 +1616,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "app_routes_admin_products_adminproductsroute",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 4,
+      "community_name": "Product",
       "norm_label": "adminproductsroute()"
     },
     {
@@ -1572,8 +1627,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_routes_admin_users",
-      "community": 8,
-      "community_name": "AdminUsersView.tsx",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "users.tsx"
     },
     {
@@ -1583,8 +1638,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "app_routes_admin_users_adminusersroute",
-      "community": 8,
-      "community_name": "AdminUsersView.tsx",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "adminusersroute()"
     },
     {
@@ -1594,15 +1649,15 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_routes_layout",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "layout.tsx"
     },
     {
       "label": "LayoutContextType",
       "file_type": "code",
       "source_file": "app/routes/layout.tsx",
-      "source_location": "L23",
+      "source_location": "L20",
       "_origin": "ast",
       "id": "app_routes_layout_layoutcontexttype",
       "community": 4,
@@ -1613,7 +1668,7 @@
       "label": "Layout()",
       "file_type": "code",
       "source_file": "app/routes/layout.tsx",
-      "source_location": "L38",
+      "source_location": "L35",
       "_origin": "ast",
       "id": "app_routes_layout_layout",
       "community": 1,
@@ -1635,7 +1690,7 @@
       "label": "AssetsRoute()",
       "file_type": "code",
       "source_file": "app/routes/user/assets.tsx",
-      "source_location": "L6",
+      "source_location": "L7",
       "_origin": "ast",
       "id": "app_routes_user_assets_assetsroute",
       "community": 2,
@@ -1649,8 +1704,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_routes_user_dashboard",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "dashboard.tsx"
     },
     {
@@ -1660,8 +1715,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "app_routes_user_dashboard_dashboardroute",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "dashboardroute()"
     },
     {
@@ -1671,8 +1726,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_routes_user_goals",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "goals.tsx"
     },
     {
@@ -1682,8 +1737,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "app_routes_user_goals_goalsroute",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "goalsroute()"
     },
     {
@@ -1693,8 +1748,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_routes_user_products",
-      "community": 7,
-      "community_name": "TypeScript Configuration",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "products.tsx"
     },
     {
@@ -1704,8 +1759,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "app_routes_user_products_productsroute",
-      "community": 7,
-      "community_name": "TypeScript Configuration",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "productsroute()"
     },
     {
@@ -1715,8 +1770,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_routes_user_progress",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "progress.tsx"
     },
     {
@@ -1726,8 +1781,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "app_routes_user_progress_progressroute",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "progressroute()"
     },
     {
@@ -1737,8 +1792,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_routes_user_recommendations",
-      "community": 7,
-      "community_name": "TypeScript Configuration",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "recommendations.tsx"
     },
     {
@@ -1748,8 +1803,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "app_routes_user_recommendations_recommendationsroute",
-      "community": 7,
-      "community_name": "TypeScript Configuration",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "recommendationsroute()"
     },
     {
@@ -1759,8 +1814,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_services_auth",
-      "community": 4,
-      "community_name": "Product",
+      "community": 3,
+      "community_name": "types.ts",
       "norm_label": "auth.ts"
     },
     {
@@ -1770,8 +1825,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "app_services_auth_authservice",
-      "community": 4,
-      "community_name": "Product",
+      "community": 3,
+      "community_name": "types.ts",
       "norm_label": "authservice"
     },
     {
@@ -1781,8 +1836,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_services_index",
-      "community": 4,
-      "community_name": "Product",
+      "community": 3,
+      "community_name": "types.ts",
       "norm_label": "index.ts"
     },
     {
@@ -1792,8 +1847,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_services_portfolio",
-      "community": 4,
-      "community_name": "Product",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "portfolio.ts"
     },
     {
@@ -1803,8 +1858,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "app_services_portfolio_portfolioservice",
-      "community": 4,
-      "community_name": "Product",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "portfolioservice"
     },
     {
@@ -1847,8 +1902,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_stores_goalsstore",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "goalsstore.ts"
     },
     {
@@ -1858,8 +1913,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "app_stores_goalsstore_goalsstate",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "goalsstate"
     },
     {
@@ -1869,8 +1924,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "app_stores_goalsstore_usegoalsstore",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "usegoalsstore"
     },
     {
@@ -1880,8 +1935,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_stores_portofoliostore",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "portofoliostore.ts"
     },
     {
@@ -1891,8 +1946,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "app_stores_portofoliostore_portfoliostate",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "portfoliostate"
     },
     {
@@ -1913,8 +1968,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_stores_productsstore",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 4,
+      "community_name": "Product",
       "norm_label": "productsstore.ts"
     },
     {
@@ -1924,8 +1979,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "app_stores_productsstore_productsstate",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 4,
+      "community_name": "Product",
       "norm_label": "productsstate"
     },
     {
@@ -1935,8 +1990,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "app_stores_productsstore_useproductsstore",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 4,
+      "community_name": "Product",
       "norm_label": "useproductsstore"
     },
     {
@@ -1946,8 +2001,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_stores_recommendationsstore",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "recommendationsstore.ts"
     },
     {
@@ -1957,8 +2012,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "app_stores_recommendationsstore_recommendationsstate",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "recommendationsstate"
     },
     {
@@ -1968,8 +2023,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "app_stores_recommendationsstore_userecommendationsstore",
-      "community": 7,
-      "community_name": "TypeScript Configuration",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "userecommendationsstore"
     },
     {
@@ -1979,8 +2034,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_types",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "types.ts"
     },
     {
@@ -1990,8 +2045,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_types_riskprofile",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "riskprofile"
     },
     {
@@ -2001,8 +2056,8 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "app_types_producttype",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "producttype"
     },
     {
@@ -2012,8 +2067,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "app_types_userrole",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "userrole"
     },
     {
@@ -2023,8 +2078,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "app_types_userstatus",
-      "community": 8,
-      "community_name": "AdminUsersView.tsx",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "userstatus"
     },
     {
@@ -2045,8 +2100,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "app_types_recommendation",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "recommendation"
     },
     {
@@ -2056,8 +2111,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "app_types_healthscore",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "healthscore"
     },
     {
@@ -2067,8 +2122,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "app_types_goaltype",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "goaltype"
     },
     {
@@ -2078,8 +2133,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "app_types_goal",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 4,
+      "community_name": "Product",
       "norm_label": "goal"
     },
     {
@@ -2100,8 +2155,8 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "app_types_appuser",
-      "community": 4,
-      "community_name": "Product",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "appuser"
     },
     {
@@ -2122,8 +2177,8 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "app_types_asset",
-      "community": 4,
-      "community_name": "Product",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "asset"
     },
     {
@@ -2133,8 +2188,8 @@
       "source_location": "L100",
       "_origin": "ast",
       "id": "app_types_auditlog",
-      "community": 4,
-      "community_name": "Product",
+      "community": 3,
+      "community_name": "types.ts",
       "norm_label": "auditlog"
     },
     {
@@ -2155,8 +2210,8 @@
       "source_location": "L112",
       "_origin": "ast",
       "id": "app_types_goalanalysis",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "goalanalysis"
     },
     {
@@ -2166,8 +2221,8 @@
       "source_location": "L120",
       "_origin": "ast",
       "id": "app_types_assetspnlresponse",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "assetspnlresponse"
     },
     {
@@ -2177,8 +2232,8 @@
       "source_location": "L134",
       "_origin": "ast",
       "id": "app_types_transactionhistory",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "transactionhistory"
     },
     {
@@ -2188,8 +2243,8 @@
       "source_location": "L144",
       "_origin": "ast",
       "id": "app_types_assetregistrationdto",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "assetregistrationdto"
     },
     {
@@ -2199,8 +2254,8 @@
       "source_location": "L149",
       "_origin": "ast",
       "id": "app_types_goalsettingdto",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "goalsettingdto"
     },
     {
@@ -2210,8 +2265,8 @@
       "source_location": "L153",
       "_origin": "ast",
       "id": "app_types_goalregistrationdto",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "goalregistrationdto"
     },
     {
@@ -2221,8 +2276,8 @@
       "source_location": "L165",
       "_origin": "ast",
       "id": "app_types_goalprojectiondto",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "goalprojectiondto"
     },
     {
@@ -2232,8 +2287,8 @@
       "source_location": "L173",
       "_origin": "ast",
       "id": "app_types_userdashboarddto",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "userdashboarddto"
     },
     {
@@ -2243,8 +2298,8 @@
       "source_location": "L182",
       "_origin": "ast",
       "id": "app_types_admindashboarddto",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "admindashboarddto"
     },
     {
@@ -2273,18 +2328,18 @@
       "label": "fmtFull()",
       "file_type": "code",
       "source_file": "app/utils.tsx",
-      "source_location": "L10",
+      "source_location": "L11",
       "_origin": "ast",
       "id": "app_utils_fmtfull",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "fmtfull()"
     },
     {
       "label": "fmtPct()",
       "file_type": "code",
       "source_file": "app/utils.tsx",
-      "source_location": "L12",
+      "source_location": "L16",
       "_origin": "ast",
       "id": "app_utils_fmtpct",
       "community": 2,
@@ -2295,7 +2350,7 @@
       "label": "fmtDate()",
       "file_type": "code",
       "source_file": "app/utils.tsx",
-      "source_location": "L14",
+      "source_location": "L21",
       "_origin": "ast",
       "id": "app_utils_fmtdate",
       "community": 2,
@@ -2306,29 +2361,29 @@
       "label": "fmtTs()",
       "file_type": "code",
       "source_file": "app/utils.tsx",
-      "source_location": "L17",
+      "source_location": "L24",
       "_origin": "ast",
       "id": "app_utils_fmtts",
-      "community": 30,
-      "community_name": "AdminAuditView.tsx",
+      "community": 3,
+      "community_name": "types.ts",
       "norm_label": "fmtts()"
     },
     {
       "label": "riskLabel()",
       "file_type": "code",
       "source_file": "app/utils.tsx",
-      "source_location": "L26",
+      "source_location": "L33",
       "_origin": "ast",
       "id": "app_utils_risklabel",
-      "community": 7,
-      "community_name": "TypeScript Configuration",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "risklabel()"
     },
     {
       "label": "typeLabel()",
       "file_type": "code",
       "source_file": "app/utils.tsx",
-      "source_location": "L30",
+      "source_location": "L37",
       "_origin": "ast",
       "id": "app_utils_typelabel",
       "community": 7,
@@ -2339,62 +2394,62 @@
       "label": "maxRiskForProfile()",
       "file_type": "code",
       "source_file": "app/utils.tsx",
-      "source_location": "L34",
+      "source_location": "L41",
       "_origin": "ast",
       "id": "app_utils_maxriskforprofile",
-      "community": 7,
-      "community_name": "TypeScript Configuration",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "maxriskforprofile()"
     },
     {
       "label": "scoreToProfile()",
       "file_type": "code",
       "source_file": "app/utils.tsx",
-      "source_location": "L39",
+      "source_location": "L46",
       "_origin": "ast",
       "id": "app_utils_scoretoprofile",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "scoretoprofile()"
     },
     {
       "label": "genHistory()",
       "file_type": "code",
       "source_file": "app/utils.tsx",
-      "source_location": "L42",
+      "source_location": "L49",
       "_origin": "ast",
       "id": "app_utils_genhistory",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "genhistory()"
     },
     {
       "label": "categoryBadge()",
       "file_type": "code",
       "source_file": "app/utils.tsx",
-      "source_location": "L52",
+      "source_location": "L59",
       "_origin": "ast",
       "id": "app_utils_categorybadge",
-      "community": 30,
-      "community_name": "AdminAuditView.tsx",
+      "community": 3,
+      "community_name": "types.ts",
       "norm_label": "categorybadge()"
     },
     {
       "label": "statusBadge()",
       "file_type": "code",
       "source_file": "app/utils.tsx",
-      "source_location": "L60",
+      "source_location": "L67",
       "_origin": "ast",
       "id": "app_utils_statusbadge",
-      "community": 8,
-      "community_name": "AdminUsersView.tsx",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "statusbadge()"
     },
     {
       "label": "monthsToGoal()",
       "file_type": "code",
       "source_file": "app/utils.tsx",
-      "source_location": "L68",
+      "source_location": "L75",
       "_origin": "ast",
       "id": "app_utils_monthstogoal",
       "community": 7,
@@ -2405,7 +2460,7 @@
       "label": "fmtDuration()",
       "file_type": "code",
       "source_file": "app/utils.tsx",
-      "source_location": "L90",
+      "source_location": "L97",
       "_origin": "ast",
       "id": "app_utils_fmtduration",
       "community": 7,
@@ -2416,7 +2471,7 @@
       "label": "projectedDate()",
       "file_type": "code",
       "source_file": "app/utils.tsx",
-      "source_location": "L100",
+      "source_location": "L107",
       "_origin": "ast",
       "id": "app_utils_projecteddate",
       "community": 7,
@@ -2427,7 +2482,7 @@
       "label": "monthlyNeeded()",
       "file_type": "code",
       "source_file": "app/utils.tsx",
-      "source_location": "L108",
+      "source_location": "L115",
       "_origin": "ast",
       "id": "app_utils_monthlyneeded",
       "community": 7,
@@ -2441,8 +2496,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_views_admin_adminauditview",
-      "community": 30,
-      "community_name": "AdminAuditView.tsx",
+      "community": 3,
+      "community_name": "types.ts",
       "norm_label": "adminauditview.tsx"
     },
     {
@@ -2452,8 +2507,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "app_views_admin_adminauditview_adminauditviewprops",
-      "community": 4,
-      "community_name": "Product",
+      "community": 3,
+      "community_name": "types.ts",
       "norm_label": "adminauditviewprops"
     },
     {
@@ -2463,8 +2518,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "app_views_admin_adminauditview_adminauditview",
-      "community": 30,
-      "community_name": "AdminAuditView.tsx",
+      "community": 3,
+      "community_name": "types.ts",
       "norm_label": "adminauditview()"
     },
     {
@@ -2474,8 +2529,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_views_admin_admindashboardview",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "admindashboardview.tsx"
     },
     {
@@ -2485,8 +2540,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "app_views_admin_admindashboardview_dashboardperfchart",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "dashboardperfchart"
     },
     {
@@ -2496,8 +2551,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "app_views_admin_admindashboardview_dashboardpiechart",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "dashboardpiechart"
     },
     {
@@ -2507,8 +2562,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "app_views_admin_admindashboardview_admindashboardviewprops",
-      "community": 4,
-      "community_name": "Product",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "admindashboardviewprops"
     },
     {
@@ -2518,8 +2573,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "app_views_admin_admindashboardview_admindashboardview",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "admindashboardview()"
     },
     {
@@ -2529,8 +2584,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_views_admin_adminproductsview",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 4,
+      "community_name": "Product",
       "norm_label": "adminproductsview.tsx"
     },
     {
@@ -2540,8 +2595,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "app_views_admin_adminproductsview_adminproductsviewprops",
-      "community": 4,
-      "community_name": "Product",
+      "community": 3,
+      "community_name": "types.ts",
       "norm_label": "adminproductsviewprops"
     },
     {
@@ -2551,8 +2606,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "app_views_admin_adminproductsview_adminproductsview",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 4,
+      "community_name": "Product",
       "norm_label": "adminproductsview()"
     },
     {
@@ -2562,8 +2617,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_views_admin_adminusersview",
-      "community": 8,
-      "community_name": "AdminUsersView.tsx",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "adminusersview.tsx"
     },
     {
@@ -2573,8 +2628,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "app_views_admin_adminusersview_adminusersviewprops",
-      "community": 4,
-      "community_name": "Product",
+      "community": 3,
+      "community_name": "types.ts",
       "norm_label": "adminusersviewprops"
     },
     {
@@ -2584,8 +2639,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "app_views_admin_adminusersview_adminusersview",
-      "community": 8,
-      "community_name": "AdminUsersView.tsx",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "adminusersview()"
     },
     {
@@ -2606,8 +2661,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "app_views_assets_addtransactionmodal_addtransactionmodalprops",
-      "community": 4,
-      "community_name": "Product",
+      "community": 11,
+      "community_name": "Admin Audit & Utils",
       "norm_label": "addtransactionmodalprops"
     },
     {
@@ -2669,7 +2724,7 @@
       "label": "AssetsViewProps",
       "file_type": "code",
       "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L20",
+      "source_location": "L17",
       "_origin": "ast",
       "id": "app_views_assets_assetsview_assetsviewprops",
       "community": 4,
@@ -2680,7 +2735,7 @@
       "label": "AssetsView()",
       "file_type": "code",
       "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L28",
+      "source_location": "L27",
       "_origin": "ast",
       "id": "app_views_assets_assetsview_assetsview",
       "community": 2,
@@ -2870,8 +2925,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_views_auth_profileresultview",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "profileresultview.tsx"
     },
     {
@@ -2881,8 +2936,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "app_views_auth_profileresultview_profileresultprops",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "profileresultprops"
     },
     {
@@ -2892,8 +2947,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "app_views_auth_profileresultview_profileresultview",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "profileresultview()"
     },
     {
@@ -2903,8 +2958,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_views_auth_questionnaireview",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "questionnaireview.tsx"
     },
     {
@@ -2914,8 +2969,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "app_views_auth_questionnaireview_questionnaireviewprops",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "questionnaireviewprops"
     },
     {
@@ -2925,8 +2980,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "app_views_auth_questionnaireview_questionnaireview",
-      "community": 1,
-      "community_name": "Authentication & Forms",
+      "community": 8,
+      "community_name": "AdminUsersView.tsx",
       "norm_label": "questionnaireview()"
     },
     {
@@ -2969,8 +3024,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_views_dashboard_dashboardview",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "dashboardview.tsx"
     },
     {
@@ -2980,8 +3035,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "app_views_dashboard_dashboardview_dashboardperfchart",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "dashboardperfchart"
     },
     {
@@ -2991,8 +3046,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "app_views_dashboard_dashboardview_dashboardpiechart",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "dashboardpiechart"
     },
     {
@@ -3002,8 +3057,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "app_views_dashboard_dashboardview_dashboardviewprops",
-      "community": 4,
-      "community_name": "Product",
+      "community": 1,
+      "community_name": "Authentication & Forms",
       "norm_label": "dashboardviewprops"
     },
     {
@@ -3013,8 +3068,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "app_views_dashboard_dashboardview_dashboardview",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "dashboardview()"
     },
     {
@@ -3068,8 +3123,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "app_views_goals_goalformmodal_goalformmodalprops",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 4,
+      "community_name": "Product",
       "norm_label": "goalformmodalprops"
     },
     {
@@ -3090,8 +3145,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_views_goals_goalsview",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "goalsview.tsx"
     },
     {
@@ -3112,8 +3167,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "app_views_goals_goalsview_goalsview",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "goalsview()"
     },
     {
@@ -3156,8 +3211,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_views_goals_surplusallocation",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "surplusallocation.tsx"
     },
     {
@@ -3167,8 +3222,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "app_views_goals_surplusallocation_surplusallocationprops",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 4,
+      "community_name": "Product",
       "norm_label": "surplusallocationprops"
     },
     {
@@ -3178,8 +3233,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "app_views_goals_surplusallocation_surplusallocation",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "surplusallocation()"
     },
     {
@@ -3189,8 +3244,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_views_goals_wealthcalculator",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "wealthcalculator.tsx"
     },
     {
@@ -3200,8 +3255,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "app_views_goals_wealthcalculator_wealthcalculatorprops",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 4,
+      "community_name": "Product",
       "norm_label": "wealthcalculatorprops"
     },
     {
@@ -3211,8 +3266,8 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "app_views_goals_wealthcalculator_expense_labels",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "expense_labels"
     },
     {
@@ -3222,8 +3277,8 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "app_views_goals_wealthcalculator_wealthcalculator",
-      "community": 3,
-      "community_name": "types.ts",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "wealthcalculator()"
     },
     {
@@ -3233,8 +3288,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_views_products_productselectorstep",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "productselectorstep.tsx"
     },
     {
@@ -3244,8 +3299,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "app_views_products_productselectorstep_productselectorstepprops",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "productselectorstepprops"
     },
     {
@@ -3255,8 +3310,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "app_views_products_productselectorstep_productselectorstep",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "productselectorstep()"
     },
     {
@@ -3266,8 +3321,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_views_products_productsview",
-      "community": 7,
-      "community_name": "TypeScript Configuration",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "productsview.tsx"
     },
     {
@@ -3277,8 +3332,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "app_views_products_productsview_productsviewprops",
-      "community": 4,
-      "community_name": "Product",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "productsviewprops"
     },
     {
@@ -3288,8 +3343,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "app_views_products_productsview_productsview",
-      "community": 7,
-      "community_name": "TypeScript Configuration",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "productsview()"
     },
     {
@@ -3299,8 +3354,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_views_products_trackformstep",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "trackformstep.tsx"
     },
     {
@@ -3310,8 +3365,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "app_views_products_trackformstep_trackformstepprops",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 4,
+      "community_name": "Product",
       "norm_label": "trackformstepprops"
     },
     {
@@ -3321,8 +3376,8 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "app_views_products_trackformstep_trackformstep",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "trackformstep()"
     },
     {
@@ -3332,8 +3387,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_views_products_trackmodal",
-      "community": 0,
-      "community_name": "Admin Dashboard & UI Components",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "trackmodal.tsx"
     },
     {
@@ -3343,8 +3398,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "app_views_products_trackmodal_trackmodalprops",
-      "community": 4,
-      "community_name": "Product",
+      "community": 2,
+      "community_name": "App Setup & Profile",
       "norm_label": "trackmodalprops"
     },
     {
@@ -3354,8 +3409,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "app_views_products_trackmodal_trackmodal",
-      "community": 7,
-      "community_name": "TypeScript Configuration",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "trackmodal()"
     },
     {
@@ -3365,8 +3420,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_views_progress_progressview",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "progressview.tsx"
     },
     {
@@ -3376,8 +3431,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "app_views_progress_progressview_progressgoalchart",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "progressgoalchart"
     },
     {
@@ -3398,8 +3453,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "app_views_progress_progressview_progressview",
-      "community": 2,
-      "community_name": "App Setup & Profile",
+      "community": 7,
+      "community_name": "TypeScript Configuration",
       "norm_label": "progressview()"
     },
     {
@@ -3409,8 +3464,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_views_recommendations_recommendationsview",
-      "community": 7,
-      "community_name": "TypeScript Configuration",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "recommendationsview.tsx"
     },
     {
@@ -3431,8 +3486,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "app_views_recommendations_recommendationsview_recommendationsview",
-      "community": 7,
-      "community_name": "TypeScript Configuration",
+      "community": 30,
+      "community_name": "AdminAuditView.tsx",
       "norm_label": "recommendationsview()"
     },
     {
@@ -3442,8 +3497,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "package",
-      "community": 5,
-      "community_name": "Types & Prop Interfaces",
+      "community": 0,
+      "community_name": "Admin Dashboard & UI Components",
       "norm_label": "package.json"
     },
     {
@@ -3453,8 +3508,8 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "package_name",
-      "community": 5,
-      "community_name": "Types & Prop Interfaces",
+      "community": 0,
+      "community_name": "Admin Dashboard & UI Components",
       "norm_label": "name"
     },
     {
@@ -3464,8 +3519,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "package_private",
-      "community": 5,
-      "community_name": "Types & Prop Interfaces",
+      "community": 0,
+      "community_name": "Admin Dashboard & UI Components",
       "norm_label": "private"
     },
     {
@@ -3475,8 +3530,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "package_type",
-      "community": 5,
-      "community_name": "Types & Prop Interfaces",
+      "community": 0,
+      "community_name": "Admin Dashboard & UI Components",
       "norm_label": "type"
     },
     {
@@ -3486,8 +3541,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "package_scripts",
-      "community": 5,
-      "community_name": "Types & Prop Interfaces",
+      "community": 0,
+      "community_name": "Admin Dashboard & UI Components",
       "norm_label": "scripts"
     },
     {
@@ -3497,8 +3552,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "package_scripts_dev",
-      "community": 5,
-      "community_name": "Types & Prop Interfaces",
+      "community": 0,
+      "community_name": "Admin Dashboard & UI Components",
       "norm_label": "dev"
     },
     {
@@ -3508,8 +3563,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "package_scripts_build",
-      "community": 5,
-      "community_name": "Types & Prop Interfaces",
+      "community": 0,
+      "community_name": "Admin Dashboard & UI Components",
       "norm_label": "build"
     },
     {
@@ -3519,8 +3574,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "package_scripts_start",
-      "community": 5,
-      "community_name": "Types & Prop Interfaces",
+      "community": 0,
+      "community_name": "Admin Dashboard & UI Components",
       "norm_label": "start"
     },
     {
@@ -3530,8 +3585,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "package_scripts_typecheck",
-      "community": 5,
-      "community_name": "Types & Prop Interfaces",
+      "community": 0,
+      "community_name": "Admin Dashboard & UI Components",
       "norm_label": "typecheck"
     },
     {
@@ -3552,8 +3607,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "package_dependencies_react_router_node",
-      "community": 9,
-      "community_name": "External Dependencies",
+      "community": 38,
+      "community_name": "@react-router/node",
       "norm_label": "@react-router/node"
     },
     {
@@ -3563,8 +3618,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "react_router_node",
-      "community": 9,
-      "community_name": "External Dependencies",
+      "community": 38,
+      "community_name": "@react-router/node",
       "norm_label": "@react-router/node"
     },
     {
@@ -3640,8 +3695,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "package_dependencies_lucide_react",
-      "community": 9,
-      "community_name": "External Dependencies",
+      "community": 37,
+      "community_name": "lucide-react",
       "norm_label": "lucide-react"
     },
     {
@@ -3651,8 +3706,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "lucide_react",
-      "community": 9,
-      "community_name": "External Dependencies",
+      "community": 37,
+      "community_name": "lucide-react",
       "norm_label": "lucide-react"
     },
     {
@@ -3706,8 +3761,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "package_dependencies_react_router",
-      "community": 9,
-      "community_name": "External Dependencies",
+      "community": 35,
+      "community_name": "assets.ts",
       "norm_label": "react-router"
     },
     {
@@ -3717,8 +3772,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "react_router",
-      "community": 9,
-      "community_name": "External Dependencies",
+      "community": 35,
+      "community_name": "assets.ts",
       "norm_label": "react-router"
     },
     {
@@ -3827,8 +3882,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "package_devdependencies_tailwindcss_vite",
-      "community": 5,
-      "community_name": "Types & Prop Interfaces",
+      "community": 39,
+      "community_name": "@tailwindcss/vite",
       "norm_label": "@tailwindcss/vite"
     },
     {
@@ -3838,8 +3893,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "tailwindcss_vite",
-      "community": 5,
-      "community_name": "Types & Prop Interfaces",
+      "community": 39,
+      "community_name": "@tailwindcss/vite",
       "norm_label": "@tailwindcss/vite"
     },
     {
@@ -4976,6 +5031,94 @@
       "norm_label": "stability"
     },
     {
+      "label": "AUTH_REVIEW.md",
+      "file_type": "document",
+      "source_file": "AUTH_REVIEW.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "auth_review",
+      "community": 34,
+      "community_name": "Auth Feature Code Review",
+      "norm_label": "auth_review.md"
+    },
+    {
+      "label": "Auth Feature Code Review",
+      "file_type": "document",
+      "source_file": "AUTH_REVIEW.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "auth_review_auth_feature_code_review",
+      "community": 34,
+      "community_name": "Auth Feature Code Review",
+      "norm_label": "auth feature code review"
+    },
+    {
+      "label": "1. Logout Token Race Condition",
+      "file_type": "document",
+      "source_file": "AUTH_REVIEW.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "auth_review_1_logout_token_race_condition",
+      "community": 34,
+      "community_name": "Auth Feature Code Review",
+      "norm_label": "1. logout token race condition"
+    },
+    {
+      "label": "2. Missing Unauthenticated State Handler",
+      "file_type": "document",
+      "source_file": "AUTH_REVIEW.md",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "auth_review_2_missing_unauthenticated_state_handler",
+      "community": 34,
+      "community_name": "Auth Feature Code Review",
+      "norm_label": "2. missing unauthenticated state handler"
+    },
+    {
+      "label": "3. Questionnaire State Lost on Page Reload",
+      "file_type": "document",
+      "source_file": "AUTH_REVIEW.md",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "auth_review_3_questionnaire_state_lost_on_page_reload",
+      "community": 34,
+      "community_name": "Auth Feature Code Review",
+      "norm_label": "3. questionnaire state lost on page reload"
+    },
+    {
+      "label": "4. Missing Logout on 401 Without Refresh Token",
+      "file_type": "document",
+      "source_file": "AUTH_REVIEW.md",
+      "source_location": "L20",
+      "_origin": "ast",
+      "id": "auth_review_4_missing_logout_on_401_without_refresh_token",
+      "community": 34,
+      "community_name": "Auth Feature Code Review",
+      "norm_label": "4. missing logout on 401 without refresh token"
+    },
+    {
+      "label": "5. Global Token Leak",
+      "file_type": "document",
+      "source_file": "AUTH_REVIEW.md",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "auth_review_5_global_token_leak",
+      "community": 34,
+      "community_name": "Auth Feature Code Review",
+      "norm_label": "5. global token leak"
+    },
+    {
+      "label": "6. Refresh Token Race Condition",
+      "file_type": "document",
+      "source_file": "AUTH_REVIEW.md",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "auth_review_6_refresh_token_race_condition",
+      "community": 34,
+      "community_name": "Auth Feature Code Review",
+      "norm_label": "6. refresh token race condition"
+    },
+    {
       "label": "CLAUDE.md",
       "file_type": "document",
       "source_file": "CLAUDE.md",
@@ -5144,10 +5287,20 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/api/assets.ts",
-      "source_location": "L4",
+      "source_location": "L21",
       "weight": 1.0,
       "source": "app_api_assets",
       "target": "app_api_assets_assetapi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/api/assets.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "app_api_assets",
+      "target": "app_api_assets_toassetpayload",
       "confidence_score": 1.0
     },
     {
@@ -5231,17 +5384,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "source": "app_views_assets_assetsview",
-      "target": "app_api_assets",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "app/views/dashboard/DashboardView.tsx",
       "source_location": "L12",
       "weight": 1.0,
@@ -5281,28 +5423,6 @@
       "source": "app_stores_portofoliostore",
       "target": "app_api_assets_assetapi",
       "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "source": "app_views_assets_assetsview",
-      "target": "app_api_assets_assetapi",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "references",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L54",
-      "weight": 1.0,
-      "source": "app_views_assets_assetsview_assetsview",
-      "target": "app_api_assets_assetapi"
     },
     {
       "relation": "imports",
@@ -5448,10 +5568,10 @@
       "context": "import",
       "deferred": true,
       "confidence": "EXTRACTED",
-      "source_file": "app/routes/layout.tsx",
-      "source_location": "L110",
+      "source_file": "app/hooks/useAuthManager.ts",
+      "source_location": "L86",
       "weight": 1.0,
-      "source": "app_routes_layout_layout",
+      "source": "app_hooks_useauthmanager_useauthmanager",
       "target": "app_api_auth",
       "confidence_score": 1.0
     },
@@ -5498,6 +5618,17 @@
       "source": "app_api_client",
       "target": "app_api_auth_authapi",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "app/hooks/useAuthManager.ts",
+      "source_location": "L87",
+      "weight": 1.0,
+      "source": "app_hooks_useauthmanager_useauthmanager",
+      "target": "app_api_auth_authapi"
     },
     {
       "relation": "imports",
@@ -5551,6 +5682,26 @@
       "weight": 1.0,
       "source": "app_api_client",
       "target": "app_api_client_api",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/api/client.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "app_api_client",
+      "target": "app_api_client_failedqueue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/api/client.ts",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "app_api_client",
+      "target": "app_api_client_processqueue",
       "confidence_score": 1.0
     },
     {
@@ -5623,10 +5774,10 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "app/routes/layout.tsx",
-      "source_location": "L21",
+      "source_file": "app/hooks/useAuthManager.ts",
+      "source_location": "L3",
       "weight": 1.0,
-      "source": "app_routes_layout",
+      "source": "app_hooks_useauthmanager",
       "target": "app_api_client",
       "confidence_score": 1.0
     },
@@ -5700,10 +5851,10 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "app/routes/layout.tsx",
-      "source_location": "L21",
+      "source_file": "app/hooks/useAuthManager.ts",
+      "source_location": "L3",
       "weight": 1.0,
-      "source": "app_routes_layout",
+      "source": "app_hooks_useauthmanager",
       "target": "app_api_client_api",
       "confidence_score": 1.0
     },
@@ -6664,6 +6815,17 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "app/views/assets/AssetsView.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "app_views_assets_assetsview",
+      "target": "app_components_ui_badge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "app/views/products/ProductSelectorStep.tsx",
       "source_location": "L3",
       "weight": 1.0,
@@ -6767,6 +6929,17 @@
       "source_location": "L8",
       "weight": 1.0,
       "source": "app_views_admin_adminusersview",
+      "target": "app_components_ui_badge_badge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/views/assets/AssetsView.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "app_views_assets_assetsview",
       "target": "app_components_ui_badge_badge",
       "confidence_score": 1.0
     },
@@ -6925,7 +7098,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L11",
+      "source_location": "L12",
       "weight": 1.0,
       "source": "app_views_assets_assetsview",
       "target": "app_components_ui_btn",
@@ -7200,7 +7373,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L11",
+      "source_location": "L12",
       "weight": 1.0,
       "source": "app_views_assets_assetsview",
       "target": "app_components_ui_btn_btn",
@@ -10477,6 +10650,170 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "app/hooks/useAuthManager.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "app_hooks_useauthmanager",
+      "target": "app_hooks_useauthmanager_useauthmanager",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/hooks/useAuthManager.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "app_hooks_useauthmanager",
+      "target": "app_stores_authstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/hooks/useAuthManager.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "app_hooks_useauthmanager",
+      "target": "app_stores_authstore_useauthstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/hooks/useAuthManager.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "app_hooks_useauthmanager",
+      "target": "app_types",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/hooks/useAuthManager.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "app_hooks_useauthmanager",
+      "target": "app_types_appuser",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/hooks/useAuthManager.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "app_hooks_useauthmanager",
+      "target": "app_types_auditlog",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/hooks/useAuthManager.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "app_hooks_useauthmanager",
+      "target": "app_types_riskprofile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/hooks/useAuthManager.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "app_hooks_useauthmanager",
+      "target": "app_types_view",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/hooks/useAuthManager.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "app_hooks_useauthmanager",
+      "target": "app_utils",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/hooks/useAuthManager.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "app_hooks_useauthmanager",
+      "target": "app_utils_risklabel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/routes/layout.tsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "app_routes_layout",
+      "target": "app_hooks_useauthmanager",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "app/hooks/useAuthManager.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "app_hooks_useauthmanager_useauthmanager",
+      "target": "app_stores_authstore_useauthstore"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "app/hooks/useAuthManager.ts",
+      "source_location": "L73",
+      "weight": 1.0,
+      "source": "app_hooks_useauthmanager_useauthmanager",
+      "target": "app_utils_risklabel"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/routes/layout.tsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "app_routes_layout",
+      "target": "app_hooks_useauthmanager_useauthmanager",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "app/routes/layout.tsx",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "app_routes_layout_layout",
+      "target": "app_hooks_useauthmanager_useauthmanager"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "app/hooks/useQuestionnaire.ts",
       "source_location": "L6",
       "weight": 1.0,
@@ -10545,7 +10882,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "app/hooks/useQuestionnaire.ts",
-      "source_location": "L23",
+      "source_location": "L26",
       "weight": 1.0,
       "source": "app_hooks_usequestionnaire_usequestionnaire",
       "target": "app_utils_scoretoprofile"
@@ -11006,7 +11343,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/routes/layout.tsx",
-      "source_location": "L38",
+      "source_location": "L35",
       "weight": 1.0,
       "source": "app_routes_layout",
       "target": "app_routes_layout_layout",
@@ -11016,32 +11353,10 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/routes/layout.tsx",
-      "source_location": "L23",
+      "source_location": "L20",
       "weight": 1.0,
       "source": "app_routes_layout",
       "target": "app_routes_layout_layoutcontexttype",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/routes/layout.tsx",
-      "source_location": "L19",
-      "weight": 1.0,
-      "source": "app_routes_layout",
-      "target": "app_stores_authstore",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/routes/layout.tsx",
-      "source_location": "L19",
-      "weight": 1.0,
-      "source": "app_routes_layout",
-      "target": "app_stores_authstore_useauthstore",
       "confidence_score": 1.0
     },
     {
@@ -11141,28 +11456,6 @@
       "weight": 1.0,
       "source": "app_routes_layout",
       "target": "app_types_view",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/routes/layout.tsx",
-      "source_location": "L18",
-      "weight": 1.0,
-      "source": "app_routes_layout",
-      "target": "app_utils",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/routes/layout.tsx",
-      "source_location": "L18",
-      "weight": 1.0,
-      "source": "app_routes_layout",
-      "target": "app_utils_risklabel",
       "confidence_score": 1.0
     },
     {
@@ -11324,7 +11617,7 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "app/routes/layout.tsx",
-      "source_location": "L25",
+      "source_location": "L22",
       "weight": 1.0,
       "source": "app_routes_layout_layoutcontexttype",
       "target": "app_types_appuser",
@@ -11335,7 +11628,7 @@
       "context": "field",
       "confidence": "EXTRACTED",
       "source_file": "app/routes/layout.tsx",
-      "source_location": "L29",
+      "source_location": "L26",
       "weight": 1.0,
       "source": "app_routes_layout_layoutcontexttype",
       "target": "app_types_asset",
@@ -11346,7 +11639,7 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "app/routes/layout.tsx",
-      "source_location": "L34",
+      "source_location": "L31",
       "weight": 1.0,
       "source": "app_routes_layout_layoutcontexttype",
       "target": "app_types_auditlog",
@@ -11357,7 +11650,7 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "app/routes/layout.tsx",
-      "source_location": "L32",
+      "source_location": "L29",
       "weight": 1.0,
       "source": "app_routes_layout_layoutcontexttype",
       "target": "app_types_financialprofile",
@@ -11368,7 +11661,7 @@
       "context": "field",
       "confidence": "EXTRACTED",
       "source_file": "app/routes/layout.tsx",
-      "source_location": "L30",
+      "source_location": "L27",
       "weight": 1.0,
       "source": "app_routes_layout_layoutcontexttype",
       "target": "app_types_goal",
@@ -11379,7 +11672,7 @@
       "context": "field",
       "confidence": "EXTRACTED",
       "source_file": "app/routes/layout.tsx",
-      "source_location": "L28",
+      "source_location": "L25",
       "weight": 1.0,
       "source": "app_routes_layout_layoutcontexttype",
       "target": "app_types_product",
@@ -11452,35 +11745,35 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/routes/layout.tsx",
-      "source_location": "L39",
-      "weight": 1.0,
-      "source": "app_routes_layout_layout",
-      "target": "app_stores_authstore_useauthstore"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/routes/layout.tsx",
-      "source_location": "L98",
-      "weight": 1.0,
-      "source": "app_routes_layout_layout",
-      "target": "app_utils_risklabel"
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/routes/user/assets.tsx",
-      "source_location": "L6",
+      "source_location": "L7",
       "weight": 1.0,
       "source": "app_routes_user_assets",
       "target": "app_routes_user_assets_assetsroute",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/routes/user/assets.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "app_routes_user_assets",
+      "target": "app_stores_portofoliostore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/routes/user/assets.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "app_routes_user_assets",
+      "target": "app_stores_portofoliostore_useportfoliostore",
       "confidence_score": 1.0
     },
     {
@@ -11504,6 +11797,17 @@
       "source": "app_routes_user_assets",
       "target": "app_views_assets_assetsview_assetsview",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "app/routes/user/assets.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "app_routes_user_assets_assetsroute",
+      "target": "app_stores_portofoliostore_useportfoliostore"
     },
     {
       "relation": "contains",
@@ -11833,7 +12137,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L14",
+      "source_location": "L15",
       "weight": 1.0,
       "source": "app_views_assets_assetsview",
       "target": "app_services_portfolio",
@@ -11844,11 +12148,22 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L14",
+      "source_location": "L15",
       "weight": 1.0,
       "source": "app_views_assets_assetsview",
       "target": "app_services_portfolio_portfolioservice",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "app/views/assets/AssetsView.tsx",
+      "source_location": "L66",
+      "weight": 1.0,
+      "source": "app_views_assets_assetsview_assetsview",
+      "target": "app_services_portfolio_portfolioservice"
     },
     {
       "relation": "contains",
@@ -12134,17 +12449,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L15",
-      "weight": 1.0,
-      "source": "app_views_assets_assetsview",
-      "target": "app_stores_portofoliostore",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "app/views/progress/ProgressView.tsx",
       "source_location": "L10",
       "weight": 1.0,
@@ -12205,28 +12509,6 @@
       "source_location": "L54",
       "weight": 1.0,
       "source": "app_views_assets_assetdetailpage_assetdetailpage",
-      "target": "app_stores_portofoliostore_useportfoliostore"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L15",
-      "weight": 1.0,
-      "source": "app_views_assets_assetsview",
-      "target": "app_stores_portofoliostore_useportfoliostore",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L39",
-      "weight": 1.0,
-      "source": "app_views_assets_assetsview_assetsview",
       "target": "app_stores_portofoliostore_useportfoliostore"
     },
     {
@@ -13218,7 +13500,7 @@
       "context": "field",
       "confidence": "EXTRACTED",
       "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L24",
+      "source_location": "L23",
       "weight": 1.0,
       "source": "app_views_assets_assetsview_assetsviewprops",
       "target": "app_types_goal",
@@ -13537,7 +13819,7 @@
       "context": "field",
       "confidence": "EXTRACTED",
       "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L21",
+      "source_location": "L18",
       "weight": 1.0,
       "source": "app_views_assets_assetsview_assetsviewprops",
       "target": "app_types_appuser",
@@ -13834,7 +14116,7 @@
       "context": "field",
       "confidence": "EXTRACTED",
       "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L22",
+      "source_location": "L19",
       "weight": 1.0,
       "source": "app_views_assets_assetsview_assetsviewprops",
       "target": "app_types_product",
@@ -14105,6 +14387,17 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "app/views/assets/AssetsView.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "app_views_assets_assetsview_assetsviewprops",
+      "target": "app_types_asset",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -14339,7 +14632,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/utils.tsx",
-      "source_location": "L52",
+      "source_location": "L59",
       "weight": 1.0,
       "source": "app_utils",
       "target": "app_utils_categorybadge",
@@ -14359,7 +14652,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/utils.tsx",
-      "source_location": "L14",
+      "source_location": "L21",
       "weight": 1.0,
       "source": "app_utils",
       "target": "app_utils_fmtdate",
@@ -14369,7 +14662,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/utils.tsx",
-      "source_location": "L90",
+      "source_location": "L97",
       "weight": 1.0,
       "source": "app_utils",
       "target": "app_utils_fmtduration",
@@ -14379,7 +14672,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/utils.tsx",
-      "source_location": "L10",
+      "source_location": "L11",
       "weight": 1.0,
       "source": "app_utils",
       "target": "app_utils_fmtfull",
@@ -14389,7 +14682,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/utils.tsx",
-      "source_location": "L12",
+      "source_location": "L16",
       "weight": 1.0,
       "source": "app_utils",
       "target": "app_utils_fmtpct",
@@ -14399,7 +14692,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/utils.tsx",
-      "source_location": "L17",
+      "source_location": "L24",
       "weight": 1.0,
       "source": "app_utils",
       "target": "app_utils_fmtts",
@@ -14409,7 +14702,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/utils.tsx",
-      "source_location": "L42",
+      "source_location": "L49",
       "weight": 1.0,
       "source": "app_utils",
       "target": "app_utils_genhistory",
@@ -14419,7 +14712,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/utils.tsx",
-      "source_location": "L34",
+      "source_location": "L41",
       "weight": 1.0,
       "source": "app_utils",
       "target": "app_utils_maxriskforprofile",
@@ -14429,7 +14722,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/utils.tsx",
-      "source_location": "L108",
+      "source_location": "L115",
       "weight": 1.0,
       "source": "app_utils",
       "target": "app_utils_monthlyneeded",
@@ -14439,7 +14732,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/utils.tsx",
-      "source_location": "L68",
+      "source_location": "L75",
       "weight": 1.0,
       "source": "app_utils",
       "target": "app_utils_monthstogoal",
@@ -14449,7 +14742,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/utils.tsx",
-      "source_location": "L100",
+      "source_location": "L107",
       "weight": 1.0,
       "source": "app_utils",
       "target": "app_utils_projecteddate",
@@ -14459,7 +14752,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/utils.tsx",
-      "source_location": "L26",
+      "source_location": "L33",
       "weight": 1.0,
       "source": "app_utils",
       "target": "app_utils_risklabel",
@@ -14469,7 +14762,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/utils.tsx",
-      "source_location": "L39",
+      "source_location": "L46",
       "weight": 1.0,
       "source": "app_utils",
       "target": "app_utils_scoretoprofile",
@@ -14479,7 +14772,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/utils.tsx",
-      "source_location": "L60",
+      "source_location": "L67",
       "weight": 1.0,
       "source": "app_utils",
       "target": "app_utils_statusbadge",
@@ -14489,7 +14782,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/utils.tsx",
-      "source_location": "L30",
+      "source_location": "L37",
       "weight": 1.0,
       "source": "app_utils",
       "target": "app_utils_typelabel",
@@ -14820,7 +15113,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L159",
+      "source_location": "L132",
       "weight": 1.0,
       "source": "app_views_assets_assetsview_assetsview",
       "target": "app_utils_fmt"
@@ -15139,7 +15432,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L59",
+      "source_location": "L54",
       "weight": 1.0,
       "source": "app_views_assets_assetsview_assetsview",
       "target": "app_utils_fmtfull"
@@ -15227,7 +15520,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L160",
+      "source_location": "L133",
       "weight": 1.0,
       "source": "app_views_assets_assetsview_assetsview",
       "target": "app_utils_fmtpct"
@@ -15359,7 +15652,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L268",
+      "source_location": "L235",
       "weight": 1.0,
       "source": "app_views_assets_assetsview_assetsview",
       "target": "app_utils_fmtdate"
@@ -16004,7 +16297,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L13",
+      "source_location": "L14",
       "weight": 1.0,
       "source": "app_views_assets_assetsview",
       "target": "app_views_assets_assetdetailpage",
@@ -16015,7 +16308,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L13",
+      "source_location": "L14",
       "weight": 1.0,
       "source": "app_views_assets_assetsview",
       "target": "app_views_assets_assetdetailpage_assetdetailpage",
@@ -16025,7 +16318,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L28",
+      "source_location": "L27",
       "weight": 1.0,
       "source": "app_views_assets_assetsview",
       "target": "app_views_assets_assetsview_assetsview",
@@ -16035,7 +16328,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L20",
+      "source_location": "L17",
       "weight": 1.0,
       "source": "app_views_assets_assetsview",
       "target": "app_views_assets_assetsview_assetsviewprops",
@@ -16046,7 +16339,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L12",
+      "source_location": "L13",
       "weight": 1.0,
       "source": "app_views_assets_assetsview",
       "target": "app_views_products_trackmodal",
@@ -16057,7 +16350,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "app/views/assets/AssetsView.tsx",
-      "source_location": "L12",
+      "source_location": "L13",
       "weight": 1.0,
       "source": "app_views_assets_assetsview",
       "target": "app_views_products_trackmodal_trackmodal",
@@ -18144,6 +18437,76 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "AUTH_REVIEW.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "auth_review",
+      "target": "auth_review_auth_feature_code_review",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUTH_REVIEW.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "auth_review_auth_feature_code_review",
+      "target": "auth_review_1_logout_token_race_condition",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUTH_REVIEW.md",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "auth_review_auth_feature_code_review",
+      "target": "auth_review_2_missing_unauthenticated_state_handler",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUTH_REVIEW.md",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "auth_review_auth_feature_code_review",
+      "target": "auth_review_3_questionnaire_state_lost_on_page_reload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUTH_REVIEW.md",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "auth_review_auth_feature_code_review",
+      "target": "auth_review_4_missing_logout_on_401_without_refresh_token",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUTH_REVIEW.md",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "auth_review_auth_feature_code_review",
+      "target": "auth_review_5_global_token_leak",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AUTH_REVIEW.md",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "auth_review_auth_feature_code_review",
+      "target": "auth_review_6_refresh_token_race_condition",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -18253,5 +18616,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "3dbe41a5bad88ae84e59f01fd5cdb7966a6b1b4f"
+  "built_at_commit": "3aede720135c5ffd1a994ff51b3d3bc2d7571dd4"
 }

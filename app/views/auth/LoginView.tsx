@@ -35,14 +35,13 @@ export function LoginView({ onLogin, onNavigate }: LoginViewProps) {
       // Trigger root App state update to switch views
       onLogin(authUser);
     } catch (err: any) {
-      if (err.response?.status === 401) {
+      if (err?.response?.status === 401) {
         setError("Invalid email or password.");
-      } else if (err.response?.status === 403) {
+      } else if (err?.response?.status === 403) {
         setError("Your account has been suspended. Contact support.");
       } else {
         setError("An error occurred during login. Please try again.");
       }
-    } finally {
       setLoading(false);
     }
   };

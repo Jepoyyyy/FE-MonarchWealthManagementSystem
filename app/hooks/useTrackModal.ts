@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import type { AppUser, Product, Asset, ProductType } from "~/types";
-import { PRODUCT_SEED_PRICES } from "~/data";
+import { PRODUCT_SEED_PRICES } from "~/config/products";
 import { maxRiskForProfile } from "~/utils";
 
 interface UseTrackModalProps {

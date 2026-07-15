@@ -171,12 +171,13 @@ export interface GoalProjectionDTO {
 }
 
 export interface UserDashboardDTO {
-  totalAssets: number;
-  totalInvested: number;
-  pnl: number;
-  pnlPercent: number;
-  assetCount: number;
-  recentTransactions: TransactionHistory[];
+  performance: { month: number; value: number }[];
+  portofolio: {
+    value: number | string;
+    invested: number | string;
+    holdings: number;
+    items: { name: string; value: number; color?: string }[];
+  };
 }
 
 export interface AdminDashboardDTO {

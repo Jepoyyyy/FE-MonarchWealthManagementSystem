@@ -1,7 +1,7 @@
 import { ChevronRight, Trash2, Info, ArrowUpRight, ArrowDownRight, Plus } from "lucide-react";
 import type { Asset, Product, Goal } from "~/types";
-import { GOAL_TYPE_CONFIG } from "~/data";
-import { fmt, fmtDate, fmtPct } from "~/utils";
+import { GOAL_TYPE_CONFIG } from "~/config/goals";
+import { fmt, fmtPct } from "~/utils";
 import { ProductTypeBadge } from "~/components/ui/ProductTypeBadge";
 import { RiskLevelBadge } from "~/components/ui/RiskLevelBadge";
 import { ConfirmModal } from "~/components/ui/ConfirmModal";

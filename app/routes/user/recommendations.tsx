@@ -23,7 +23,7 @@ export default function RecommendationsRoute() {
       assets={context.assets}
       products={context.products}
       goals={context.goals}
-      finProfile={context.finProfile}
+      finProfile={context.finProfile ?? { monthlyIncome: 0, expenses: {} } as any}
       addLog={context.addLog}
       toast={context.toast}
     />

@@ -7,6 +7,7 @@
   "5": "Types & Prop Interfaces",
   "6": "Build Tools & Package Info",
   "7": "TypeScript Configuration",
+  "8": "AdminUsersView.tsx",
   "9": "External Dependencies",
   "10": "React Router Context",
   "11": "Admin Audit & Utils",
@@ -27,5 +28,15 @@
   "26": "Identify the Mode",
   "27": "React Server Components (RSC)",
   "28": "Declarative Mode",
-  "29": "CLAUDE.md"
+  "29": "CLAUDE.md",
+  "30": "AdminAuditView.tsx",
+  "31": "test-interceptor.js",
+  "32": "test-login.js",
+  "33": "login.spec.ts",
+  "34": "Auth Feature Code Review",
+  "35": "assets.ts",
+  "36": "axios",
+  "37": "lucide-react",
+  "38": "@react-router/node",
+  "39": "@tailwindcss/vite"
 }

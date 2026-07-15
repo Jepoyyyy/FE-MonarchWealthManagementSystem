@@ -2,6 +2,30 @@ import { Shield, ChevronRight, Star } from "lucide-react";
 import type { RiskProfile } from "~/types";
 import { Btn } from "~/components/ui/Btn";
 
+const PROFILE_CONFIG = {
+  risk_averse: {
+    label: "Risk Averse",
+    color: "#10b981",
+    bg: "#f0fdf4",
+    desc: "You prefer capital preservation. We'll recommend Money Market and Deposit products.",
+    products: "Money Market & Deposits",
+  },
+  moderate: {
+    label: "Moderate",
+    color: "#f59e0b",
+    bg: "#fffbeb",
+    desc: "You seek balanced growth. We'll feature Mutual Funds and Bonds for you.",
+    products: "Mutual Funds & Bonds",
+  },
+  risk_taker: {
+    label: "Risk Taker",
+    color: "#ef4444",
+    bg: "#fef2f2",
+    desc: "You chase maximum returns. Stocks and high-yield instruments await you.",
+    products: "Stocks & High-Yield Funds",
+  },
+};
+
 interface ProfileResultProps {
   profile: RiskProfile;
   score: number;
@@ -9,29 +33,7 @@ interface ProfileResultProps {
 }
 
 export function ProfileResultView({ profile, score, onContinue }: ProfileResultProps) {
-  const config = {
-    risk_averse: {
-      label: "Risk Averse",
-      color: "#10b981",
-      bg: "#f0fdf4",
-      desc: "You prefer capital preservation. We'll recommend Money Market and Deposit products.",
-      products: "Money Market & Deposits",
-    },
-    moderate: {
-      label: "Moderate",
-      color: "#f59e0b",
-      bg: "#fffbeb",
-      desc: "You seek balanced growth. We'll feature Mutual Funds and Bonds for you.",
-      products: "Mutual Funds & Bonds",
-    },
-    risk_taker: {
-      label: "Risk Taker",
-      color: "#ef4444",
-      bg: "#fef2f2",
-      desc: "You chase maximum returns. Stocks and high-yield instruments await you.",
-      products: "Stocks & High-Yield Funds",
-    },
-  }[profile];
+  const config = PROFILE_CONFIG[profile];
 
   return (
     <div

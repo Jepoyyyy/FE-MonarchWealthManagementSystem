@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from "react";
 import { Plus, Wallet, DollarSign, Percent, Briefcase, Trash2, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import type { AppUser, Product, Asset, Goal } from "~/types";
-import { GOAL_TYPE_CONFIG } from "~/data";
+import { GOAL_TYPE_CONFIG } from "~/config/goals";
 import { fmt, fmtDate, fmtFull, fmtPct } from "~/utils";
 import { ProductTypeBadge } from "~/components/ui/ProductTypeBadge";
 import { RiskLevelBadge } from "~/components/ui/RiskLevelBadge";

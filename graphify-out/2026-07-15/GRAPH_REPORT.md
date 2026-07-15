@@ -1,16 +1,16 @@
 # Graph Report - FE-MonarchWealthManagementSystem  (2026-07-15)
 
 ## Corpus Check
-- 100 files · ~30,654 words
+- 105 files · ~33,207 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 460 nodes · 1218 edges · 29 communities (21 shown, 8 thin omitted)
+- 478 nodes · 1234 edges · 40 communities (26 shown, 14 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `3dbe41a5`
+- Built from commit: `3aede720`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -23,6 +23,7 @@
 - Types & Prop Interfaces
 - Build Tools & Package Info
 - TypeScript Configuration
+- AdminUsersView.tsx
 - External Dependencies
 - React Router Context
 - Admin Audit & Utils
@@ -40,12 +41,21 @@
 - React Server Components (RSC)
 - Declarative Mode
 - CLAUDE.md
+- AdminAuditView.tsx
+- test-interceptor.js
+- test-login.js
+- Auth Feature Code Review
+- assets.ts
+- axios
+- lucide-react
+- @react-router/node
+- @tailwindcss/vite
 
 ## God Nodes (most connected - your core abstractions)
 1. `Product` - 43 edges
 2. `fmt()` - 43 edges
 3. `AppUser` - 42 edges
-4. `Asset` - 31 edges
+4. `Asset` - 32 edges
 5. `Btn()` - 28 edges
 6. `Goal` - 26 edges
 7. `LayoutContextType` - 17 edges
@@ -54,65 +64,69 @@
 10. `AuditLog` - 13 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `ProductCardProps` --references--> `Product`  [EXTRACTED]
-  app/components/ui/ProductCard.tsx → app/types.ts
-- `ProductsState` --references--> `Product`  [EXTRACTED]
-  app/stores/productsStore.ts → app/types.ts
-- `AssetsView()` --references--> `AssetApi`  [EXTRACTED]
-  app/views/assets/AssetsView.tsx → app/api/assets.ts
 - `AuthSuccessResponse` --references--> `AppUser`  [EXTRACTED]
   app/api/auth.ts → app/types.ts
 - `AppLayoutProps` --references--> `AppUser`  [EXTRACTED]
   app/components/layout/AppLayout.tsx → app/types.ts
+- `SidebarProps` --references--> `AppUser`  [EXTRACTED]
+  app/components/layout/Sidebar.tsx → app/types.ts
+- `AuthState` --references--> `AppUser`  [EXTRACTED]
+  app/stores/authStore.ts → app/types.ts
+- `GoalFormModalProps` --references--> `Goal`  [EXTRACTED]
+  app/views/goals/GoalFormModal.tsx → app/types.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (29 total, 8 thin omitted)
+## Communities (40 total, 14 thin omitted)
 
 ### Community 0 - "Admin Dashboard & UI Components"
-Cohesion: 0.08
-Nodes (44): Badge(), BadgeProps, variantClasses, Btn(), BtnProps, sizeClasses, variantClasses, ConfirmModal() (+36 more)
+Cohesion: 0.22
+Nodes (8): name, private, scripts, build, dev, start, typecheck, type
 
 ### Community 1 - "Authentication & Forms"
-Cohesion: 0.07
-Nodes (47): AuthApi, AuthSuccessResponse, LoginPayload, RegisterPayload, AppLayout(), AppLayoutProps, Sidebar(), SidebarProps (+39 more)
+Cohesion: 0.09
+Nodes (30): AuthApi, AuthSuccessResponse, LoginPayload, RegisterPayload, api, failedQueue, ProductUpdateDTO, AuthShell() (+22 more)
 
 ### Community 2 - "App Setup & Profile"
 Cohesion: 0.10
-Nodes (22): api, ProductApi, ProductUpdateDTO, RecommendationApi, RecommendationCardProps, PortfolioState, ProductsState, RecommendationsState (+14 more)
+Nodes (37): Badge(), BadgeProps, variantClasses, Btn(), BtnProps, sizeClasses, variantClasses, ConfirmModal() (+29 more)
 
 ### Community 3 - "types.ts"
-Cohesion: 0.14
-Nodes (29): GoalApi, GOAL_TYPE_CONFIG, analyzeGoal(), generateRecommendations(), LayoutContextType, GoalsState, useGoalsStore, FinancialProfile (+21 more)
+Cohesion: 0.11
+Nodes (24): GoalApi, RecommendationApi, RecommendationCardProps, GoalsState, useGoalsStore, RecommendationsState, AdminDashboardDTO, AssetRegistrationDTO (+16 more)
 
 ### Community 4 - "Product"
-Cohesion: 0.13
-Nodes (23): ProductTypeBadgeProps, depositTenors, useAssetDetail(), UseAssetDetailProps, useTrackModal(), UseTrackModalProps, AuthService, PortfolioService (+15 more)
+Cohesion: 0.11
+Nodes (32): ProductCard(), ProductCardProps, ProductTypeBadgeProps, useAssetDetail(), UseAssetDetailProps, useTrackModal(), UseTrackModalProps, LayoutContextType (+24 more)
 
 ### Community 5 - "Types & Prop Interfaces"
-Cohesion: 0.07
-Nodes (27): devDependencies, @react-router/dev, rollup-plugin-visualizer, tailwindcss, @tailwindcss/vite, @types/node, @types/react, @types/react-dom (+19 more)
+Cohesion: 0.12
+Nodes (17): devDependencies, @react-router/dev, rollup-plugin-visualizer, tailwindcss, @types/node, @types/react, @types/react-dom, typescript (+9 more)
 
 ### Community 6 - "Build Tools & Package Info"
 Cohesion: 0.08
 Nodes (27): **/*, ./app/*, **/.client/**/*, DOM, DOM.Iterable, ES2022, node, .react-router/types/**/* (+19 more)
 
 ### Community 7 - "TypeScript Configuration"
-Cohesion: 0.12
-Nodes (19): AssetApi, DashboardApi, RecommendationCard(), ScoreRing(), ScoreRingProps, SubScore(), SubScoreProps, calcHealthScore() (+11 more)
+Cohesion: 0.14
+Nodes (24): RecommendationCard(), ScoreRing(), ScoreRingProps, SubScore(), SubScoreProps, analyzeGoal(), calcHealthScore(), generateRecommendations() (+16 more)
+
+### Community 8 - "AdminUsersView.tsx"
+Cohesion: 0.13
+Nodes (17): AppLayout(), AppLayoutProps, Sidebar(), SidebarProps, RiskBadge(), riskBadgeClasses, RiskBadgeProps, riskDotClasses (+9 more)
 
 ### Community 9 - "External Dependencies"
-Cohesion: 0.09
-Nodes (23): axios, isbot, lucide-react, dependencies, axios, isbot, lucide-react, react (+15 more)
+Cohesion: 0.12
+Nodes (17): isbot, dependencies, isbot, react, react-dom, react-router, @react-router/serve, recharts (+9 more)
 
 ### Community 10 - "React Router Context"
 Cohesion: 0.14
 Nodes (13): Data and Mutations, Forms, Fetchers, and Pending UI, Framework Mode, Framework Shape, Layout and Root Route Rules, Metadata, Middleware, Sessions, and Auth, Read the Local Docs by Mode (+5 more)
 
 ### Community 11 - "Admin Audit & Utils"
-Cohesion: 0.21
-Nodes (11): InputField(), InputFieldProps, AddTransactionModal(), BondFormProps, BondTransactionForm(), DepositFormProps, DepositTransactionForm(), MutualFundFormProps (+3 more)
+Cohesion: 0.15
+Nodes (16): ProductApi, InputField(), InputFieldProps, fmt(), AdminProductsView(), AddTransactionModal(), BondFormProps, BondTransactionForm() (+8 more)
 
 ### Community 12 - "Dashboard Charts"
 Cohesion: 0.40
@@ -138,25 +152,37 @@ Nodes (8): Client/Server Boundaries, Data Loading in RSC, Detect RSC Data Mode, 
 Cohesion: 0.25
 Nodes (7): Declarative Mode, Declarative Router Shape, Mode Boundary, Navigation, Read the Local Docs by Mode, Routing, URL Values
 
+### Community 30 - "AdminAuditView.tsx"
+Cohesion: 0.14
+Nodes (13): DashboardApi, AuditLog, categoryBadge(), fmtTs(), genHistory(), AdminAuditView(), AdminAuditViewProps, AdminDashboardView() (+5 more)
+
+### Community 34 - "Auth Feature Code Review"
+Cohesion: 0.25
+Nodes (7): 1. Logout Token Race Condition, 2. Missing Unauthenticated State Handler, 3. Questionnaire State Lost on Page Reload, 4. Missing Logout on 401 Without Refresh Token, 5. Global Token Leak, 6. Refresh Token Race Condition, Auth Feature Code Review
+
+### Community 35 - "assets.ts"
+Cohesion: 0.52
+Nodes (4): AssetApi, PortfolioState, AssetsPnLResponse, TransactionHistory
+
 ## Knowledge Gaps
-- **144 isolated node(s):** `LoginPayload`, `RegisterPayload`, `ProductUpdateDTO`, `AdminAreaChartProps`, `DashboardPerfChartProps` (+139 more)
+- **154 isolated node(s):** `LoginPayload`, `RegisterPayload`, `failedQueue`, `ProductUpdateDTO`, `AdminAreaChartProps` (+149 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **8 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **14 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `AppUser` connect `Authentication & Forms` to `Admin Dashboard & UI Components`, `App Setup & Profile`, `types.ts`, `Product`, `TypeScript Configuration`?**
-  _High betweenness centrality (0.032) - this node is a cross-community bridge._
-- **Why does `fmt()` connect `types.ts` to `Admin Dashboard & UI Components`, `App Setup & Profile`, `Product`, `TypeScript Configuration`, `Admin Audit & Utils`?**
+- **Why does `AppUser` connect `Product` to `Authentication & Forms`, `App Setup & Profile`, `types.ts`, `TypeScript Configuration`, `AdminUsersView.tsx`, `AdminAuditView.tsx`?**
   _High betweenness centrality (0.030) - this node is a cross-community bridge._
-- **Why does `Product` connect `Product` to `Admin Dashboard & UI Components`, `Authentication & Forms`, `App Setup & Profile`, `types.ts`, `TypeScript Configuration`, `Admin Audit & Utils`?**
-  _High betweenness centrality (0.026) - this node is a cross-community bridge._
-- **What connects `LoginPayload`, `RegisterPayload`, `ProductUpdateDTO` to the rest of the system?**
-  _144 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `Admin Dashboard & UI Components` be split into smaller, more focused modules?**
-  _Cohesion score 0.07577639751552795 - nodes in this community are weakly interconnected._
+- **Why does `fmt()` connect `Admin Audit & Utils` to `App Setup & Profile`, `types.ts`, `Product`, `TypeScript Configuration`, `AdminAuditView.tsx`?**
+  _High betweenness centrality (0.029) - this node is a cross-community bridge._
+- **Why does `Product` connect `Product` to `Authentication & Forms`, `App Setup & Profile`, `types.ts`, `TypeScript Configuration`, `Admin Audit & Utils`, `AdminAuditView.tsx`?**
+  _High betweenness centrality (0.024) - this node is a cross-community bridge._
+- **What connects `LoginPayload`, `RegisterPayload`, `failedQueue` to the rest of the system?**
+  _154 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Authentication & Forms` be split into smaller, more focused modules?**
-  _Cohesion score 0.06547619047619048 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.09487179487179487 - nodes in this community are weakly interconnected._
 - **Should `App Setup & Profile` be split into smaller, more focused modules?**
-  _Cohesion score 0.10080645161290322 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.09701928696668614 - nodes in this community are weakly interconnected._
+- **Should `types.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.11092436974789915 - nodes in this community are weakly interconnected._

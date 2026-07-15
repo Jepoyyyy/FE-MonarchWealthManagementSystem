@@ -23,8 +23,8 @@ export default function AssetsRoute() {
     return null;
   }
 
-  const monthlyExpenses = Object.values(context.finProfile.expenses).reduce((a, b) => a + b, 0);
-  const surplus = context.finProfile.monthlyIncome - monthlyExpenses;
+  const monthlyExpenses = context.finProfile ? Object.values(context.finProfile.expenses).reduce((a, b) => a + b, 0) : 0;
+  const surplus = context.finProfile ? context.finProfile.monthlyIncome - monthlyExpenses : 0;
 
   // Since we're fetching from API, we can either pass a dummy setter or update the store.
   // The actual mutations should hit the API via AssetApi and then call fetchPortfolio.

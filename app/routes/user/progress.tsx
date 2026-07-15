@@ -22,7 +22,7 @@ export default function ProgressRoute() {
       user={context.currentUser}
       products={context.products}
       goals={context.goals}
-      finProfile={context.finProfile}
+      finProfile={context.finProfile ?? { monthlyIncome: 0, expenses: {} } as any}
     />
   );
 }

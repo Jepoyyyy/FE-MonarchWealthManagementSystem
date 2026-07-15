@@ -15,6 +15,20 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+let isRefreshing = false;
+let failedQueue: Array<{ resolve: (value?: unknown) => void; reject: (reason?: any) => void }> = [];
+
+const processQueue = (error: any, token: string | null = null) => {
+  failedQueue.forEach(prom => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
+    }
+  });
+  failedQueue = [];
+};
+
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -24,7 +38,20 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
     if (error.response?.status === 401 && !originalRequest._retry) {
+      if (isRefreshing) {
+        return new Promise(function (resolve, reject) {
+          failedQueue.push({ resolve, reject });
+        })
+          .then((token) => {
+            originalRequest.headers["Authorization"] = `Bearer ${token}`;
+            return api(originalRequest);
+          })
+          .catch((err) => Promise.reject(err));
+      }
+
       originalRequest._retry = true;
+      isRefreshing = true;
+
       const refreshToken = useAuthStore.getState().refreshToken;
       if (refreshToken) {
         try {
@@ -33,10 +60,19 @@ api.interceptors.response.use(
           useAuthStore.getState().setAuth(newToken, newRefreshToken, user);
           api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
           originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+          processQueue(null, newToken);
           return api(originalRequest);
         } catch (refreshError) {
+          processQueue(refreshError, null);
           useAuthStore.getState().clearAuth();
+          delete api.defaults.headers.common["Authorization"];
+        } finally {
+          isRefreshing = false;
         }
+      } else {
+        isRefreshing = false;
+        useAuthStore.getState().clearAuth();
+        delete api.defaults.headers.common["Authorization"];
       }
     }
     return Promise.reject(error);

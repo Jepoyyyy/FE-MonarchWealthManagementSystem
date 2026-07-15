@@ -10,7 +10,7 @@ interface DashboardPieChartProps {
   data: PieSlice[];
 }
 
-const FALLBACK_COLORS = ["#1a3a5c", "#b8860b", "#2d6a4f", "#7b2d8b", "#d97706", "#dc2626", "#2563eb", "#059669"];
+// ponytail: shared palette module when more charts appear
 
 export default function DashboardPieChart({ data }: DashboardPieChartProps) {
   return (
@@ -28,10 +28,10 @@ export default function DashboardPieChart({ data }: DashboardPieChartProps) {
             dataKey="value"
           >
             {data.map((entry, i) => (
-              <Cell key={entry.name} fill={entry.color || FALLBACK_COLORS[i % FALLBACK_COLORS.length]} />
+              <Cell key={entry.name} fill={entry.color || "#888"} />
             ))}
           </Pie>
-          <Tooltip formatter={(v: any) => [`IDR ${v.toLocaleString()}`, "Value"]} />
+          <Tooltip formatter={(v: any) => [`${v}%`, "Allocation"]} />
         </PieChart>
       </ResponsiveContainer>
       <div className="mt-3 space-y-1.5">

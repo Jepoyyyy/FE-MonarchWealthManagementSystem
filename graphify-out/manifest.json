@@ -1,7 +1,7 @@
 {
   "app/api/assets.ts": {
-    "mtime": 1784079212.9644616,
-    "ast_hash": "72a3d293daf20619cff0a83e6067200a",
+    "mtime": 1784091677.6206448,
+    "ast_hash": "b02918e5342a32f630858e13c242d0a1",
     "semantic_hash": ""
   },
   "app/api/auth.ts": {
@@ -10,8 +10,8 @@
     "semantic_hash": ""
   },
   "app/api/client.ts": {
-    "mtime": 1784085216.2674074,
-    "ast_hash": "d234d71ecf834307e835174029796fe4",
+    "mtime": 1784101630.873885,
+    "ast_hash": "599c904fb2742c4b0d23bb3076432ef7",
     "semantic_hash": ""
   },
   "app/api/dashboard.ts": {
@@ -25,9 +25,9 @@
     "semantic_hash": "97a918b2983dbe2e47c24826135a9caa"
   },
   "app/api/products.ts": {
-    "mtime": 1784016978.1351695,
-    "ast_hash": "efeae90138f1e58296abb05785040b20",
-    "semantic_hash": "efeae90138f1e58296abb05785040b20"
+    "mtime": 1784090737.8243148,
+    "ast_hash": "477148157c60b825a272a43edb41c18a",
+    "semantic_hash": ""
   },
   "app/api/recommendations.ts": {
     "mtime": 1784016986.762903,
@@ -40,9 +40,9 @@
     "semantic_hash": "971a7fef6c6204d4384de3ff331bca21"
   },
   "app/components/charts/DashboardPerfChart.tsx": {
-    "mtime": 1784003254.6199057,
-    "ast_hash": "597e5e7ef5c8110398edc07996eb3a99",
-    "semantic_hash": "597e5e7ef5c8110398edc07996eb3a99"
+    "mtime": 1784089694.707271,
+    "ast_hash": "fe8a6a6d24cde44dc8d3ce465738cac0",
+    "semantic_hash": ""
   },
   "app/components/charts/DashboardPieChart.tsx": {
     "mtime": 1784003254.6471071,
@@ -160,7 +160,7 @@
     "semantic_hash": "ce3432fb3340d72ec64b3fd90e1ba50b"
   },
   "app/engine.tsx": {
-    "mtime": 1783918223.4314175,
+    "mtime": 1784097802.9339354,
     "ast_hash": "c26160ed84650302bef84d824f43e4b1",
     "semantic_hash": "c26160ed84650302bef84d824f43e4b1"
   },
@@ -175,14 +175,14 @@
     "semantic_hash": "f7932a2c62323a8aa73a09093b4d3cc1"
   },
   "app/hooks/useQuestionnaire.ts": {
-    "mtime": 1783915007.6560183,
-    "ast_hash": "178b9633815eafbc756b465580835173",
-    "semantic_hash": "178b9633815eafbc756b465580835173"
+    "mtime": 1784089209.3945465,
+    "ast_hash": "864a42a130963352385b156b8ae7221c",
+    "semantic_hash": ""
   },
   "app/hooks/useTrackModal.ts": {
-    "mtime": 1783916589.6761434,
-    "ast_hash": "ad1818f393bb03a9744cdddf4926ede5",
-    "semantic_hash": "ad1818f393bb03a9744cdddf4926ede5"
+    "mtime": 1784091777.8225496,
+    "ast_hash": "76d291f1720817aede19953ae300e403",
+    "semantic_hash": ""
   },
   "app/root.tsx": {
     "mtime": 1784003552.2821486,
@@ -215,13 +215,13 @@
     "semantic_hash": ""
   },
   "app/routes/layout.tsx": {
-    "mtime": 1784082869.426164,
-    "ast_hash": "5e1cd874f9e914b5fcf741ce9cbc67a8",
+    "mtime": 1784102232.562923,
+    "ast_hash": "5468cb8ebdbef4d197fa0b071c11ac11",
     "semantic_hash": ""
   },
   "app/routes/user/assets.tsx": {
-    "mtime": 1784079903.8443892,
-    "ast_hash": "60dd06d84afa4aa2184b9cbe51e78f2e",
+    "mtime": 1784098251.5861602,
+    "ast_hash": "1b3e240eaa4428a03d2954e21641d099",
     "semantic_hash": ""
   },
   "app/routes/user/dashboard.tsx": {
@@ -280,9 +280,9 @@
     "semantic_hash": "80e616690a39ed26e063f0cc4cf561e8"
   },
   "app/stores/productsStore.ts": {
-    "mtime": 1784021947.997375,
-    "ast_hash": "119490667271bc1e9c8ee81078570a36",
-    "semantic_hash": "119490667271bc1e9c8ee81078570a36"
+    "mtime": 1784097802.9384809,
+    "ast_hash": "41f420e9a83df853ff8135f3ab77d87a",
+    "semantic_hash": ""
   },
   "app/stores/recommendationsStore.ts": {
     "mtime": 1784017011.4950368,
@@ -295,9 +295,9 @@
     "semantic_hash": ""
   },
   "app/utils.tsx": {
-    "mtime": 1783918167.9735887,
-    "ast_hash": "a31db75c587b5a3bc15632375171aa46",
-    "semantic_hash": "a31db75c587b5a3bc15632375171aa46"
+    "mtime": 1784089506.971931,
+    "ast_hash": "85b31003bedfbcba935bc7004e6b48a8",
+    "semantic_hash": ""
   },
   "app/views/admin/AdminAuditView.tsx": {
     "mtime": 1784082161.1968584,
@@ -330,8 +330,8 @@
     "semantic_hash": "43d74adccc1143008de0f87960ee46a6"
   },
   "app/views/assets/AssetsView.tsx": {
-    "mtime": 1784079870.725371,
-    "ast_hash": "42d8a1a3a777c8ab9dffa919780c189e",
+    "mtime": 1784098483.683974,
+    "ast_hash": "1c618e2af7c584c1f1331c923d125d29",
     "semantic_hash": ""
   },
   "app/views/assets/transaction-forms/BondTransactionForm.tsx": {
@@ -370,14 +370,14 @@
     "semantic_hash": "4251d807e1defeacc19e32a881bd1059"
   },
   "app/views/auth/QuestionnaireView.tsx": {
-    "mtime": 1783918808.2574275,
-    "ast_hash": "5b180b94f6a1243ad20a5af6b89a9f8f",
-    "semantic_hash": "5b180b94f6a1243ad20a5af6b89a9f8f"
+    "mtime": 1784089214.9380062,
+    "ast_hash": "ec117c97f284a7aebd7bb6a3b52c59e4",
+    "semantic_hash": ""
   },
   "app/views/auth/RegisterView.tsx": {
-    "mtime": 1784085357.623387,
-    "ast_hash": "184005fcd0a8b18bec45eae8d4a8f0da",
-    "semantic_hash": "184005fcd0a8b18bec45eae8d4a8f0da"
+    "mtime": 1784088224.6382065,
+    "ast_hash": "e0bcc0f578fe28206a6e03656216da2b",
+    "semantic_hash": ""
   },
   "app/views/dashboard/DashboardView.tsx": {
     "mtime": 1784082067.8721907,
@@ -425,9 +425,9 @@
     "semantic_hash": ""
   },
   "app/views/products/TrackFormStep.tsx": {
-    "mtime": 1784021970.3199503,
-    "ast_hash": "b32dab3928b24ddbfbe9c9a6d79b73c3",
-    "semantic_hash": "b32dab3928b24ddbfbe9c9a6d79b73c3"
+    "mtime": 1784090536.3819883,
+    "ast_hash": "ba1c79d5b329d1b620a16956981ed801",
+    "semantic_hash": ""
   },
   "app/views/products/TrackModal.tsx": {
     "mtime": 1783918808.247902,
@@ -460,7 +460,7 @@
     "semantic_hash": "b9865d4a1f30d936c311a2118e0ffe73"
   },
   "vite.config.ts": {
-    "mtime": 1784017975.594208,
+    "mtime": 1784087870.5012019,
     "ast_hash": "30110c2d2b934ebad6ad654eb1c208e9",
     "semantic_hash": "30110c2d2b934ebad6ad654eb1c208e9"
   },
@@ -562,6 +562,16 @@
   ".playwright-mcp/page-2026-07-15T02-59-38-665Z.yml": {
     "mtime": 1784084378.6678255,
     "ast_hash": "be8474a9840bf359a90dc704480e3778",
+    "semantic_hash": ""
+  },
+  "AUTH_REVIEW.md": {
+    "mtime": 1784101377.5850804,
+    "ast_hash": "e673b8ef1f2dd244b30876bbd0aadc67",
+    "semantic_hash": ""
+  },
+  "app/hooks/useAuthManager.ts": {
+    "mtime": 1784102173.6288896,
+    "ast_hash": "5128d8726bca29f0e261be8a28b4a19a",
     "semantic_hash": ""
   }
 }

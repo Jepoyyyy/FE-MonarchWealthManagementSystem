@@ -12,7 +12,7 @@ import {
   Info,
 } from "lucide-react";
 import type { Goal, Asset, Product, GoalStatus } from "~/types";
-import { GOAL_TYPE_CONFIG } from "~/data";
+import { GOAL_TYPE_CONFIG } from "~/config/goals";
 import { Btn } from "~/components/ui/Btn";
 import { analyzeGoal } from "~/engine";
 import { fmt, fmtDuration, projectedDate } from "~/utils";

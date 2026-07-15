@@ -94,7 +94,7 @@ export function AdminUsersView({
       </div>
 
       <div className="bg-card rounded-xl border border-border overflow-x-auto">
-        <table className="w-full text-sm min-w-[600px]">
+        <table className="w-full text-sm min-w-150">
           <thead>
             <tr style={{ background: "var(--muted)", borderBottom: "1px solid var(--border)" }}>
               {["User", "Risk Profile", "Joined", "Portfolio Value", "Status", "Actions"].map((h) => (

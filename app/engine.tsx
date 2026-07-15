@@ -1,5 +1,5 @@
 import type { AppUser, Asset, Product, Goal, FinancialProfile, HealthScore, Recommendation, ProductType, GoalAnalysis } from "~/types";
-import { GOAL_MAX_MONTHS, GOAL_FAST_MONTHS, GOAL_PRODUCT_TYPES, GOAL_TYPE_CONFIG } from "~/data";
+import { GOAL_MAX_MONTHS, GOAL_FAST_MONTHS, GOAL_PRODUCT_TYPES, GOAL_TYPE_CONFIG } from "~/config/goals";
 import { monthsToGoal, monthlyNeeded, maxRiskForProfile, riskLabel, typeLabel, fmt, fmtFull, projectedDate, fmtDuration } from "~/utils";
 
 export const analyzeGoal = (goal: Goal, effectiveCurrentSaved?: number): GoalAnalysis => {

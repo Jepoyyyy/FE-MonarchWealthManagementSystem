@@ -46,12 +46,11 @@ export function RegisterView({ onRegister, onNavigate }: RegisterViewProps) {
       // Trigger root App state update
       onRegister(authUser);
     } catch (err: any) {
-      if (err.response?.status === 409) {
+      if (err?.response?.status === 409) {
         setError("An account with this email already exists.");
       } else {
         setError("An error occurred during registration. Please try again.");
       }
-    } finally {
       setLoading(false);
     }
   };

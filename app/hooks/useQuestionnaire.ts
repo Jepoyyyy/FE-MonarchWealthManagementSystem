@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { RiskProfile } from "~/types";
-import { QUESTIONNAIRE } from "~/data";
+import { QUESTIONNAIRE } from "~/config/questionnaire";
 import { scoreToProfile } from "~/utils";
 
 export function useQuestionnaire(onComplete: (profile: RiskProfile, score: number, allAnswers: { questionnaireAnswer: string; score: number }[]) => void) {

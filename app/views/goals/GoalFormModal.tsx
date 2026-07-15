@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { X, DollarSign, Wallet, Lock, Calculator, AlertTriangle, ToggleLeft, ToggleRight, TrendingUp } from "lucide-react";
 import type { Goal, GoalType, GoalStatus } from "~/types";
-import { GOAL_TYPE_CONFIG } from "~/data";
+import { GOAL_TYPE_CONFIG } from "~/config/goals";
 import { monthsToGoal, fmt, fmtDuration, projectedDate } from "~/utils";
 import { InputField } from "~/components/ui/InputField";
 import { MonthlyContributionInput } from "./MonthlyContributionInput";

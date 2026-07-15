@@ -2,7 +2,7 @@ import React, { useState, useMemo, Suspense, useEffect } from "react";
 import { Target, TrendingUp, Calendar, DollarSign, Percent, AlertTriangle, Wallet, Clock, BarChart3 } from "lucide-react";
 import type { AppUser, Goal, Asset, Product, FinancialProfile } from "~/types";
 import { fmt, fmtDate, genHistory, projectedDate, fmtPct, fmtDuration, fmtFull } from "~/utils";
-import { GOAL_MAX_MONTHS, GOAL_TYPE_CONFIG } from "~/data";
+import { GOAL_MAX_MONTHS, GOAL_TYPE_CONFIG } from "~/config/goals";
 import { ProductTypeBadge } from "~/components/ui/ProductTypeBadge";
 import { PageHeader } from "~/components/ui/PageHeader";
 import { StatCard } from "~/components/ui/StatCard";

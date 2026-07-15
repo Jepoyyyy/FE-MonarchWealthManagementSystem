@@ -20,8 +20,8 @@ export default function GoalsRoute() {
   return (
     <GoalsView
       user={context.currentUser}
-      finProfile={context.finProfile}
-      setFinProfile={context.setFinProfile}
+      finProfile={context.finProfile ?? { monthlyIncome: 0, expenses: {} } as any}
+      setFinProfile={context.setFinProfile as any}
       assets={context.assets}
       products={context.products}
       toast={context.toast}

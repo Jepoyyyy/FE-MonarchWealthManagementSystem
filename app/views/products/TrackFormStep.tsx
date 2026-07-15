@@ -1,6 +1,6 @@
 import { DollarSign, TrendingUp, Percent, Layers, Briefcase, AlertTriangle } from "lucide-react";
 import type { Product } from "~/types";
-import { depositTenors } from "~/data";
+import { depositTenors } from "~/config/products";
 import { fmt } from "~/utils";
 import { ProductTypeBadge } from "~/components/ui/ProductTypeBadge";
 import { RiskLevelBadge } from "~/components/ui/RiskLevelBadge";
