@@ -116,3 +116,69 @@ export interface GoalAnalysis {
   detail: string;
   suggestedMonthly?: number; // only when too_little
 }
+
+export interface AssetsPnLResponse {
+  assetId: string;
+  productId: string;
+  productName: string;
+  productType: string;
+  units: number;
+  currentValue: number;
+  avgPrice: number;
+  potentialPnl: number;
+  potentialPnlPercent: number;
+  realizedPnl: number;
+  realizedPnlPercent: number;
+}
+
+export interface TransactionHistory {
+  id: string;
+  assetId: string;
+  action: "BUY" | "SELL";
+  units: number;
+  pricePerUnit: number;
+  totalAmount: number;
+  transactionDate: string;
+}
+
+export interface AssetRegistrationDTO {
+  productId: string;
+  units: number;
+}
+
+export interface GoalSettingDTO {
+  // Define fields if any are known, or leave as any/partial
+}
+
+export interface GoalRegistrationDTO {
+  name: string;
+  type: "vehicle" | "vacation" | "property" | "retirement" | "savings" | "custom";
+  targetAmount: number;
+  currentSaved: number;
+  monthlyContribution: number;
+  expectedReturn: number;
+  priority: "HIGH" | "MEDIUM" | "LOW";
+  isPriority: boolean;
+  color: string;
+}
+
+export interface GoalProjectionDTO {
+  goalId: string;
+  month: number;
+  projectedValue: number;
+  totalContributions: number;
+  totalReturns: number;
+}
+
+export interface UserDashboardDTO {
+  totalAssets: number;
+  totalInvested: number;
+  pnl: number;
+  pnlPercent: number;
+  assetCount: number;
+  recentTransactions: TransactionHistory[];
+}
+
+export interface AdminDashboardDTO {
+  // define if needed based on plan
+}
