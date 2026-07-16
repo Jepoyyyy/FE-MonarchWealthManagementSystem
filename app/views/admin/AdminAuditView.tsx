@@ -101,7 +101,7 @@ export function AdminAuditView({ logs: propLogs }: AdminAuditViewProps) {
       </div>
 
       <div className="bg-card rounded-xl border border-border overflow-x-auto">
-        <table className="w-full text-sm min-w-[600px]">
+        <table className="w-full text-sm min-w-150">
           <thead>
             <tr style={{ background: "var(--muted)", borderBottom: "1px solid var(--border)" }}>
               {["Timestamp", "User", "Action", "Details", "Category"].map((h) => (

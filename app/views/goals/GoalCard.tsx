@@ -184,7 +184,7 @@ export function GoalCard({
                       {p?.name ?? "Unknown"}
                     </span>
                   </div>
-                  <div className="flex items-center gap-3 flex-shrink-0 ml-2">
+                  <div className="flex items-center gap-3 shrink-0 ml-2">
                     <span
                       className={`text-xs ${ret >= 0 ? "text-emerald-600" : "text-red-500"}`}
                       style={{ fontFamily: "var(--font-mono)" }}
@@ -220,7 +220,7 @@ export function GoalCard({
           className="rounded-lg px-3 py-2.5 mb-3 flex items-start gap-2 border"
           style={{ background: ss.bg, borderColor: ss.border }}
         >
-          <span className="mt-0.5 flex-shrink-0" style={{ color: ss.text }}>
+          <span className="mt-0.5 shrink-0" style={{ color: ss.text }}>
             {ss.icon}
           </span>
           <div className="flex-1 min-w-0">
@@ -292,7 +292,7 @@ export function GoalCard({
 
         {goal.notes && (
           <p className="text-xs text-muted-foreground mt-2 flex items-start gap-1.5">
-            <Info size={11} className="mt-0.5 flex-shrink-0" />
+            <Info size={11} className="mt-0.5 shrink-0" />
             {goal.notes}
           </p>
         )}

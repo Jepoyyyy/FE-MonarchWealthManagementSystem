@@ -93,7 +93,7 @@ export function AdminDashboardView({ users, products, assets }: AdminDashboardVi
                 <p className="text-xs font-medium text-foreground">{log.action.replace(/_/g, " ")}</p>
                 <p className="text-xs text-muted-foreground truncate">{log.details}</p>
               </div>
-              <div className="text-right flex-shrink-0">
+              <div className="text-right shrink-0">
                 <p
                   className="text-xs text-muted-foreground"
                   style={{ fontFamily: "var(--font-mono)" }}

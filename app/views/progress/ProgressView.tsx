@@ -142,7 +142,7 @@ export function ProgressView({ user, products, goals, finProfile }: ProgressView
             borderColor: perfConfig[perfStatus].border,
           }}
         >
-          <div className="flex-shrink-0">
+          <div className="shrink-0">
             <div
               className="w-10 h-10 rounded-xl flex items-center justify-center"
               style={{ background: perfConfig[perfStatus].color + "20" }}
@@ -164,7 +164,7 @@ export function ProgressView({ user, products, goals, finProfile }: ProgressView
             </div>
             <p className="text-xs text-muted-foreground">{perfConfig[perfStatus].sub}</p>
           </div>
-          <div className="flex-shrink-0 text-right w-full md:w-auto mt-2 md:mt-0">
+          <div className="shrink-0 text-right w-full md:w-auto mt-2 md:mt-0">
             <p className="text-xs text-muted-foreground mb-1">Portfolio income vs target</p>
             <div className="w-full md:w-40 h-2 bg-muted rounded-full overflow-hidden">
               <div
@@ -202,7 +202,7 @@ export function ProgressView({ user, products, goals, finProfile }: ProgressView
               Months to reach each goal = (Target − Current Portfolio) ÷ avg monthly portfolio income
             </p>
           </div>
-          <table className="w-full text-sm min-w-[500px]">
+          <table className="w-full text-sm min-w-125">
             <thead>
               <tr style={{ background: "var(--muted)", borderBottom: "1px solid var(--border)" }}>
                 {["Goal", "Target", "Remaining", "ETA", "Status"].map((h) => (

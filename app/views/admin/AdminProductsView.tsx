@@ -63,7 +63,7 @@ export function AdminProductsView({
         </div>
       ) : (
       <div className="bg-card rounded-xl border border-border overflow-x-auto">
-        <table className="w-full text-sm min-w-[600px]">
+        <table className="w-full text-sm min-w-150">
           <thead>
             <tr style={{ background: "var(--muted)", borderBottom: "1px solid var(--border)" }}>
               {["Product", "Type", "Risk Level", "Annual Return", "Min. Investment", "Status", "Visibility"].map(
