@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useOutletContext, useNavigate } from "react-router";
 import type { LayoutContextType } from "~/routes/layout";
-import { RecommendationsView } from '~/features/recommendations/components/RecommendationsView';
+import { RecommendationsView } from '~/features/recommendations';
 
 export default function RecommendationsRoute() {
   const context = useOutletContext<LayoutContextType>();

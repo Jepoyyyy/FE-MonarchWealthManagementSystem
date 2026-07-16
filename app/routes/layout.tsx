@@ -2,13 +2,9 @@ import { useState, useMemo, useCallback, useEffect } from "react";
 import { Outlet } from "react-router";
 import { Toaster, toast } from "sonner";
 import { AppLayout } from '~/shared/layouts';
-import { LoginView } from '~/features/auth/components/LoginView';
-import { RegisterView } from '~/features/auth/components/RegisterView';
-import { QuestionnaireView } from '~/features/auth/components/QuestionnaireView';
-import { ProfileResultView } from '~/features/auth/components/ProfileResultView';
+import { LoginView, RegisterView, QuestionnaireView, ProfileResultView, useAuthManager } from '~/features/auth';
 import type { AppUser, Product, Asset, Goal, FinancialProfile, AuditLog } from "~/types";
-import { useAuthManager } from '~/features/auth/hooks/useAuthManager';
-import { useProductsStore } from '~/features/products/products.store';
+import { useProductsStore } from '~/features/products';
 
 export interface LayoutContextType {
   currentUser: AppUser | null;

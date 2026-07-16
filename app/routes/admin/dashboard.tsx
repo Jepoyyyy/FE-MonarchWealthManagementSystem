@@ -1,6 +1,6 @@
 import { useOutletContext, useNavigate } from "react-router";
 import type { LayoutContextType } from "~/routes/layout";
-import { AdminDashboardView } from '~/features/admin/components/AdminDashboardView';
+import { AdminDashboardView } from '~/features/admin';
 
 export default function AdminDashboardRoute() {
   const context = useOutletContext<LayoutContextType>();

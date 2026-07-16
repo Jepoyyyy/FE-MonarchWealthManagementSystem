@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useOutletContext, useNavigate } from "react-router";
 import type { LayoutContextType } from "~/routes/layout";
-import { ProgressView } from '~/features/progress/components/ProgressView';
+import { ProgressView } from '~/features/progress';
 
 export default function ProgressRoute() {
   const context = useOutletContext<LayoutContextType>();
