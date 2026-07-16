@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useOutletContext, useNavigate } from "react-router";
 import type { LayoutContextType } from "~/routes/layout";
-import { GoalsView } from "~/views/goals/GoalsView";
+import { GoalsView } from '~/features/goals/components/GoalsView';
 
 export default function GoalsRoute() {
   const context = useOutletContext<LayoutContextType>();

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useOutletContext, useNavigate } from "react-router";
 import type { LayoutContextType } from "~/routes/layout";
-import { ProductsView } from "~/views/products/ProductsView";
+import { ProductsView } from '~/features/products/components/ProductsView';
 import { ErrorBoundary } from "~/components/ErrorBoundary";
 
 export default function ProductsRoute() {

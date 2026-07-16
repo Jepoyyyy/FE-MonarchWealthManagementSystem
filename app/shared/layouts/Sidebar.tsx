@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import type { AppUser } from "~/shared/types/common";
 import { Btn } from "~/shared/components/Button";
-import { RiskBadge } from "~/components/ui/RiskBadge";
+import { RiskBadge } from '~/features/profile/components/RiskBadge';
 
 interface SidebarProps {
   user: AppUser;

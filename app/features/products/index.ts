@@ -1,1 +1,2 @@
-// Products Feature Public API
+export { ProductsView } from "./components/ProductsView";
+export { useProductsStore } from "./products.store";

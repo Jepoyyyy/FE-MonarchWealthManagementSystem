@@ -1,6 +1,6 @@
 import { useOutletContext, useNavigate } from "react-router";
 import type { LayoutContextType } from "~/routes/layout";
-import { DashboardView } from "~/views/dashboard/DashboardView";
+import { DashboardView } from '~/features/dashboard/components/DashboardView';
 
 export default function DashboardRoute() {
   const context = useOutletContext<LayoutContextType>();

@@ -1,1 +1,2 @@
-// Goals Feature Public API
+export { GoalsView } from "./components/GoalsView";
+export { useGoalsStore } from "./goals.store";

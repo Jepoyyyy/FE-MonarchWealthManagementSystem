@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useOutletContext, useNavigate } from "react-router";
 import type { LayoutContextType } from "~/routes/layout";
-import { AssetsView } from "~/views/assets/AssetsView";
-import { usePortfolioStore } from "~/stores/portfolioStore";
+import { AssetsView } from '~/features/assets/components/AssetsView';
+import { usePortfolioStore } from '~/features/assets/portfolio.store';
 
 export default function AssetsRoute() {
   const context = useOutletContext<LayoutContextType>();

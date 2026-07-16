@@ -1,1 +1,1 @@
-// Progress Feature Public API
+export { ProgressView } from "./components/ProgressView";

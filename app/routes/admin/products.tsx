@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useOutletContext, useNavigate } from "react-router";
 import type { LayoutContextType } from "~/routes/layout";
-import { AdminProductsView } from "~/views/admin/AdminProductsView";
+import { AdminProductsView } from '~/features/admin/components/AdminProductsView';
 
 export default function AdminProductsRoute() {
   const context = useOutletContext<LayoutContextType>();
