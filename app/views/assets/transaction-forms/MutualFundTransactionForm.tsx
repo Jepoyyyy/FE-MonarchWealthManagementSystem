@@ -14,7 +14,6 @@ interface MutualFundFormProps {
 export function MutualFundTransactionForm({ type, currentPrice, onClose, onSubmit }: MutualFundFormProps) {
   const [method, setMethod] = useState<"amount" | "units">("units");
   const [val, setVal] = useState("");
-  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [err, setErr] = useState("");
 
   const parsedVal = parseFloat(val) || 0;
@@ -70,8 +69,6 @@ export function MutualFundTransactionForm({ type, currentPrice, onClose, onSubmi
           Total: <span className="font-bold font-mono">{fmt(Math.round(totalAmt))}</span>
         </p>
       )}
-
-      <InputField label="Date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
 
       {err && (
         <p className="text-xs text-red-500 flex items-center gap-1">

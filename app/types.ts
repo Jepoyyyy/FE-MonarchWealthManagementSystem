@@ -111,10 +111,10 @@ export type GoalStatus = "reached" | "no_contribution" | "ahead" | "on_track" | 
 
 export interface GoalAnalysis {
   status: GoalStatus;
-  months: number; // actual months to goal
+  months: number; 
   headline: string;
   detail: string;
-  suggestedMonthly?: number; // only when too_little
+  suggestedMonthly?: number; 
 }
 
 export interface AssetsPnLResponse {
@@ -124,11 +124,11 @@ export interface AssetsPnLResponse {
   productType: string;
   units: number;
   currentValue: number;
-  avgPrice: number;
-  potentialPnl: number;
-  potentialPnlPercent: number;
-  realizedPnl: number;
-  realizedPnlPercent: number;
+  avg_price: number;
+  potential_pnl: number;
+  potential_pnl_percent: number;
+  realized_pnl: number;
+  realized_pnl_percent: number;
 }
 
 export interface TransactionHistory {
@@ -146,9 +146,6 @@ export interface AssetRegistrationDTO {
   units: number;
 }
 
-export interface GoalSettingDTO {
-  // Define fields if any are known, or leave as any/partial
-}
 
 export interface GoalRegistrationDTO {
   name: string;
@@ -181,5 +178,17 @@ export interface UserDashboardDTO {
 }
 
 export interface AdminDashboardDTO {
-  // define if needed based on plan
+  totalAUM: number;
+  activeUsers: number;
+  totalUsers: number;
+  activeProducts: number;
+  totalProducts: number;
+  totalEvents: number;
+  riskProfileDist: {
+    riskAverse: number;
+    moderate: number;
+    riskTaker: number;
+  };
+  recentActivity: any[];
+  aumHistory?: { month: number; value: number }[];
 }

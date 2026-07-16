@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useOutletContext, useNavigate } from "react-router";
 import type { LayoutContextType } from "~/routes/layout";
 import { ProductsView } from "~/views/products/ProductsView";
+import { ErrorBoundary } from "~/components/ErrorBoundary";
 
 export default function ProductsRoute() {
   const context = useOutletContext<LayoutContextType>();
@@ -18,10 +19,12 @@ export default function ProductsRoute() {
   }
 
   return (
-    <ProductsView
-      user={context.currentUser}
-      addLog={context.addLog}
-      toast={context.toast}
-    />
+    <ErrorBoundary>
+      <ProductsView
+        user={context.currentUser}
+        addLog={context.addLog}
+        toast={context.toast}
+      />
+    </ErrorBoundary>
   );
 }

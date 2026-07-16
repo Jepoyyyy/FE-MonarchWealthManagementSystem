@@ -1,10 +1,12 @@
+import { useEffect, useRef } from "react";
 import { X, ChevronRight } from "lucide-react";
-import type { AppUser, Product, Asset, ProductType } from "~/types";
+import type { AppUser, Product, Asset } from "~/types";
 import { ConfirmModal } from "~/components/ui/ConfirmModal";
 import { Btn } from "~/components/ui/Btn";
 import { useTrackModal } from "~/hooks/useTrackModal";
 import { ProductSelectorStep } from "./ProductSelectorStep";
 import { TrackFormStep } from "./TrackFormStep";
+import { PRODUCT_TYPE_OPTIONS } from "~/constants/productTypes";
 
 interface TrackModalProps {
   user: AppUser;
@@ -12,7 +14,6 @@ interface TrackModalProps {
   onSave: (a: Omit<Asset, "id">) => void;
   onClose: () => void;
   initialProduct?: Product;
-  investableSurplus?: number;
 }
 
 export function TrackModal({
@@ -21,8 +22,24 @@ export function TrackModal({
   onSave,
   onClose,
   initialProduct,
-  investableSurplus,
 }: TrackModalProps) {
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = modalRef.current;
+    if (!el) return;
+    const first = el.querySelector<HTMLElement>("input, button, select, textarea");
+    first?.focus();
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Escape") {
+      if (step === 1 && (amount || currentVal)) setShowConfirmCancelTrack(true);
+      else onClose();
+    }
+  };
   const {
     step,
     setStep,
@@ -63,26 +80,19 @@ export function TrackModal({
     onSave,
     onClose,
     initialProduct,
-    investableSurplus,
   });
-
-  const types: Array<{ id: ProductType | "all"; label: string }> = [
-    { id: "all", label: "All" },
-    { id: "money_market", label: "Money Market" },
-    { id: "deposit", label: "Deposit" },
-    { id: "bond", label: "Bond" },
-    { id: "mutual_fund", label: "Mutual Fund" },
-    { id: "stock", label: "Stock" },
-  ];
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ background: "rgba(13,33,55,0.75)", backdropFilter: "blur(4px)" }}
+      ref={modalRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label={step === 0 ? "Choose a Product" : "Track Investment"}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[rgba(13,33,55,0.75)] backdrop-blur-sm"
+      onKeyDown={handleKeyDown}
     >
       <div
-        className="bg-card rounded-2xl shadow-2xl border border-border w-full flex flex-col max-h-[90vh]"
-        style={{ maxWidth: step === 0 ? 680 : 520 }}
+        className={`bg-card rounded-2xl shadow-2xl border border-border w-full flex flex-col max-h-[90vh] ${step === 0 ? "max-w-170" : "max-w-130"}`}
       >
         {/* Header */}
         <div
@@ -134,13 +144,12 @@ export function TrackModal({
               setSearch={setSearch}
               typeFilter={typeFilter}
               setTypeFilter={setTypeFilter}
-              types={types}
+              types={PRODUCT_TYPE_OPTIONS}
               onSelect={selectProduct}
             />
           ) : (
             <TrackFormStep
               picked={picked}
-              investableSurplus={investableSurplus}
               amount={amount}
               setAmount={setAmount}
               currentVal={currentVal}

@@ -31,8 +31,8 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
         logs: logsRes.data,
         loading: false,
       });
-    } catch (err: any) {
-      set({ error: err.message || "Failed to load portfolio", loading: false });
+    } catch (err: unknown) {
+      set({ error: err instanceof Error ? err.message : "Failed to load portfolio", loading: false });
     }
   },
 }));

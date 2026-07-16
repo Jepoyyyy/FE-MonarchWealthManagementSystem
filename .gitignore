@@ -8,6 +8,10 @@
 /.hermes/
 AGENTS.md
 CHANGES.md
+CLAUDE.md
+/graphify-out/
+/test-result/
+/test/
 
 # React Router
 /.react-router/

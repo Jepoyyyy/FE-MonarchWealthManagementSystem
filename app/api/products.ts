@@ -1,9 +1,9 @@
 import { api } from "./client";
-import type { Product } from "../types";
+import type { Product, Page } from "../types/product.types";
 
 interface ProductUpdateDTO {
   name?: string;
-  type?: "stock" | "mutual_fund" | "bond" | "deposit";
+  type?: "stock" | "mutual_fund" | "bond" | "deposit" | "money_market";
   issuer?: string;
   riskLevel?: number;
   currentPrice?: number;
@@ -11,7 +11,31 @@ interface ProductUpdateDTO {
   visible?: boolean;
 }
 
+export interface ProductQueryParams {
+  searchQuery?: string;
+  type?: string;
+  showAll?: boolean;
+  dashboardSummary?: boolean;
+  page?: number;
+  size?: number;
+  sort?: string;
+}
+
 export const ProductApi = {
-  list: () => api.get<Product[]>("/api/v1/products?size=1000"),
-  update: (id: string, dto: ProductUpdateDTO) => api.put<Product>(`/api/v1/products/${id}`, dto),
+  list: (params: ProductQueryParams = {}) => {
+    const query = new URLSearchParams();
+    if (params.searchQuery) query.set("searchQuery", params.searchQuery);
+    if (params.type) query.set("type", params.type);
+    if (params.showAll !== undefined) query.set("showAll", String(params.showAll));
+    if (params.dashboardSummary !== undefined) {
+      query.set("dashboardSummary", String(params.dashboardSummary));
+    }
+    query.set("page", String(params.page ?? 0));
+    query.set("size", String(params.size ?? 20));
+    if (params.sort) query.set("sort", params.sort);
+    return api.get<Page<Product>>(`/api/v1/products?${query.toString()}`);
+  },
+
+  update: (id: string, dto: ProductUpdateDTO) =>
+    api.put<Product>(`/api/v1/products/${id}`, dto),
 };

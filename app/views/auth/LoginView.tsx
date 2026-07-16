@@ -29,6 +29,14 @@ export function LoginView({ onLogin, onNavigate }: LoginViewProps) {
       const res = await AuthApi.login({ email, password: pass });
       const { accessToken, refreshToken, user: authUser } = res.data;
 
+      console.log("[LoginView Debug] Backend response:", {
+        email: authUser.email,
+        riskProfile: authUser.riskProfile,
+        questionnaireCompleted: authUser.questionnaireCompleted,
+        role: authUser.role,
+        fullUser: authUser
+      });
+
       // Save to Zustand store
       useAuthStore.getState().setAuth(accessToken, refreshToken, authUser);
       

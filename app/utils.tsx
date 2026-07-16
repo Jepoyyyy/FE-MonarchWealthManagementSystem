@@ -40,7 +40,7 @@ export const typeLabel = (t: ProductType) =>
 
 export const maxRiskForProfile = (p: RiskProfile | null, showHigh: boolean): number => {
   const base = { risk_averse: 2, moderate: 3, risk_taker: 5 }[p!] ?? 2;
-  return showHigh && p !== "risk_taker" ? Math.min(base + 1, 5) : base;
+  return showHigh ? 5 : base;
 };
 
 export const scoreToProfile = (s: number): RiskProfile =>

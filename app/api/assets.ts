@@ -1,14 +1,17 @@
 import { api } from "./client";
 import type { Asset, AssetsPnLResponse, TransactionHistory } from "~/types";
 
+function toDateArray(dateStr: string | undefined): number[] | undefined {
+  if (!dateStr) return undefined;
+  const [y, m, d] = dateStr.split("-").map(Number);
+  return [y, m, d, 0, 0, 0];
+}
+
 function toAssetPayload(data: Omit<Asset, "id">) {
   return {
     product_id: data.productId,
     amount: data.amount,
-    purchase_date: data.purchaseDate ? (() => {
-      const [y, m, d] = data.purchaseDate!.split("-").map(Number);
-      return [y, m, d, 0, 0, 0];
-    })() : undefined,
+    purchase_date: toDateArray(data.purchaseDate),
     current_value: data.currentValue,
     units: data.quantity,
     goal_id: data.goalId,

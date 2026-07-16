@@ -1,70 +1,83 @@
-import { useState, useMemo, useEffect } from "react";
-import { Search, Filter, AlertTriangle, ToggleRight, ToggleLeft, Plus, Clock } from "lucide-react";
-import type { AppUser, Product, Asset, ProductType } from "~/types";
+import { useState, useEffect } from "react";
+import { Search, Filter, AlertTriangle, ToggleRight, ToggleLeft } from "lucide-react";
+import type { AppUser, Product, Asset, ProductType, AuditLog } from "~/types";
 import { PageHeader } from "~/components/ui/PageHeader";
-import { maxRiskForProfile, riskLabel, fmt } from "~/utils";
+import { fmt } from "~/utils";
 import { TrackModal } from "./TrackModal";
 import { ProductCard } from "~/components/ui/ProductCard";
+import { Pagination } from "~/components/ui/Pagination";
+import { RiskProfileBanner } from "~/components/ui/RiskProfileBanner";
 import { useProductsStore } from "~/stores/productsStore";
 import { AssetApi } from "~/api/assets";
+import { useDebounce } from "~/hooks/useDebounce";
 
 interface ProductsViewProps {
   user: AppUser;
-  addLog: (l: any) => void;
+  addLog: (l: Omit<AuditLog, "id">) => void;
   toast: any;
 }
 
-export function ProductsView({
-  user,
-  addLog,
-  toast,
-}: ProductsViewProps) {
+const PAGE_SIZE = 20;
+
+export function ProductsView({ user, addLog, toast }: ProductsViewProps) {
   const [showHighRisk, setShowHighRisk] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
   const [typeFilter, setTypeFilter] = useState<ProductType | "all">("all");
   const [trackingProduct, setTrackingProduct] = useState<Product | null>(null);
-  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(0);
 
-  const { products, loading, fetchProducts } = useProductsStore();
+  const search = useDebounce(searchInput, 300);
 
+  const {
+    products,
+    loading,
+    error,
+    totalPages,
+    fetchProducts,
+  } = useProductsStore();
+
+  // reset to first page whenever a filter changes
   useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts]);
+    setPage(0);
+  }, [search, typeFilter, showHighRisk]);
 
-  const maxRisk = maxRiskForProfile(user.riskProfile, showHighRisk);
-
-  const visible = useMemo(() => {
-    return products.filter((p) => {
-      if (!p.visible) return false;
-      if (p.riskLevel > maxRisk) return false;
-      if (typeFilter !== "all" && p.type !== typeFilter) return false;
-      if (
-        search &&
-        !p.name.toLowerCase().includes(search.toLowerCase()) &&
-        !p.issuer.toLowerCase().includes(search.toLowerCase())
-      ) {
-        return false;
-      }
-      return true;
+  // fetch whenever filters or page change
+  useEffect(() => {
+    fetchProducts({
+      searchQuery: search || undefined,
+      type: typeFilter !== "all" ? typeFilter : undefined,
+      showAll: showHighRisk,
+      page,
+      size: PAGE_SIZE,
     });
-  }, [products, maxRisk, typeFilter, search]);
+  }, [search, typeFilter, showHighRisk, page, fetchProducts]);
 
   const saveTracked = async (data: Omit<Asset, "id">) => {
-    const p = products.find((pr) => pr.id === data.productId)!;
+    const p = products.find((pr) => pr.id === data.productId);
+    if (!p) {
+      toast.error("Product not found. Please refresh and try again.");
+      return;
+    }
     try {
-      await AssetApi.create(data as any);
-      addLog({
-        userId: user.id,
-        userName: user.name,
-        action: "ADD_ASSET",
-        details: `Tracked ${p.name} — ${fmt(data.amount)} (from products view)`,
-        timestamp: new Date().toISOString(),
-        category: "portfolio",
-      });
+      await AssetApi.create(data);
+      try {
+        addLog({
+          userId: user.id,
+          userName: user.name,
+          action: "ADD_ASSET",
+          details: `Tracked ${p.name} — ${fmt(data.amount)} (from products view)`,
+          timestamp: new Date().toISOString(),
+          category: "portfolio",
+        });
+      } catch (logErr) {
+        console.error("Failed to add audit log:", logErr);
+      }
       setTrackingProduct(null);
       toast.success("Investment tracked", {
         description: `${p.name} added to your portfolio.`,
       });
     } catch (err: any) {
+      console.error("Failed to track investment:", err);
       toast.error("Failed to track investment", { description: err.message });
     }
   };
@@ -83,7 +96,6 @@ export function ProductsView({
           initialProduct={trackingProduct}
           onSave={saveTracked}
           onClose={() => setTrackingProduct(null)}
-          investableSurplus={0}
         />
       )}
 
@@ -94,8 +106,8 @@ export function ProductsView({
           <input
             type="text"
             placeholder="Search by product name or issuer..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
             className="w-full pl-9 pr-4 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 bg-background text-foreground"
           />
         </div>
@@ -113,6 +125,7 @@ export function ProductsView({
               <option value="stock">Stocks</option>
               <option value="bond">Bonds (SBN)</option>
               <option value="deposit">Deposits</option>
+              <option value="money_market">Money Market</option>
             </select>
           </div>
 
@@ -134,14 +147,14 @@ export function ProductsView({
         </div>
       </div>
 
-      {!showHighRisk && (
-        <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 flex items-start gap-3">
-          <AlertTriangle size={16} className="text-primary mt-0.5 shrink-0" />
+      <RiskProfileBanner user={user} showHighRisk={showHighRisk} />
+
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-start gap-3">
+          <AlertTriangle size={16} className="text-red-500 mt-0.5 shrink-0" />
           <div>
-            <p className="text-sm font-medium text-foreground">Filtered for your profile</p>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Showing investments suitable for a {riskLabel(user.riskProfile)} investor (Risk Level ≤ {maxRiskForProfile(user.riskProfile, false)}). Enable "Show High Risk" to see all.
-            </p>
+            <p className="text-sm font-medium text-red-800">Failed to load products</p>
+            <p className="text-xs text-red-600 mt-0.5">{error}</p>
           </div>
         </div>
       )}
@@ -152,22 +165,31 @@ export function ProductsView({
         </div>
       ) : (
         <>
-          {visible.length === 0 ? (
+          {products.length === 0 ? (
             <div className="bg-card rounded-xl border border-border p-12 flex flex-col items-center justify-center text-center">
               <Search size={32} className="text-muted-foreground mb-3" />
               <p className="font-semibold text-lg text-foreground">No products match</p>
               <p className="text-sm text-muted-foreground mt-1">Try adjusting your search or filter criteria</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {visible.map((p) => (
-                <ProductCard
-                  key={p.id}
-                  product={p}
-                  onTrack={() => setTrackingProduct(p)}
-                />
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {products.map((p) => (
+                  <ProductCard
+                    key={p.id}
+                    product={p}
+                    onTrack={() => setTrackingProduct(p)}
+                  />
+                ))}
+              </div>
+
+              <Pagination
+                currentPage={page}
+                totalPages={totalPages}
+                onPageChange={setPage}
+                className="pt-4"
+              />
+            </>
           )}
         </>
       )}

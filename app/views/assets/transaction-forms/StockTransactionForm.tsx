@@ -13,7 +13,6 @@ interface StockFormProps {
 
 export function StockTransactionForm({ type, currentPrice, onClose, onSubmit }: StockFormProps) {
   const [qty, setQty] = useState("");
-  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [err, setErr] = useState("");
 
   const parsedQty = parseFloat(qty) || 0;
@@ -44,21 +43,19 @@ export function StockTransactionForm({ type, currentPrice, onClose, onSubmit }: 
         disabled
         icon={<TrendingUp size={14} />}
       />
-      
+
       {totalAmt > 0 && (
         <p className="text-sm text-foreground">
           Total: <span className="font-bold font-mono">{fmt(Math.round(totalAmt))}</span> ({parsedQty * 100} shares)
         </p>
       )}
-      
-      <InputField label="Date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-      
+
       {err && (
         <p className="text-xs text-red-500 flex items-center gap-1">
           <AlertTriangle size={12} /> {err}
         </p>
       )}
-      
+
       <div className="flex gap-3 mt-2">
         <Btn variant="secondary" className="flex-1" onClick={onClose}>Cancel</Btn>
         <Btn className="flex-1" onClick={handleSubmit}>{type === "buy" ? "Buy Stocks" : "Sell Stocks"}</Btn>

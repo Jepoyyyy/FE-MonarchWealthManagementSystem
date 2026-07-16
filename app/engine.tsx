@@ -1,6 +1,6 @@
 import type { AppUser, Asset, Product, Goal, FinancialProfile, HealthScore, Recommendation, ProductType, GoalAnalysis } from "~/types";
 import { GOAL_MAX_MONTHS, GOAL_FAST_MONTHS, GOAL_PRODUCT_TYPES, GOAL_TYPE_CONFIG } from "~/config/goals";
-import { monthsToGoal, monthlyNeeded, maxRiskForProfile, riskLabel, typeLabel, fmt, fmtFull, projectedDate, fmtDuration } from "~/utils";
+import { monthsToGoal, monthlyNeeded, maxRiskForProfile, riskLabel, typeLabel, fmt, projectedDate, fmtDuration } from "~/utils";
 
 export const analyzeGoal = (goal: Goal, effectiveCurrentSaved?: number): GoalAnalysis => {
   const saved = effectiveCurrentSaved ?? goal.currentSaved;
@@ -49,6 +49,7 @@ export function calcHealthScore(
   user: AppUser, myAssets: Asset[], products: Product[],
   goals: Goal[], finProfile: FinancialProfile
 ): HealthScore {
+  const productMap = new Map(products.map(p => [p.id, p]));
   const monthlyExpenses = Object.values(finProfile.expenses).reduce((a, b) => a + b, 0);
   const totalValue = myAssets.reduce((s, a) => s + a.currentValue, 0);
   const maxRiskLv = maxRiskForProfile(user.riskProfile, false);
@@ -56,13 +57,13 @@ export function calcHealthScore(
   // Emergency fund: target = 6× monthly expenses in liquid assets
   const emergencyTarget = monthlyExpenses * 6;
   const liquidValue = myAssets
-    .filter(a => { const p = products.find(pr => pr.id === a.productId); return p && (p.type === "money_market" || p.type === "deposit"); })
+    .filter(a => { const p = productMap.get(a.productId); return p && (p.type === "money_market" || p.type === "deposit"); })
     .reduce((s, a) => s + a.currentValue, 0);
   const emergency = emergencyTarget > 0 ? Math.min(25, Math.round((liquidValue / emergencyTarget) * 25)) : 12;
 
   // Diversification: unique product types owned vs eligible
   const eligibleTypes = new Set(products.filter(p => p.visible && p.riskLevel <= maxRiskLv).map(p => p.type));
-  const ownedTypes = new Set(myAssets.map(a => products.find(p => p.id === a.productId)?.type).filter(Boolean) as ProductType[]);
+  const ownedTypes = new Set(myAssets.map(a => productMap.get(a.productId)?.type).filter(Boolean) as ProductType[]);
   const diversification = eligibleTypes.size > 0 ? Math.min(25, Math.round((ownedTypes.size / eligibleTypes.size) * 25)) : 0;
 
   // Goal coverage: goals that have a matching product type in portfolio
@@ -74,7 +75,7 @@ export function calcHealthScore(
   let riskAlignment = 12;
   if (totalValue > 0) {
     const avgRisk = myAssets.reduce((s, a) => {
-      const p = products.find(pr => pr.id === a.productId);
+      const p = productMap.get(a.productId);
       return s + (p ? (a.currentValue / totalValue) * p.riskLevel : 0);
     }, 0);
     const target = ({ risk_averse: 1.5, moderate: 2.5, risk_taker: 4 } as Record<string, number>)[user.riskProfile!] ?? 2.5;
@@ -93,9 +94,10 @@ export function generateRecommendations(
   const monthlyExpenses = Object.values(finProfile.expenses).reduce((a, b) => a + b, 0);
   const surplus = finProfile.monthlyIncome - monthlyExpenses;
   const totalValue = myAssets.reduce((s, a) => s + a.currentValue, 0);
+  const productMap = new Map(products.map(p => [p.id, p]));
   const maxRiskLv = maxRiskForProfile(user.riskProfile, false);
   const ownedIds = new Set(myAssets.map(a => a.productId));
-  const ownedTypes = new Set(myAssets.map(a => products.find(p => p.id === a.productId)?.type).filter(Boolean) as ProductType[]);
+  const ownedTypes = new Set(myAssets.map(a => productMap.get(a.productId)?.type).filter(Boolean) as ProductType[]);
 
   const bestOf = (types: ProductType[], maxRisk: number, exclude?: Set<string>) =>
     products
@@ -105,7 +107,7 @@ export function generateRecommendations(
   // 1. Emergency fund
   const emergencyTarget = monthlyExpenses * 6;
   const liquidValue = myAssets
-    .filter(a => { const p = products.find(pr => pr.id === a.productId); return p && (p.type === "money_market" || p.type === "deposit"); })
+    .filter(a => { const p = productMap.get(a.productId); return p && (p.type === "money_market" || p.type === "deposit"); })
     .reduce((s, a) => s + a.currentValue, 0);
   if (liquidValue < emergencyTarget * 0.8) {
     const p = bestOf(["money_market", "deposit"], 2);
@@ -123,7 +125,7 @@ export function generateRecommendations(
     const byId = myAssets.reduce((acc, a) => { acc[a.productId] = (acc[a.productId] || 0) + a.currentValue; return acc; }, {} as Record<string, number>);
     const [topId, topVal] = Object.entries(byId).sort(([, a], [, b]) => b - a)[0];
     if (topVal / totalValue > 0.65) {
-      const topProduct = products.find(p => p.id === topId);
+      const topProduct = productMap.get(topId);
       const complement = bestOf(
         (["money_market","deposit","bond","mutual_fund","stock"] as ProductType[]).filter(t => t !== topProduct?.type),
         maxRiskLv, ownedIds

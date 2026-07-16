@@ -1,101 +1,64 @@
-import { useState, useMemo, useCallback } from "react";
-import { Plus, Wallet, DollarSign, Percent, Briefcase, Trash2, ArrowUpRight, ArrowDownRight } from "lucide-react";
-import type { AppUser, Product, Asset, Goal } from "~/types";
-import { GOAL_TYPE_CONFIG } from "~/config/goals";
-import { fmt, fmtDate, fmtFull, fmtPct } from "~/utils";
-import { ProductTypeBadge } from "~/components/ui/ProductTypeBadge";
-import { RiskLevelBadge } from "~/components/ui/RiskLevelBadge";
+import { useState } from "react";
+import { Plus, Wallet, DollarSign, Percent, Briefcase, ArrowUpRight, ArrowDownRight } from "lucide-react";
+import type { AppUser, Product, Asset, Goal, AuditLog } from "~/types";
+import { fmt, fmtFull, fmtPct } from "~/utils";
 import { PageHeader } from "~/components/ui/PageHeader";
 import { StatCard } from "~/components/ui/StatCard";
-import { ConfirmModal } from "~/components/ui/ConfirmModal";
-import { Badge } from "~/components/ui/Badge";
 import { Btn } from "~/components/ui/Btn";
 import { TrackModal } from "~/views/products/TrackModal";
 import { AssetDetailPage } from "./AssetDetailPage";
+import { AssetRow } from "./AssetRow";
+import { AssetApi } from "~/api/assets";
+import { usePortfolioStore } from "~/stores/portfolioStore";
 import { PortfolioService } from "~/services/portfolio";
 
 interface AssetsViewProps {
   user: AppUser;
   products: Product[];
-  assets: Asset[];
-  setAssets: React.Dispatch<React.SetStateAction<Asset[]>>;
-  addLog: (l: any) => void;
+  addLog: (l: Omit<AuditLog, "id">) => void;
   goals: Goal[];
-  investableSurplus: number;
 }
 
 export function AssetsView({
   user,
   products,
-  assets,
-  setAssets,
   addLog,
   goals,
-  investableSurplus,
 }: AssetsViewProps) {
   const [showAdd, setShowAdd] = useState(false);
   const [detailAssetId, setDetailAssetId] = useState<string | null>(null);
-  const [confirmRemoveId, setConfirmRemoveId] = useState<string | null>(null);
+  const assets = usePortfolioStore((s) => s.assets);
 
-  const myAssets = useMemo(() => (assets || []).filter((a) => a.userId === user.id), [assets, user.id]);
-  const totalValue = useMemo(() => myAssets.reduce((s, a) => s + a.currentValue, 0), [myAssets]);
-  const totalCost = useMemo(() => myAssets.reduce((s, a) => s + a.amount, 0), [myAssets]);
-  const totalGain = useMemo(() => totalValue - totalCost, [totalValue, totalCost]);
-  const totalRetPct = useMemo(() => (totalCost > 0 ? (totalGain / totalCost) * 100 : 0), [totalGain, totalCost]);
+  const myAssets = (assets || []).filter((a) => a.userId === user.id);
+  const totalValue = myAssets.reduce((s, a) => s + a.currentValue, 0);
+  const totalCost = myAssets.reduce((s, a) => s + a.amount, 0);
+  const totalGain = totalValue - totalCost;
+  const totalRetPct = totalCost > 0 ? (totalGain / totalCost) * 100 : 0;
 
-  const saveAsset = (data: Omit<Asset, "id">) => {
-    const p = products.find((pr) => pr.id === data.productId)!;
-    const newAsset: Asset = { ...data, id: `a${Date.now()}` };
-    setAssets((prev) => [...prev, newAsset]);
-    addLog({
-      userId: user.id,
-      userName: user.name,
-      action: "ADD_ASSET",
-      details: `Tracked ${p.name} — ${fmtFull(data.amount)} via ${data.platform || "external platform"}`,
-      timestamp: new Date().toISOString(),
-      category: "portfolio",
-    });
-    setShowAdd(false);
+  const saveAsset = async (data: Omit<Asset, "id">) => {
+    try {
+      await AssetApi.create(data);
+      await usePortfolioStore.getState().fetchPortfolio();
+      setShowAdd(false);
+    } catch {}
   };
 
-  const updateAsset = (id: string, data: Partial<Asset>, txType?: "buy" | "sell", txQty?: number, txPrice?: number) => {
-    const a = assets.find((x) => x.id === id)!;
-    const p = products.find((pr) => pr.id === a.productId)!;
-
-    const newData = txType && txPrice !== undefined
-      ? { ...data, ...PortfolioService.processTransaction(a, p, txType, data.amount ?? 0, txPrice, txQty) }
-      : data;
-
-    setAssets((prev) => prev.map((x) => (x.id === id ? { ...x, ...newData } : x)));
-    addLog({
-      userId: user.id,
-      userName: user.name,
-      action: "UPDATE_ASSET",
-      details: txType
-        ? `${txType === "buy" ? "Top Up" : "Redeem"} ${p.name}`
-        : `Updated ${p?.name ?? "position"} detail`,
-      timestamp: new Date().toISOString(),
-      category: "portfolio",
-    });
+  const updateAsset = async (id: string, data: Partial<Asset>, txType?: "buy" | "sell", txQty?: number, txPrice?: number) => {
+    try {
+      await AssetApi.update(id, data);
+      await usePortfolioStore.getState().fetchPortfolio();
+    } catch {}
   };
 
-  const removeAsset = (id: string) => {
-    const a = assets.find((x) => x.id === id)!;
-    const p = products.find((pr) => pr.id === a.productId);
-    setAssets((prev) => prev.filter((x) => x.id !== id));
-    addLog({
-      userId: user.id,
-      userName: user.name,
-      action: "REMOVE_ASSET",
-      details: `Removed ${p?.name ?? "position"} from portfolio`,
-      timestamp: new Date().toISOString(),
-      category: "portfolio",
-    });
-    setConfirmRemoveId(null);
+  const removeAsset = async (id: string) => {
+    try {
+      await AssetApi.delete(id);
+      await usePortfolioStore.getState().fetchPortfolio();
+    } catch {}
   };
 
   const assignGoal = (assetId: string, goalId: string | undefined) => {
-    setAssets((prev) => prev.map((a) => (a.id === assetId ? { ...a, goalId } : a)));
+    // local-only until goal-linking API endpoint is available
   };
 
   const detailAsset = detailAssetId ? myAssets.find((a) => a.id === detailAssetId) : null;
@@ -150,17 +113,6 @@ export function AssetsView({
           products={products}
           onSave={saveAsset}
           onClose={() => setShowAdd(false)}
-          investableSurplus={investableSurplus}
-        />
-      )}
-      {confirmRemoveId && (
-        <ConfirmModal
-          open={!!confirmRemoveId}
-          onOpenChange={() => setConfirmRemoveId(null)}
-          title="Hapus posisi ini?"
-          message="Data investasi ini akan dihapus permanen."
-          confirmLabel="Ya, hapus"
-          onConfirm={() => removeAsset(confirmRemoveId!)}
         />
       )}
 
@@ -179,7 +131,7 @@ export function AssetsView({
         </div>
       ) : (
         <div className="bg-card rounded-xl border border-border overflow-x-auto">
-          <table className="w-full text-sm min-w-[800px]">
+          <table className="w-full text-sm min-w-200">
             <thead>
               <tr style={{ background: "var(--muted)", borderBottom: "1px solid var(--border)" }}>
                 {["Product", "Risk", "Qty", "Platform", "Date", "Cost Basis", "Cur Value", "P/L", "Goals", ""].map(
@@ -195,100 +147,17 @@ export function AssetsView({
               </tr>
             </thead>
             <tbody>
-              {myAssets.map((a) => {
-                const p = products.find((pr) => pr.id === a.productId) || { name: 'Unknown', issuer: 'Unknown', type: 'stock', riskLevel: 1 };
-                const qty = a.quantity ?? a.amount;
-                const ret = ((a.currentValue - a.amount) / a.amount) * 100;
-                const isStock2 = p.type === "stock";
-                const isMF2 = p.type === "mutual_fund" || p.type === "money_market";
-                const isDeposit2 = p.type === "deposit";
-                const qtyLabel2 = isStock2 ? `${qty} Lot` : isMF2 ? `${qty.toFixed(4)}` : isDeposit2 ? "—" : fmt(Math.round(qty));
-                return (
-                  <tr
-                    key={a.id}
-                    onClick={() => setDetailAssetId(a.id)}
-                    className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors cursor-pointer group"
-                  >
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-2">
-                        <ProductTypeBadge type={p.type} />
-                        <div>
-                          <p className="text-xs font-semibold leading-tight text-foreground">{p.name}</p>
-                          <p className="text-xs text-muted-foreground">{p.issuer}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <RiskLevelBadge level={p.riskLevel} />
-                    </td>
-                    <td
-                      className="px-4 py-3 text-xs text-foreground"
-                      style={{ fontFamily: "var(--font-mono)" }}
-                    >
-                      {qtyLabel2}
-                    </td>
-                    <td className="px-4 py-3 text-xs text-muted-foreground">{a.platform ?? "—"}</td>
-                    <td
-                      className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap"
-                      style={{ fontFamily: "var(--font-mono)" }}
-                    >
-                      {fmtDate(a.purchaseDate)}
-                    </td>
-                    <td
-                      className="px-4 py-3 text-xs text-foreground"
-                      style={{ fontFamily: "var(--font-mono)" }}
-                    >
-                      {fmt(a.amount)}
-                    </td>
-                    <td
-                      className="px-4 py-3 text-xs font-semibold text-foreground"
-                      style={{ fontFamily: "var(--font-mono)" }}
-                    >
-                      {fmt(a.currentValue)}
-                    </td>
-                    <td className="px-4 py-3">
-                      <span
-                        className={`text-xs font-semibold flex items-center gap-0.5 ${
-                          ret >= 0 ? "text-emerald-600" : "text-red-500"
-                        }`}
-                        style={{ fontFamily: "var(--font-mono)" }}
-                      >
-                        {ret >= 0 ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
-                        {fmtPct(ret)}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
-                      <select
-                        value={a.goalId ?? ""}
-                        onChange={(e) => assignGoal(a.id, e.target.value || undefined)}
-                        className="text-xs rounded-md border px-2 py-1.5 max-w-[130px] focus:outline-none focus:ring-2 focus:ring-primary/20"
-                        style={{
-                          borderColor: a.goalId ? "var(--accent)" : "var(--border)",
-                          background: "var(--input-background)",
-                          color: a.goalId ? "var(--foreground)" : "var(--muted-foreground)",
-                        }}
-                      >
-                        <option value="">No goal</option>
-                        {goals.map((g) => (
-                          <option key={g.id} value={g.id}>
-                            {GOAL_TYPE_CONFIG[g.type].icon} {g.name}
-                          </option>
-                        ))}
-                      </select>
-                    </td>
-                    <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
-                      <Btn
-                        variant="unstyled"
-                        onClick={() => setConfirmRemoveId(a.id)}
-                        className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-red-500 transition-all flex items-center justify-center"
-                        title="Hapus"
-                      >
-                        <Trash2 size={14} />
-                      </Btn>
-                    </td>
-                  </tr>
-                );
-              })}
+              {myAssets.map((a) => (
+                <AssetRow
+                  key={a.id}
+                  asset={a}
+                  products={products}
+                  goals={goals}
+                  onSelect={setDetailAssetId}
+                  onRemove={removeAsset}
+                  onAssignGoal={assignGoal}
+                />
+              ))}
             </tbody>
             <tfoot>
               <tr style={{ background: "var(--muted)", borderTop: "2px solid var(--border)" }}>

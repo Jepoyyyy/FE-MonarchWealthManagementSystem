@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import type { AppUser, Product, Asset, ProductType } from "~/types";
 import { PRODUCT_SEED_PRICES } from "~/config/products";
 import { maxRiskForProfile } from "~/utils";
@@ -9,8 +9,16 @@ interface UseTrackModalProps {
   onSave: (a: Omit<Asset, "id">) => void;
   onClose: () => void;
   initialProduct?: Product;
-  investableSurplus?: number;
 }
+
+const getFallbackPrice = (product: Product): number => {
+  const seed = PRODUCT_SEED_PRICES[product.id];
+  if (seed) return seed;
+  if (product.type === "bond") return 100;
+  if (product.type === "mutual_fund" || product.type === "money_market") return 1000;
+  if (product.type === "stock") return 100;
+  return 0;
+};
 
 export function useTrackModal({
   user,
@@ -18,7 +26,6 @@ export function useTrackModal({
   onSave,
   onClose,
   initialProduct,
-  investableSurplus,
 }: UseTrackModalProps) {
   const [step, setStep] = useState<0 | 1>(initialProduct ? 1 : 0);
   const [search, setSearch] = useState("");
@@ -40,7 +47,7 @@ export function useTrackModal({
   const isMF = picked?.type === "mutual_fund" || picked?.type === "money_market";
   const isBond = picked?.type === "bond";
 
-  const visible = products.filter((p) => {
+  const visible = useMemo(() => products.filter((p) => {
     if (!p.visible) return false;
     if (typeFilter !== "all" && p.type !== typeFilter) return false;
     if (
@@ -50,14 +57,15 @@ export function useTrackModal({
     )
       return false;
     return true;
-  });
+  }), [products, typeFilter, search]);
 
   const selectProduct = (p: Product) => {
     setPicked(p);
     setStep(1);
     setErr("");
     setAmount("");
-    setCurrentVal(String(PRODUCT_SEED_PRICES[p.id] ?? ""));
+    const price = getFallbackPrice(p);
+    setCurrentVal(price > 0 ? String(price) : "");
     setQuantity("");
     setTenorMonths(12);
   };
@@ -65,21 +73,35 @@ export function useTrackModal({
   const parsedAmount = parseFloat(amount) || 0;
   const parsedCurrentVal = parseFloat(currentVal) || 0;
 
-  // Auto-calculations based on type
+  // Stock: amount = qty(lots) * 100 shares/lot * price
   useEffect(() => {
-    if (!isStock || !picked || !quantity) return;
+    if (!isStock || !picked || !quantity) {
+      if (isStock) setAmount("");
+      return;
+    }
     const qty = parseFloat(quantity) || 0;
-    if (parsedCurrentVal > 0) {
+    if (parsedCurrentVal > 0 && qty > 0) {
       setAmount(String(qty * 100 * parsedCurrentVal));
+    } else {
+      setAmount("");
     }
   }, [quantity, currentVal, isStock, picked, parsedCurrentVal]);
 
+  // MF/Bond: quantity = amount / price (with div-by-zero guard)
   useEffect(() => {
-    if ((!isMF && !isBond) || !picked || !amount) return;
+    if ((!isMF && !isBond) || !picked) return;
+    if (!amount) {
+      setQuantity("");
+      setErr("");
+      return;
+    }
     const amt = parseFloat(amount) || 0;
-    if (parsedCurrentVal > 0) {
+    if (parsedCurrentVal > 0 && amt > 0) {
+      setErr("");
       if (isMF) setQuantity((amt / parsedCurrentVal).toFixed(4));
       if (isBond) setQuantity(String(Math.round(amt / (parsedCurrentVal / 100) / 10000) * 10000));
+    } else {
+      setQuantity("");
     }
   }, [amount, currentVal, isMF, isBond, picked, parsedCurrentVal]);
 
@@ -94,8 +116,12 @@ export function useTrackModal({
       setErr("Enter the quantity (lot).");
       return;
     }
+    if ((isMF || isBond) && (parsedCurrentVal <= 0)) {
+      setErr("Market price data unavailable for this product. Cannot auto-calculate units.");
+      return;
+    }
     const qtyVal = isDeposit ? amt : (parseFloat(quantity) || amt);
-    const currentValNum = isDeposit ? amt : parseFloat(currentVal);
+    const currentValNum = isDeposit ? amt : parsedCurrentVal;
     onSave({
       userId: user.id,
       productId: picked.id,
@@ -144,7 +170,6 @@ export function useTrackModal({
     visible,
     selectProduct,
     parsedAmount,
-    parsedCurrentVal,
     submit,
   };
 }

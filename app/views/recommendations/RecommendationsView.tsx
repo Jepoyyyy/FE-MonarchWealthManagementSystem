@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { CheckCircle } from "lucide-react";
-import type { AppUser, Asset, Product, Goal, FinancialProfile } from "~/types";
+import type { AppUser, Asset, Product, Goal, FinancialProfile, AuditLog } from "~/types";
 import { riskLabel, fmt, fmtFull, fmtPct } from "~/utils";
 import { calcHealthScore, generateRecommendations } from "~/engine";
 import { PageHeader } from "~/components/ui/PageHeader";
@@ -18,7 +18,7 @@ interface RecommendationsViewProps {
   products: Product[];
   goals: Goal[];
   finProfile: FinancialProfile;
-  addLog: (l: any) => void;
+  addLog: (l: Omit<AuditLog, "id">) => void;
   toast: any;
 }
 

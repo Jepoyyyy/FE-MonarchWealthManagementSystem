@@ -1,6 +1,0 @@
-C:\Code\miniproject\FE-MonarchWealthManagementSystem\.agents\skills\react-router\SKILL.md
-C:\Code\miniproject\FE-MonarchWealthManagementSystem\.agents\skills\react-router\references\data-mode.md
-C:\Code\miniproject\FE-MonarchWealthManagementSystem\.agents\skills\react-router\references\declarative-mode.md
-C:\Code\miniproject\FE-MonarchWealthManagementSystem\.agents\skills\react-router\references\framework-mode.md
-C:\Code\miniproject\FE-MonarchWealthManagementSystem\.agents\skills\react-router\references\rsc.md
-C:\Code\miniproject\FE-MonarchWealthManagementSystem\README.md

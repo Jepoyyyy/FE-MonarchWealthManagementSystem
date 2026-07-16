@@ -8,7 +8,7 @@ import { ConfirmModal } from "~/components/ui/ConfirmModal";
 import { AddTransactionModal } from "./AddTransactionModal";
 import { Btn } from "~/components/ui/Btn";
 import { useAssetDetail } from "~/hooks/useAssetDetail";
-import { usePortfolioStore } from "~/stores/portofolioStore";
+import { usePortfolioStore } from "~/stores/portfolioStore";
 
 interface AssetDetailPageProps {
   asset: Asset;
@@ -55,8 +55,8 @@ export function AssetDetailPage({
   const pnl = pnlData.find(x => x.assetId === asset.id);
   
   const displayCurValNum = pnl ? pnl.currentValue : curValNum;
-  const displayPnlAmt = pnl ? pnl.potentialPnl : pnlAmt;
-  const displayPnlPct = pnl ? pnl.potentialPnlPercent : pnlPct;
+  const displayPnlAmt = pnl ? pnl.potential_pnl : pnlAmt;
+  const displayPnlPct = pnl ? pnl.potential_pnl_percent : pnlPct;
 
   return (
     <div className="space-y-6">
@@ -108,7 +108,7 @@ export function AssetDetailPage({
         </Btn>
         <Btn
           variant="secondary"
-          className="flex-1 !bg-red-50 !text-red-600 hover:!bg-red-100 border-red-200"
+          className="flex-1 bg-red-50! text-red-600! hover:bg-red-100! border-red-200"
           onClick={() => setShowTxModal("sell")}
         >
           Sell / Redeem

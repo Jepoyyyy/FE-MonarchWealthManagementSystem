@@ -13,7 +13,6 @@ interface BondFormProps {
 
 export function BondTransactionForm({ type, currentPrice, onClose, onSubmit }: BondFormProps) {
   const [qty, setQty] = useState("");
-  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [err, setErr] = useState("");
 
   const parsedQty = parseFloat(qty) || 0;
@@ -67,8 +66,6 @@ export function BondTransactionForm({ type, currentPrice, onClose, onSubmit }: B
           )}
         </>
       )}
-
-      <InputField label="Date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
 
       {err && (
         <p className="text-xs text-red-500 flex items-center gap-1">

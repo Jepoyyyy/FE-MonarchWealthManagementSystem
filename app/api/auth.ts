@@ -12,7 +12,7 @@ export const AuthApi = {
     api.post<AuthSuccessResponse>("/api/v1/auth/register", data),
   logout: () => api.post("/api/v1/auth/logout"),
   refresh: (refreshToken: string) =>
-    api.post("/api/v1/auth/refresh", {
+    api.post<AuthSuccessResponse>("/api/v1/auth/refresh", {
         refreshToken
     }),
 };

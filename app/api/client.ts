@@ -30,7 +30,12 @@ const processQueue = (error: any, token: string | null = null) => {
 };
 
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    if (response.data && typeof response.data === "object" && "result" in response.data && "code" in response.data) {
+      response.data = response.data.result;
+    }
+    return response;
+  },
   async (error) => {
     const originalRequest = error.config;
     // Don't intercept 401s on auth endpoints
@@ -56,7 +61,7 @@ api.interceptors.response.use(
       if (refreshToken) {
         try {
           const res = await AuthApi.refresh(refreshToken);
-          const { accessToken: newToken, refreshToken: newRefreshToken, user } = res.data as any;
+          const { accessToken: newToken, refreshToken: newRefreshToken, user } = res.data;
           useAuthStore.getState().setAuth(newToken, newRefreshToken, user);
           api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
           originalRequest.headers["Authorization"] = `Bearer ${newToken}`;

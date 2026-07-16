@@ -39,12 +39,8 @@ export function ProductSelectorStep({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by name or issuer…"
-            className="w-full pl-9 pr-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-            style={{
-              borderColor: "var(--border)",
-              background: "var(--input-background)",
-              color: "var(--foreground)",
-            }}
+            className="w-full pl-9 pr-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 border-border"
+            style={{ background: "var(--input-background)", color: "var(--foreground)" }}
           />
         </div>
         <div className="flex gap-1.5 flex-wrap">

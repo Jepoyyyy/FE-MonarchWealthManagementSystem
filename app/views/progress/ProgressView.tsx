@@ -7,7 +7,7 @@ import { ProductTypeBadge } from "~/components/ui/ProductTypeBadge";
 import { PageHeader } from "~/components/ui/PageHeader";
 import { StatCard } from "~/components/ui/StatCard";
 import { Badge } from "~/components/ui/Badge";
-import { usePortfolioStore } from "~/stores/portofolioStore";
+import { usePortfolioStore } from "~/stores/portfolioStore";
 
 const ProgressGoalChart = React.lazy(() => import("~/components/charts/ProgressGoalChart"));
 
@@ -26,7 +26,7 @@ export function ProgressView({ user, products, goals, finProfile }: ProgressView
   }, [fetchPortfolio]);
 
   const totalValue = pnlData.reduce((s, a) => s + a.currentValue, 0);
-  const totalCost = pnlData.reduce((s, a) => s + (a.units * a.avgPrice), 0);
+  const totalCost = pnlData.reduce((s, a) => s + (a.units * a.avg_price), 0);
   const portfolioGain = totalValue - totalCost;
 
   const earliestMs =
@@ -279,7 +279,7 @@ export function ProgressView({ user, products, goals, finProfile }: ProgressView
           {pnlData.map((pnl) => {
             const p = products.find((pr) => pr.id === pnl.productId);
             if (!p) return null;
-            const ret = pnl.potentialPnlPercent;
+            const ret = pnl.potential_pnl_percent;
             const share = totalValue > 0 ? (pnl.currentValue / totalValue) * 100 : 0;
             return (
               <div key={pnl.assetId}>
