@@ -27,7 +27,7 @@ export function AdminUsersView({
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const res = await api.get("/api/v1/admin/users");
+      const res = await api.get("/api/v2/users");
       setUsers(res.data);
     } catch (err: any) {
       toast.error("Failed to load users", { description: err.message });
@@ -46,7 +46,7 @@ export function AdminUsersView({
   const toggleStatus = async (id: string, next: UserStatus) => {
     const u = users.find((us) => us.id === id)!;
     try {
-      await api.patch(`/api/v1/admin/users/${id}/status`, { status: next });
+      await api.put(`/api/v2/users/${id}`, { status: next });
       addLog({
         userId: adminUser.id,
         userName: adminUser.name,

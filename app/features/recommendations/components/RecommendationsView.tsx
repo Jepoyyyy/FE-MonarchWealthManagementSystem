@@ -11,6 +11,7 @@ import { TrackModal } from '~/features/products/components/TrackModal';
 import { useRecommendationsStore } from '~/features/recommendations/recommendations.store';
 import { useEffect } from "react";
 import { AssetApi } from '~/features/assets/api';
+import { handleGlobalApiError } from '~/shared/api';
 
 interface RecommendationsViewProps {
   user: AppUser;
@@ -63,7 +64,9 @@ export function RecommendationsView({
       toast.success("Rekomendasi ditindaklanjuti", { description: `${p.name} — ${fmtFull(data.amount)}` });
       setTrackingProduct(null);
     } catch (err: any) {
-      toast.error("Gagal menyimpan aset", { description: err.message });
+      if (!handleGlobalApiError(err)) {
+        toast.error("Gagal menyimpan aset", { description: err.message });
+      }
     }
   };
 

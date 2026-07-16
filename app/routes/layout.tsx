@@ -32,7 +32,7 @@ export default function Layout() {
   useEffect(() => { fetchProducts(); }, [fetchProducts]);
 
   const addLog = useCallback((l: Omit<AuditLog, "id">) => {
-    // Keep it here for compatibility with contexts, but views can also rely on backend audit trails
+    
     setLogs((prev) => [{ ...l, id: `l${Date.now()}` }, ...prev]);
   }, []);
 

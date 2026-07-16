@@ -11,6 +11,8 @@ import { AssetRow } from "./AssetRow";
 import { AssetApi } from '~/features/assets/api';
 import { usePortfolioStore } from '~/features/assets/portfolio.store';
 import { PortfolioService } from '~/features/assets/portfolio.service';
+import { handleGlobalApiError } from '~/shared/api';
+import { toast } from 'sonner';
 
 interface AssetsViewProps {
   user: AppUser;
@@ -40,21 +42,36 @@ export function AssetsView({
       await AssetApi.create(data);
       await usePortfolioStore.getState().fetchPortfolio();
       setShowAdd(false);
-    } catch {}
+      toast.success("Aset berhasil ditambahkan");
+    } catch (err: any) {
+      if (!handleGlobalApiError(err)) {
+        toast.error("Gagal menambahkan aset", { description: err.message || "Unknown error" });
+      }
+    }
   };
 
   const updateAsset = async (id: string, data: Partial<Asset>, txType?: "buy" | "sell", txQty?: number, txPrice?: number) => {
     try {
       await AssetApi.update(id, data);
       await usePortfolioStore.getState().fetchPortfolio();
-    } catch {}
+      toast.success("Aset berhasil diperbarui");
+    } catch (err: any) {
+      if (!handleGlobalApiError(err)) {
+        toast.error("Gagal memperbarui aset", { description: err.message || "Unknown error" });
+      }
+    }
   };
 
   const removeAsset = async (id: string) => {
     try {
       await AssetApi.delete(id);
       await usePortfolioStore.getState().fetchPortfolio();
-    } catch {}
+      toast.success("Aset berhasil dihapus");
+    } catch (err: any) {
+      if (!handleGlobalApiError(err)) {
+        toast.error("Gagal menghapus aset", { description: err.message || "Unknown error" });
+      }
+    }
   };
 
   const assignGoal = (assetId: string, goalId: string | undefined) => {

@@ -37,6 +37,7 @@ export function GoalFormModal({
   const [isPriority, setIsPriority] = useState(initial?.isPriority ?? false);
   const [notes, setNotes] = useState(initial?.notes ?? "");
   const [err, setErr] = useState("");
+  const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(initial ? 1 : 0);
   const [showConfirmCancel, setShowConfirmCancel] = useState(false);
   const dirty = !!(name || target || (saved && saved !== "0") || monthly || notes);
@@ -49,7 +50,7 @@ export function GoalFormModal({
     setStep(1);
   };
 
-  const save = () => {
+  const save = async () => {
     const t = parseFloat(target);
     const s = parseFloat(saved) || 0;
     const m = autoDisabled && autoMonthlyAmount != null ? autoMonthlyAmount : (parseFloat(monthly) || 0);
@@ -65,17 +66,32 @@ export function GoalFormModal({
       setErr("Monthly contribution must be greater than 0.");
       return;
     }
-    onSave({
-      name: name.trim(),
-      type,
-      targetAmount: t,
-      currentSaved: s,
-      monthlyContribution: m,
-      expectedReturn: portfolioReturn ?? 7.5,
-      isPriority,
-      color: GOAL_TYPE_CONFIG[type].color,
-      notes: notes.trim() || undefined,
-    });
+    
+    setLoading(true);
+    setErr("");
+    try {
+      await onSave({
+        name: name.trim(),
+        type,
+        targetAmount: t,
+        currentSaved: s,
+        monthlyContribution: m,
+        expectedReturn: portfolioReturn ?? 7.5,
+        isPriority,
+        color: GOAL_TYPE_CONFIG[type].color,
+        notes: notes.trim() || undefined,
+      });
+    } catch (error: any) {
+      if (error && typeof error === "object" && error.error?.detail === "INSUFFICIENT_INCOME") {
+        setErr("Your income is insufficient for this goal target.");
+      } else if (error && typeof error === "object" && error.error?.detail === "DUPLICATE_PRIORITY_GOALS") {
+        setErr("Only one priority goal can be set.");
+      } else {
+        setErr(error?.message || "Failed to save goal.");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const cfg = GOAL_TYPE_CONFIG[type];
@@ -256,8 +272,8 @@ export function GoalFormModal({
             >
               Cancel
             </Btn>
-            <Btn className="flex-1" onClick={save}>
-              {initial ? "Save Changes" : "Create Goal"}
+            <Btn className="flex-1" onClick={save} disabled={loading}>
+              {loading ? "Saving..." : initial ? "Save Changes" : "Create Goal"}
             </Btn>
           </div>
         )}

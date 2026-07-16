@@ -21,7 +21,7 @@ export function AdminAuditView({ logs: propLogs }: AdminAuditViewProps) {
     const fetchLogs = async () => {
       try {
         setLoading(true);
-        const res = await api.get("/api/v1/admin/audit-logs");
+        const res = await api.get("/api/v1/admin/audit");
         setLogs(res.data);
       } catch (err) {
         console.error("Failed to load audit logs:", err);

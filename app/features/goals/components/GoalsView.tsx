@@ -101,6 +101,7 @@ export function GoalsView({
       fetchGoals();
     } catch (err: any) {
       toast.error("Gagal menambah goal", { description: err.message });
+      throw err;
     }
   };
 
@@ -123,6 +124,7 @@ export function GoalsView({
       fetchGoals();
     } catch (err: any) {
       toast.error("Gagal memperbarui goal", { description: err.message });
+      throw err;
     }
   };
 
