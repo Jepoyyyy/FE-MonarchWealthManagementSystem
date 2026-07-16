@@ -3,7 +3,7 @@ import { memo } from "react";
 import type { Product } from "~/types";
 import { ProductTypeBadge } from "./ProductTypeBadge";
 import { RiskLevelBadge } from "./RiskLevelBadge";
-import { FormattedAmount } from "./FormattedAmount";
+import { FormattedAmount } from '~/shared/components/FormattedAmount';
 
 interface ProductCardProps {
   product: Product;

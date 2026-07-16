@@ -1,4 +1,4 @@
-import { api } from "./client";
+import { api } from '~/shared/api/client';
 import type { Asset, AssetsPnLResponse, TransactionHistory } from "~/types";
 
 function toDateArray(dateStr: string | undefined): number[] | undefined {

@@ -1,6 +1,6 @@
 import type { ProductType } from "~/types";
 import { typeLabel } from "~/utils";
-import { Badge } from "./Badge";
+import { Badge } from '~/shared/components/Badge';
 
 interface ProductTypeBadgeProps {
   type: ProductType;

@@ -1,6 +1,6 @@
 import { Shield, ChevronRight, Star } from "lucide-react";
 import type { RiskProfile } from "~/types";
-import { Btn } from "~/components/ui/Btn";
+import { Btn } from '~/shared/components/Button';
 
 const PROFILE_CONFIG = {
   risk_averse: {

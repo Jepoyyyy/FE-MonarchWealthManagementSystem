@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Info, DollarSign, AlertTriangle } from "lucide-react";
-import { InputField } from "~/components/ui/InputField";
-import { Btn } from "~/components/ui/Btn";
+import { InputField } from '~/shared/components/Input';
+import { Btn } from '~/shared/components/Button';
 
 interface DepositFormProps {
   type: "buy" | "sell";

@@ -1,6 +1,6 @@
 import axios from "axios";
-import { useAuthStore } from "../stores/authStore";
-import { AuthApi } from "./auth";
+import { useAuthStore } from "~/stores/authStore";
+import { AuthApi } from "~/api/auth";
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "",

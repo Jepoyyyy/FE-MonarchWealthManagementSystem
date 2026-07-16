@@ -3,7 +3,7 @@ import { CheckCircle } from "lucide-react";
 import type { AppUser, Asset, Product, Goal, FinancialProfile, AuditLog } from "~/types";
 import { riskLabel, fmt, fmtFull, fmtPct } from "~/utils";
 import { calcHealthScore, generateRecommendations } from "~/engine";
-import { PageHeader } from "~/components/ui/PageHeader";
+import { PageHeader } from '~/shared/components/PageHeader';
 import { ScoreRing } from "~/components/ui/ScoreRing";
 import { SubScore } from "~/components/ui/SubScore";
 import { RecommendationCard } from "~/components/ui/RecommendationCard";

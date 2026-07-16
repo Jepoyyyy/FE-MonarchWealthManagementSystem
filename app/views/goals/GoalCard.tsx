@@ -13,11 +13,11 @@ import {
 } from "lucide-react";
 import type { Goal, Asset, Product, GoalStatus } from "~/types";
 import { GOAL_TYPE_CONFIG } from "~/config/goals";
-import { Btn } from "~/components/ui/Btn";
+import { Btn } from '~/shared/components/Button';
 import { analyzeGoal } from "~/engine";
 import { fmt, fmtDuration, projectedDate } from "~/utils";
 import { ProductTypeBadge } from "~/components/ui/ProductTypeBadge";
-import { ConfirmModal } from "~/components/ui/ConfirmModal";
+import { ConfirmModal } from '~/shared/components/ConfirmModal';
 
 interface GoalCardProps {
   goal: Goal;

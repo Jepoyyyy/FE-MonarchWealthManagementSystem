@@ -1,5 +1,5 @@
 import { AlertTriangle } from "lucide-react";
-import { Btn } from "./Btn";
+import { Btn } from "./Button";
 
 interface ConfirmModalProps {
   open: boolean;

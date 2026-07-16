@@ -1,7 +1,7 @@
 import { Search } from "lucide-react";
 import type { Product, ProductType } from "~/types";
-import { Badge } from "~/components/ui/Badge";
-import { Btn } from "~/components/ui/Btn";
+import { Badge } from '~/shared/components/Badge';
+import { Btn } from '~/shared/components/Button';
 import { ProductTypeBadge } from "~/components/ui/ProductTypeBadge";
 import { RiskLevelBadge } from "~/components/ui/RiskLevelBadge";
 

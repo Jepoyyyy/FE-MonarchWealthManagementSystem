@@ -3,8 +3,8 @@ import type { Product, ProductType } from "~/types";
 import { depositTenors } from "~/config/products";
 import { fmt } from "~/utils";
 import { getProductTypeIcon, getRiskLevelLabel, getRiskLevelBadgeClass } from "~/utils/productHelpers";
-import { InputField } from "~/components/ui/InputField";
-import { Badge } from "~/components/ui/Badge";
+import { InputField } from '~/shared/components/Input';
+import { Badge } from '~/shared/components/Badge';
 
 interface TrackFormStepProps {
   picked: Product | null;

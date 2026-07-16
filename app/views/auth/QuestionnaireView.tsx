@@ -1,7 +1,7 @@
 import { Shield, Check, ChevronRight } from "lucide-react";
 import type { AppUser, RiskProfile } from "~/types";
 import { QUESTIONNAIRE } from "~/config/questionnaire";
-import { Btn } from "~/components/ui/Btn";
+import { Btn } from '~/shared/components/Button';
 import { useQuestionnaire } from "~/hooks/useQuestionnaire";
 
 interface QuestionnaireViewProps {

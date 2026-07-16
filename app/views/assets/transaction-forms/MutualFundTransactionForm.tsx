@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { TrendingUp, Layers, AlertTriangle } from "lucide-react";
 import { fmt } from "~/utils";
-import { InputField } from "~/components/ui/InputField";
-import { Btn } from "~/components/ui/Btn";
+import { InputField } from '~/shared/components/Input';
+import { Btn } from '~/shared/components/Button';
 
 interface MutualFundFormProps {
   type: "buy" | "sell";

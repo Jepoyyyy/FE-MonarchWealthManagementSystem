@@ -1,4 +1,4 @@
-import { api } from "./client";
+import { api } from '~/shared/api/client';
 import type { Product, Page } from "../types/product.types";
 
 interface ProductUpdateDTO {

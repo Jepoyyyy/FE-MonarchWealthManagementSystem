@@ -35,3 +35,5 @@ export function Btn({ children, variant = "primary", size = "md", className = ""
     </button>
   );
 }
+
+export { Btn as Button };

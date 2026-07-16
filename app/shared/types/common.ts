@@ -1,0 +1,22 @@
+export type RiskProfile = "risk_averse" | "moderate" | "risk_taker";
+export type ProductType = "money_market" | "deposit" | "bond" | "mutual_fund" | "stock";
+export type UserRole = "user" | "admin";
+export type UserStatus = "active" | "suspended" | "pending";
+
+export type View =
+  | "login" | "register" | "questionnaire"
+  | "dashboard" | "products" | "assets" | "goals" | "recommendations" | "progress"
+  | "admin-dashboard" | "admin-products" | "admin-users" | "admin-audit";
+
+export interface AppUser {
+  id: string;
+  name: string; 
+  email: string; 
+  password: string;
+  role: UserRole; 
+  status: UserStatus;
+  riskProfile: RiskProfile | null; 
+  questionnaireCompleted: boolean;
+  createdAt: string; 
+  totalAssets: number;
+}

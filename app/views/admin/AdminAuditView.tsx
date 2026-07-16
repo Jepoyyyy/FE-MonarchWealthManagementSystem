@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import { Search, UserCheck, XCircle, CheckCircle, Activity } from "lucide-react";
 import type { AuditLog } from "~/types";
 import { fmtTs, categoryBadge } from "~/utils";
-import { PageHeader } from "~/components/ui/PageHeader";
-import { Btn } from "~/components/ui/Btn";
-import { Badge } from "~/components/ui/Badge";
-import { api } from "~/api/client";
+import { PageHeader } from '~/shared/components/PageHeader';
+import { Btn } from '~/shared/components/Button';
+import { Badge } from '~/shared/components/Badge';
+import { api } from '~/shared/api/client';
 
 interface AdminAuditViewProps {
   logs?: AuditLog[]; // kept for compat but not strictly needed if we fetch all

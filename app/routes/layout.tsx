@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { Outlet } from "react-router";
 import { Toaster, toast } from "sonner";
-import { AppLayout } from "~/components/layout";
+import { AppLayout } from '~/shared/layouts';
 import { LoginView } from "~/views/auth/LoginView";
 import { RegisterView } from "~/views/auth/RegisterView";
 import { QuestionnaireView } from "~/views/auth/QuestionnaireView";

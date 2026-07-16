@@ -1,5 +1,5 @@
 import type { RiskProfile } from "~/types";
-import { Badge } from "./Badge";
+import { Badge } from '~/shared/components/Badge';
 
 interface RiskBadgeProps {
   profile: RiskProfile | null;

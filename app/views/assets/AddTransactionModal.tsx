@@ -1,6 +1,6 @@
 import { X } from "lucide-react";
 import type { Asset, Product } from "~/types";
-import { Btn } from "~/components/ui/Btn";
+import { Btn } from '~/shared/components/Button';
 
 import {
   StockTransactionForm,

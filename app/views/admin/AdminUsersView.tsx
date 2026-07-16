@@ -3,12 +3,12 @@ import { Users, UserCheck, UserX } from "lucide-react";
 import type { AppUser, AuditLog, UserStatus } from "~/types";
 import { fmtDate, fmt, statusBadge } from "~/utils";
 import { RiskBadge } from "~/components/ui/RiskBadge";
-import { PageHeader } from "~/components/ui/PageHeader";
+import { PageHeader } from '~/shared/components/PageHeader';
 import { StatCard } from "~/components/ui/StatCard";
-import { Badge } from "~/components/ui/Badge";
-import { Btn } from "~/components/ui/Btn";
-import { ConfirmModal } from "~/components/ui/ConfirmModal";
-import { api } from "~/api/client";
+import { Badge } from '~/shared/components/Badge';
+import { Btn } from '~/shared/components/Button';
+import { ConfirmModal } from '~/shared/components/ConfirmModal';
+import { api } from '~/shared/api/client';
 
 interface AdminUsersViewProps {
   addLog: (l: Omit<AuditLog, "id">) => void;

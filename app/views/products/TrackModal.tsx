@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 import { X, ChevronRight } from "lucide-react";
 import type { AppUser, Product, Asset } from "~/types";
-import { ConfirmModal } from "~/components/ui/ConfirmModal";
-import { Btn } from "~/components/ui/Btn";
+import { ConfirmModal } from '~/shared/components/ConfirmModal';
+import { Btn } from '~/shared/components/Button';
 import { useTrackModal } from "~/hooks/useTrackModal";
 import { ProductSelectorStep } from "./ProductSelectorStep";
 import { TrackFormStep } from "./TrackFormStep";

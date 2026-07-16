@@ -4,9 +4,9 @@ import { GOAL_TYPE_CONFIG } from "~/config/goals";
 import { fmt, fmtPct } from "~/utils";
 import { ProductTypeBadge } from "~/components/ui/ProductTypeBadge";
 import { RiskLevelBadge } from "~/components/ui/RiskLevelBadge";
-import { ConfirmModal } from "~/components/ui/ConfirmModal";
+import { ConfirmModal } from '~/shared/components/ConfirmModal';
 import { AddTransactionModal } from "./AddTransactionModal";
-import { Btn } from "~/components/ui/Btn";
+import { Btn } from '~/shared/components/Button';
 import { useAssetDetail } from "~/hooks/useAssetDetail";
 import { usePortfolioStore } from "~/stores/portfolioStore";
 

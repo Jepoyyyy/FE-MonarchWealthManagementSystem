@@ -1,8 +1,8 @@
-import { Btn } from "~/components/ui/Btn";
+import { Btn } from "~/shared/components/Button";
 import { useState } from "react";
 import { Menu, Shield } from "lucide-react";
 import { Sidebar } from "./Sidebar";
-import type { AppUser } from "~/types";
+import type { AppUser } from "~/shared/types/common";
 
 interface AppLayoutProps {
   children: React.ReactNode;

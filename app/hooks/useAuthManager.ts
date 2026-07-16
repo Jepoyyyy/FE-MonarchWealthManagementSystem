@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { api } from "~/api/client";
+import { api } from '~/shared/api/client';
 import { riskLabel } from "~/utils";
 import { useAuthStore } from "~/stores/authStore";
 import type { AppUser, AuditLog, RiskProfile, View } from "~/types";

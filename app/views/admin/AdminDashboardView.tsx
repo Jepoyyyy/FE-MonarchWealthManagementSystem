@@ -2,9 +2,9 @@ import React, { useMemo, Suspense, useEffect, useState } from "react";
 import { DollarSign, Users, Layers, Activity } from "lucide-react";
 import type { AppUser, Product, Asset, AuditLog, Goal } from "~/types";
 import { fmt, fmtDate, genHistory, categoryBadge } from "~/utils";
-import { PageHeader } from "~/components/ui/PageHeader";
+import { PageHeader } from '~/shared/components/PageHeader';
 import { StatCard } from "~/components/ui/StatCard";
-import { Badge } from "~/components/ui/Badge";
+import { Badge } from '~/shared/components/Badge';
 import { DashboardApi } from "~/api/dashboard";
 
 const DashboardPerfChart = React.lazy(() => import("~/components/charts/DashboardPerfChart"));

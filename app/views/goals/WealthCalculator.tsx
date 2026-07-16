@@ -1,8 +1,8 @@
 import { Calculator, DollarSign, Check } from "lucide-react";
 import type { Goal, FinancialProfile } from "~/types";
 import { fmt } from "~/utils";
-import { InputField } from "~/components/ui/InputField";
-import { Btn } from "~/components/ui/Btn";
+import { InputField } from '~/shared/components/Input';
+import { Btn } from '~/shared/components/Button';
 import { SurplusAllocation } from "./SurplusAllocation";
 
 interface WealthCalculatorProps {

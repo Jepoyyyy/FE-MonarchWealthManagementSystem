@@ -5,9 +5,9 @@ import type { UserDashboardDTO } from "~/types";
 import { maxRiskForProfile, riskLabel, fmt, fmtPct, fmtFull } from "~/utils";
 import { ProductTypeBadge } from "~/components/ui/ProductTypeBadge";
 import { RiskLevelBadge } from "~/components/ui/RiskLevelBadge";
-import { PageHeader } from "~/components/ui/PageHeader";
+import { PageHeader } from '~/shared/components/PageHeader';
 import { StatCard } from "~/components/ui/StatCard";
-import { Btn } from "~/components/ui/Btn";
+import { Btn } from '~/shared/components/Button';
 import { DashboardApi } from "~/api/dashboard";
 import { toast } from "sonner";
 

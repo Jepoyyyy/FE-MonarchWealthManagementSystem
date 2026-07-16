@@ -1,10 +1,10 @@
 import { Shield, SlidersHorizontal, Target, Layers, TrendingUp, DollarSign, Plus } from "lucide-react";
 import type { Product, Recommendation } from "~/types";
-import { Badge } from "./Badge";
-import { Btn } from "./Btn";
+import { Badge } from '~/shared/components/Badge';
+import { Btn } from '~/shared/components/Button';
 import { ProductTypeBadge } from "./ProductTypeBadge";
 import { RiskLevelBadge } from "./RiskLevelBadge";
-import { FormattedAmount } from "./FormattedAmount";
+import { FormattedAmount } from '~/shared/components/FormattedAmount';
 import { PRIORITY_CONFIG } from "~/config/recommendation";
 
 interface RecommendationCardProps {

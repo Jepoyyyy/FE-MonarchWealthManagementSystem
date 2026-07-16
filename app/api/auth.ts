@@ -1,4 +1,4 @@
-import { api } from "./client";
+import { api } from '~/shared/api/client';
 import type { AppUser } from "../types";
 
 interface LoginPayload { email: string; password: string; }

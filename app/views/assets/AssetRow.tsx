@@ -5,8 +5,8 @@ import { GOAL_TYPE_CONFIG } from "~/config/goals";
 import { fmt, fmtDate, fmtPct } from "~/utils";
 import { ProductTypeBadge } from "~/components/ui/ProductTypeBadge";
 import { RiskLevelBadge } from "~/components/ui/RiskLevelBadge";
-import { ConfirmModal } from "~/components/ui/ConfirmModal";
-import { Btn } from "~/components/ui/Btn";
+import { ConfirmModal } from '~/shared/components/ConfirmModal';
+import { Btn } from '~/shared/components/Button';
 
 interface AssetRowProps {
   asset: Asset;

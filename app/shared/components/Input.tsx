@@ -43,3 +43,5 @@ export function InputField({
     </div>
   );
 }
+
+export { InputField as Input };

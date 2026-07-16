@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import { Search, Filter, AlertTriangle, ToggleRight, ToggleLeft } from "lucide-react";
 import type { AppUser, Product, Asset, ProductType, AuditLog } from "~/types";
-import { PageHeader } from "~/components/ui/PageHeader";
+import { PageHeader } from '~/shared/components/PageHeader';
 import { fmt } from "~/utils";
 import { TrackModal } from "./TrackModal";
 import { ProductCard } from "~/components/ui/ProductCard";
-import { Pagination } from "~/components/ui/Pagination";
+import { Pagination } from '~/shared/components/Pagination';
 import { RiskProfileBanner } from "~/components/ui/RiskProfileBanner";
 import { useProductsStore } from "~/stores/productsStore";
 import { AssetApi } from "~/api/assets";
-import { useDebounce } from "~/hooks/useDebounce";
+import { useDebounce } from '~/shared/hooks/useDebounce';
 
 interface ProductsViewProps {
   user: AppUser;

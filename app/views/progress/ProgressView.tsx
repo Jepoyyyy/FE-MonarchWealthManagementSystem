@@ -4,9 +4,9 @@ import type { AppUser, Goal, Asset, Product, FinancialProfile } from "~/types";
 import { fmt, fmtDate, genHistory, projectedDate, fmtPct, fmtDuration, fmtFull } from "~/utils";
 import { GOAL_MAX_MONTHS, GOAL_TYPE_CONFIG } from "~/config/goals";
 import { ProductTypeBadge } from "~/components/ui/ProductTypeBadge";
-import { PageHeader } from "~/components/ui/PageHeader";
+import { PageHeader } from '~/shared/components/PageHeader';
 import { StatCard } from "~/components/ui/StatCard";
-import { Badge } from "~/components/ui/Badge";
+import { Badge } from '~/shared/components/Badge';
 import { usePortfolioStore } from "~/stores/portfolioStore";
 
 const ProgressGoalChart = React.lazy(() => import("~/components/charts/ProgressGoalChart"));

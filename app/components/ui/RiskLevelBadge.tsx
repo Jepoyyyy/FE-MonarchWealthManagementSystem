@@ -1,4 +1,4 @@
-import { Badge } from "./Badge";
+import { Badge } from '~/shared/components/Badge';
 
 interface RiskLevelBadgeProps {
   level: number;

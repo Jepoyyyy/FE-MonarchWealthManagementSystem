@@ -13,8 +13,8 @@ import {
   Users,
   FileText,
 } from "lucide-react";
-import type { AppUser } from "~/types";
-import { Btn } from "~/components/ui/Btn";
+import type { AppUser } from "~/shared/types/common";
+import { Btn } from "~/shared/components/Button";
 import { RiskBadge } from "~/components/ui/RiskBadge";
 
 interface SidebarProps {

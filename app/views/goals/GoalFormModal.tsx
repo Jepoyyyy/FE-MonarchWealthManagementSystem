@@ -3,10 +3,10 @@ import { X, DollarSign, Wallet, Lock, Calculator, AlertTriangle, ToggleLeft, Tog
 import type { Goal, GoalType, GoalStatus } from "~/types";
 import { GOAL_TYPE_CONFIG } from "~/config/goals";
 import { monthsToGoal, fmt, fmtDuration, projectedDate } from "~/utils";
-import { InputField } from "~/components/ui/InputField";
+import { InputField } from '~/shared/components/Input';
 import { MonthlyContributionInput } from "./MonthlyContributionInput";
-import { ConfirmModal } from "~/components/ui/ConfirmModal";
-import { Btn } from "~/components/ui/Btn";
+import { ConfirmModal } from '~/shared/components/ConfirmModal';
+import { Btn } from '~/shared/components/Button';
 
 interface GoalFormModalProps {
   initial?: Goal;

@@ -3,11 +3,11 @@ import { CheckCircle, XCircle, EyeOff, Eye } from "lucide-react";
 import type { Product, AppUser, AuditLog } from "~/types";
 import { fmt, statusBadge } from "~/utils";
 import { ProductTypeBadge } from "~/components/ui/ProductTypeBadge";
-import { Btn } from "~/components/ui/Btn";
+import { Btn } from '~/shared/components/Button';
 import { RiskLevelBadge } from "~/components/ui/RiskLevelBadge";
-import { PageHeader } from "~/components/ui/PageHeader";
-import { Badge } from "~/components/ui/Badge";
-import { ConfirmModal } from "~/components/ui/ConfirmModal";
+import { PageHeader } from '~/shared/components/PageHeader';
+import { Badge } from '~/shared/components/Badge';
+import { ConfirmModal } from '~/shared/components/ConfirmModal';
 import { useProductsStore } from "~/stores/productsStore";
 import { ProductApi } from "~/api/products";
 
