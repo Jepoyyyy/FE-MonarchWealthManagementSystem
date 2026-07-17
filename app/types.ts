@@ -7,3 +7,4 @@ export * from "~/features/recommendations/recommendations.types";
 export * from "~/features/dashboard/dashboard.types";
 export * from "~/features/admin/admin.types";
 export * from "~/features/auth/auth.types";
+export * from "~/features/profiler/profiler.types";

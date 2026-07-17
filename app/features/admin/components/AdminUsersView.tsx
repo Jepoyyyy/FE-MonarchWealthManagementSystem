@@ -8,7 +8,7 @@ import { StatCard } from '~/features/dashboard/components/StatCard';
 import { Badge } from '~/shared/components/Badge';
 import { Btn } from '~/shared/components/Button';
 import { ConfirmModal } from '~/shared/components/ConfirmModal';
-import { api } from '~/shared/api/client';
+import { AdminApi } from '~/features/admin';
 
 interface AdminUsersViewProps {
   addLog: (l: Omit<AuditLog, "id">) => void;
@@ -27,8 +27,13 @@ export function AdminUsersView({
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const res = await api.get("/api/v2/users");
-      setUsers(res.data);
+      const res = await AdminApi.listUsers();
+      const userList = Array.isArray(res.data) 
+        ? res.data 
+        : (res.data && 'content' in res.data) 
+          ? res.data.content 
+          : [];
+      setUsers(userList);
     } catch (err: any) {
       toast.error("Failed to load users", { description: err.message });
     } finally {
@@ -46,7 +51,7 @@ export function AdminUsersView({
   const toggleStatus = async (id: string, next: UserStatus) => {
     const u = users.find((us) => us.id === id)!;
     try {
-      await api.put(`/api/v2/users/${id}`, { status: next });
+      await AdminApi.updateUser(id, { status: next });
       addLog({
         userId: adminUser.id,
         userName: adminUser.name,

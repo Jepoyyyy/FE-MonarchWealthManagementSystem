@@ -24,7 +24,8 @@ function toAssetPayload(data: Omit<Asset, "id">) {
 export const AssetApi = {
   list: () => api.get<Asset[]>("/api/v1/me/assets"),
   create: (data: Omit<Asset, "id">) => api.post<Asset>("/api/v1/me/assets", toAssetPayload(data)),
-  update: (id: string, data: Partial<Asset>) => api.patch<Asset>(`/api/v1/me/assets/${id}`, data),
+  update: (id: string, data: Partial<Asset>) => 
+    api.put<Asset>(`/api/v1/me/assets/${id}`, { goalId: data.goalId }),
   delete: (id: string) => api.delete(`/api/v1/me/assets/${id}`),
   addTransaction: (id: string, data: { type: string, quantity: number, price: number }) => api.post(`/api/v1/me/assets/${id}/transactions`, data),
   fetchPnL: () => api.get<AssetsPnLResponse[]>("/api/v1/me/assets/pnl"),

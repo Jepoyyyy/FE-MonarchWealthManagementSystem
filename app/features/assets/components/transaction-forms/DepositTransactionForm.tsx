@@ -27,7 +27,7 @@ export function DepositTransactionForm({ type, rate, onClose, onSubmit }: Deposi
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2 text-xs text-muted-foreground px-3 py-2.5 rounded-md border border-border bg-muted/30">
-        <Info size={14} className="flex-shrink-0" />
+        <Info size={14} className="shrink-0" />
         <span>Interest Rate: {rate}% p.a. (Fixed)</span>
       </div>
 

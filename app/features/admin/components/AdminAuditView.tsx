@@ -5,7 +5,7 @@ import { fmtTs, categoryBadge } from "~/utils";
 import { PageHeader } from '~/shared/components/PageHeader';
 import { Btn } from '~/shared/components/Button';
 import { Badge } from '~/shared/components/Badge';
-import { api } from '~/shared/api/client';
+import { AdminApi } from '~/features/admin';
 
 interface AdminAuditViewProps {
   logs?: AuditLog[]; // kept for compat but not strictly needed if we fetch all
@@ -21,8 +21,13 @@ export function AdminAuditView({ logs: propLogs }: AdminAuditViewProps) {
     const fetchLogs = async () => {
       try {
         setLoading(true);
-        const res = await api.get("/api/v1/admin/audit");
-        setLogs(res.data);
+        const res = await AdminApi.getAuditLogs();
+        const logList = Array.isArray(res.data) 
+          ? res.data 
+          : (res.data && 'content' in res.data) 
+            ? res.data.content 
+            : [];
+        setLogs(logList);
       } catch (err) {
         console.error("Failed to load audit logs:", err);
       } finally {

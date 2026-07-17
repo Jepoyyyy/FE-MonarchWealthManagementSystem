@@ -8,6 +8,15 @@ export const API_ERROR_CODES = {
   DELISTED_PRODUCT: "DELISTED_PRODUCT",
   USER_NOT_FOUND: "USER_NOT_FOUND",
   ITEM_NOT_FOUND: "ITEM_NOT_FOUND",
+  BAD_REQUEST: "BAD_REQUEST",
+  VALIDATION: "VALIDATION",
+  INVALID_REQUEST_BODY: "INVALID_REQUEST_BODY",
+  REQUIRED_REFRESH_TOKEN: "REQUIRED_REFRESH_TOKEN",
+  UNAUTHORIZED: "UNAUTHORIZED",
+  INVALID_TOKEN: "INVALID_TOKEN",
+  NOT_FOUND: "NOT_FOUND",
+  FORBIDDEN: "FORBIDDEN",
+  CONFLICT: "CONFLICT",
 } as const;
 
 export type ApiErrorCode = keyof typeof API_ERROR_CODES;
@@ -62,6 +71,31 @@ export function handleGlobalApiError(error: any): boolean {
     case API_ERROR_CODES.REQUIRED_RISK_PROFILER:
       toast.warning("Profil Risiko Dibutuhkan", {
         description: "Anda harus menyelesaikan kuesioner profil risiko terlebih dahulu.",
+      });
+      return true;
+
+    case API_ERROR_CODES.DUPLICATE_PRIORITY_GOALS:
+      toast.error("Duplikat Prioritas", {
+        description: "Anda hanya dapat memiliki satu goal prioritas.",
+      });
+      return true;
+
+    case API_ERROR_CODES.INSUFFICIENT_INCOME:
+      toast.error("Pendapatan Tidak Cukup", {
+        description: "Pendapatan Anda tidak mencukupi untuk goal ini.",
+      });
+      return true;
+
+    case API_ERROR_CODES.NOT_UNIQUE_EMAIL:
+      toast.error("Email Sudah Terdaftar", {
+        description: "Email ini sudah digunakan akun lain.",
+      });
+      return true;
+
+    case API_ERROR_CODES.USER_NOT_FOUND:
+    case API_ERROR_CODES.ITEM_NOT_FOUND:
+      toast.error("Tidak Ditemukan", {
+        description: "Data yang diminta tidak ditemukan.",
       });
       return true;
 

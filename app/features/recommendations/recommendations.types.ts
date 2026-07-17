@@ -19,3 +19,19 @@ export interface HealthScore {
   goalCoverage: number;
   riskAlignment: number;
 }
+
+export interface HealthComponent {
+  componentName: string;
+  label: string;
+  score: number;
+  maxScore: number;
+}
+
+export interface HealthScoreDTO {
+  totalScore: number;
+  maxScore: number;
+  status: string;
+  "portofolio-value": number;
+  "available-surplus": number;
+  components: HealthComponent[];
+}

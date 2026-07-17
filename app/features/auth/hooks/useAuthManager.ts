@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { api } from '~/shared/api/client';
+import { ProfilerApi } from '~/features/profiler';
 import { riskLabel } from "~/utils";
 import { useAuthStore } from '~/features/auth/auth.store';
 import type { AppUser, AuditLog, RiskProfile, View } from "~/types";
@@ -55,8 +56,7 @@ export function useAuthManager(
   const handleQuestionnaire = async (profile: RiskProfile, score: number, answers: { questionnaireAnswer: string; score: number }[]) => {
     if (!currentUser) return;
     try {
-      // Assuming a backend endpoint exists to update the questionnaire profile
-      await api.put("/api/v1/me/profiler", answers);
+      await ProfilerApi.submitAnswers({ answers });
       const updated = { ...currentUser, riskProfile: profile, questionnaireCompleted: true };
 
       const { token, refreshToken } = useAuthStore.getState();

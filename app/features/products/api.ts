@@ -38,4 +38,7 @@ export const ProductApi = {
 
   update: (id: string, dto: ProductUpdateDTO) =>
     api.put<Product>(`/api/v1/products/${id}`, dto),
+
+  getById: (id: string) =>
+    api.get<Product>(`/api/v1/products/${id}`),
 };
