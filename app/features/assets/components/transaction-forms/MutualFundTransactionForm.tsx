@@ -6,9 +6,9 @@ import { Btn } from '~/shared/components/Button';
 
 interface MutualFundFormProps {
   type: "buy" | "sell";
-  currentPrice: number; // NAV
+  currentPrice: number; 
   onClose: () => void;
-  onSubmit: (data: { amount: number; currentValue: number; quantity: number }) => void;
+  onSubmit: (data: { amount: number; currentValue: number; quantity: number }) => void; //add logic
 }
 
 export function MutualFundTransactionForm({ type, currentPrice, onClose, onSubmit }: MutualFundFormProps) {

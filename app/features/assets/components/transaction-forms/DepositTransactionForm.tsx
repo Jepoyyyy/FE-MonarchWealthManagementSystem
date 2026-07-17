@@ -5,7 +5,7 @@ import { Btn } from '~/shared/components/Button';
 
 interface DepositFormProps {
   type: "buy" | "sell";
-  rate: number; // annualReturn %
+  rate: number; 
   onClose: () => void;
   onSubmit: (data: { amount: number; currentValue: number; quantity?: number }) => void;
 }
