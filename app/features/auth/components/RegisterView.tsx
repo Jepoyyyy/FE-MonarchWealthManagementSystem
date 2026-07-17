@@ -43,8 +43,11 @@ export function RegisterView({ onRegister, onNavigate }: RegisterViewProps) {
       // Save to Zustand store
       useAuthStore.getState().setAuth(accessToken, refreshToken, authUser);
 
-      // Trigger root App state update
-      onRegister(authUser);
+      // Trigger root App state update using the mapped user from store
+      const mappedUser = useAuthStore.getState().user;
+      if (mappedUser) {
+        onRegister(mappedUser);
+      }
     } catch (err: any) {
       if (err?.error?.detail === "NOT_UNIQUE_EMAIL") {
         setError("Email is already registered.");

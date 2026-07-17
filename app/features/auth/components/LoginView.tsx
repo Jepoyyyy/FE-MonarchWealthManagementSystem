@@ -32,8 +32,11 @@ export function LoginView({ onLogin, onNavigate }: LoginViewProps) {
       // Save to Zustand store
       useAuthStore.getState().setAuth(accessToken, refreshToken, authUser);
       
-      // Trigger root App state update to switch views
-      onLogin(authUser);
+      // Trigger root App state update to switch views using the mapped user from store
+      const mappedUser = useAuthStore.getState().user;
+      if (mappedUser) {
+        onLogin(mappedUser);
+      }
     } catch (err: any) {
       if (err?.response?.status === 401) {
         setError("Invalid email or password.");
