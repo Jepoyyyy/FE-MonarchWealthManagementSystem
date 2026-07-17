@@ -8,11 +8,11 @@ interface ProductTypeBadgeProps {
 }
 
 const typeIcons: Record<ProductType, string> = {
-  money_market: "💰",
-  deposit: "🏦",
-  bond: "📜",
-  mutual_fund: "📈",
-  stock: "📊",
+  "Money Market": "💰",
+  Deposit: "🏦",
+  Bond: "📜",
+  "Mutual Fund": "📈",
+  Stock: "📊",
 };
 
 export function ProductTypeBadge({ type, className = "" }: ProductTypeBadgeProps) {

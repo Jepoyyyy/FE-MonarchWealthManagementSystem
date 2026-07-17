@@ -33,19 +33,19 @@ export function AddTransactionModal({ asset, product, type, onClose, onSaveTrans
           </Btn>
         </div>
 
-        {product.type === "stock" && (
+        {product.type === "Stock" && (
           <StockTransactionForm type={type} currentPrice={asset.currentValue} onClose={onClose} onSubmit={onSaveTransaction} />
         )}
 
-        {(product.type === "mutual_fund" || product.type === "money_market") && (
+        {(product.type === "Mutual Fund" || product.type === "Money Market") && (
           <MutualFundTransactionForm type={type} currentPrice={asset.currentValue} onClose={onClose} onSubmit={onSaveTransaction} />
         )}
 
-        {product.type === "bond" && (
+        {product.type === "Bond" && (
           <BondTransactionForm type={type} currentPrice={asset.currentValue} onClose={onClose} onSubmit={onSaveTransaction} />
         )}
 
-        {product.type === "deposit" && (
+        {product.type === "Deposit" && (
           <DepositTransactionForm type={type} rate={product.annualReturn ?? 0} onClose={onClose} onSubmit={onSaveTransaction} />
         )}
       </div>

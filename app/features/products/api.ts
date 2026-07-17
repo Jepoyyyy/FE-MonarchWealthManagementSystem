@@ -3,7 +3,7 @@ import type { Product, Page } from '~/features/products/products.types';
 
 interface ProductUpdateDTO {
   name?: string;
-  type?: "stock" | "mutual_fund" | "bond" | "deposit" | "money_market";
+  type?: "Stock" | "Mutual Fund" | "Bond" | "Deposit" | "Money Market";
   issuer?: string;
   riskLevel?: number;
   currentPrice?: number;

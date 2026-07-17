@@ -57,7 +57,7 @@ export function calcHealthScore(
   // Emergency fund: target = 6× monthly expenses in liquid assets
   const emergencyTarget = monthlyExpenses * 6;
   const liquidValue = myAssets
-    .filter(a => { const p = productMap.get(a.productId); return p && (p.type === "money_market" || p.type === "deposit"); })
+    .filter(a => { const p = productMap.get(a.productId); return p && (p.type === "Money Market" || p.type === "Deposit"); })
     .reduce((s, a) => s + a.currentValue, 0);
   const emergency = emergencyTarget > 0 ? Math.min(25, Math.round((liquidValue / emergencyTarget) * 25)) : 12;
 
@@ -107,10 +107,10 @@ export function generateRecommendations(
   // 1. Emergency fund
   const emergencyTarget = monthlyExpenses * 6;
   const liquidValue = myAssets
-    .filter(a => { const p = productMap.get(a.productId); return p && (p.type === "money_market" || p.type === "deposit"); })
+    .filter(a => { const p = productMap.get(a.productId); return p && (p.type === "Money Market" || p.type === "Deposit"); })
     .reduce((s, a) => s + a.currentValue, 0);
   if (liquidValue < emergencyTarget * 0.8) {
-    const p = bestOf(["money_market", "deposit"], 2);
+    const p = bestOf(["Money Market", "Deposit"], 2);
     recs.push({
       id: "emergency", priority: "high", category: "emergency",
       title: "Build your emergency fund",
@@ -127,7 +127,7 @@ export function generateRecommendations(
     if (topVal / totalValue > 0.65) {
       const topProduct = productMap.get(topId);
       const complement = bestOf(
-        (["money_market","deposit","bond","mutual_fund","stock"] as ProductType[]).filter(t => t !== topProduct?.type),
+        (["Money Market","Deposit","Bond","Mutual Fund","Stock"] as ProductType[]).filter(t => t !== topProduct?.type),
         maxRiskLv, ownedIds
       );
       recs.push({
@@ -178,7 +178,7 @@ export function generateRecommendations(
   });
 
   // 5. Diversification gaps — missing eligible product types
-  (["money_market","deposit","bond","mutual_fund","stock"] as ProductType[])
+  (["Money Market","Deposit","Bond","Mutual Fund","Stock"] as ProductType[])
     .filter(t => !ownedTypes.has(t))
     .forEach(t => {
       const p = bestOf([t], maxRiskLv);

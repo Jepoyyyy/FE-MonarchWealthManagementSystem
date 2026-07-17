@@ -16,18 +16,13 @@ interface ProductsState {
 
 const normalizeType = (t: string): ProductType => {
   const typeMap: Record<string, ProductType> = {
-    "Money Market": "money_market",
-    "money_market": "money_market",
-    "Stock": "stock",
-    "stock": "stock",
-    "Bond": "bond",
-    "bond": "bond",
-    "Deposit": "deposit",
-    "deposit": "deposit",
-    "Balanced Fund": "mutual_fund",
-    "Sukuk": "bond",
-    "Mutual Fund": "mutual_fund",
-    "mutual_fund": "mutual_fund",
+    "money_market": "Money Market",
+    "stock": "Stock",
+    "bond": "Bond",
+    "deposit": "Deposit",
+    "Balanced Fund": "Mutual Fund",
+    "Sukuk": "Bond",
+    "mutual_fund": "Mutual Fund",
   };
   const mapped = typeMap[t];
   if (!mapped) {

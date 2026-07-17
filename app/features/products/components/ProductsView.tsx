@@ -121,11 +121,11 @@ export function ProductsView({ user, addLog, toast }: ProductsViewProps) {
               className="text-sm rounded-lg border px-3 py-2 bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 text-foreground"
             >
               <option value="all">All Types</option>
-              <option value="mutual_fund">Mutual Funds</option>
-              <option value="stock">Stocks</option>
-              <option value="bond">Bonds (SBN)</option>
-              <option value="deposit">Deposits</option>
-              <option value="money_market">Money Market</option>
+              <option value="Mutual Fund">Mutual Funds</option>
+              <option value="Stock">Stocks</option>
+              <option value="Bond">Bonds (SBN)</option>
+              <option value="Deposit">Deposits</option>
+              <option value="Money Market">Money Market</option>
             </select>
           </div>
 

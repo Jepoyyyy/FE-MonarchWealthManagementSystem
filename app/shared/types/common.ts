@@ -1,5 +1,5 @@
 export type RiskProfile = "risk_averse" | "moderate" | "risk_taker";
-export type ProductType = "money_market" | "deposit" | "bond" | "mutual_fund" | "stock";
+export type ProductType = "Money Market" | "Deposit" | "Bond" | "Mutual Fund" | "Stock";
 export type UserRole = "user" | "admin";
 export type UserStatus = "active" | "suspended" | "pending";
 
