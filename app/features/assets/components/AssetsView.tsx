@@ -10,6 +10,7 @@ import { AssetDetailPage } from "./AssetDetailPage";
 import { AssetRow } from "./AssetRow";
 import { AssetApi } from '~/features/assets/api';
 import { usePortfolioStore } from '~/features/assets/portfolio.store';
+import { useGoalsStore } from '~/features/goals/goals.store';
 import { PortfolioService } from '~/features/assets/portfolio.service';
 import { handleGlobalApiError } from '~/shared/api';
 import { toast } from 'sonner';
@@ -41,6 +42,8 @@ export function AssetsView({
     try {
       await AssetApi.create(data);
       await usePortfolioStore.getState().fetchPortfolio();
+      await useGoalsStore.getState().fetchGoals();
+      await useGoalsStore.getState().fetchProjections();
       setShowAdd(false);
       toast.success("Aset berhasil ditambahkan");
     } catch (err: any) {
@@ -64,6 +67,8 @@ export function AssetsView({
         await AssetApi.update(id, data);
       }
       await usePortfolioStore.getState().fetchPortfolio();
+      await useGoalsStore.getState().fetchGoals();
+      await useGoalsStore.getState().fetchProjections();
       toast.success("Aset berhasil diperbarui");
     } catch (err: any) {
       if (!handleGlobalApiError(err)) {
@@ -76,6 +81,8 @@ export function AssetsView({
     try {
       await AssetApi.delete(id);
       await usePortfolioStore.getState().fetchPortfolio();
+      await useGoalsStore.getState().fetchGoals();
+      await useGoalsStore.getState().fetchProjections();
       toast.success("Aset berhasil dihapus");
     } catch (err: any) {
       if (!handleGlobalApiError(err)) {
@@ -84,8 +91,18 @@ export function AssetsView({
     }
   };
 
-  const assignGoal = (assetId: string, goalId: string | undefined) => {
-    // local-only until goal-linking API endpoint is available
+  const assignGoal = async (assetId: string, goalId: string | undefined) => {
+    try {
+      await AssetApi.update(assetId, { goalId });
+      await usePortfolioStore.getState().fetchPortfolio();
+      await useGoalsStore.getState().fetchGoals();
+      await useGoalsStore.getState().fetchProjections();
+      toast.success("Tujuan investasi berhasil dihubungkan");
+    } catch (err: any) {
+      if (!handleGlobalApiError(err)) {
+        toast.error("Gagal menghubungkan tujuan investasi", { description: err.message || "Unknown error" });
+      }
+    }
   };
 
   const detailAsset = detailAssetId ? myAssets.find((a) => a.id === detailAssetId) : null;

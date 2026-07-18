@@ -5,6 +5,8 @@ import { AppLayout } from '~/shared/layouts';
 import { LoginView, RegisterView, QuestionnaireView, ProfileResultView, useAuthManager } from '~/features/auth';
 import type { AppUser, Product, Asset, Goal, FinancialProfile, AuditLog } from "~/types";
 import { useProductsStore } from '~/features/products';
+import { usePortfolioStore } from '~/features/assets/portfolio.store';
+import { useGoalsStore } from '~/features/goals/goals.store';
 
 export interface LayoutContextType {
   currentUser: AppUser | null;
@@ -23,10 +25,14 @@ export interface LayoutContextType {
 
 export default function Layout() {
   const [users, setUsers] = useState<AppUser[]>([]);
-  const [assets] = useState<Asset[]>([]);
+  const assets = usePortfolioStore((s) => s.assets);
   const [logs, setLogs] = useState<AuditLog[]>([]);
-  const [goals] = useState<Goal[]>([]);
+  const goals = useGoalsStore((s) => s.goals);
   const [finProfile, setFinProfile] = useState<FinancialProfile | null>(null);
+
+  const fetchPortfolio = usePortfolioStore((s) => s.fetchPortfolio);
+  const fetchGoals = useGoalsStore((s) => s.fetchGoals);
+  const fetchProjections = useGoalsStore((s) => s.fetchProjections);
 
   const { products, fetchProducts } = useProductsStore();
   useEffect(() => { fetchProducts(); }, [fetchProducts]);
@@ -49,6 +55,14 @@ export default function Layout() {
     handleQuestionnaire,
     handleLogout,
   } = useAuthManager(users, setUsers, addLog);
+
+  useEffect(() => {
+    if (currentUser && currentUser.role !== "admin") {
+      fetchPortfolio();
+      fetchGoals();
+      fetchProjections();
+    }
+  }, [currentUser, fetchPortfolio, fetchGoals, fetchProjections]);
 
   // Sync user total assets - local fallback
   const syncedUser = useMemo(() => {
