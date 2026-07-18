@@ -52,7 +52,17 @@ export function AssetsView({
 
   const updateAsset = async (id: string, data: Partial<Asset>, txType?: "buy" | "sell", txQty?: number, txPrice?: number) => {
     try {
-      await AssetApi.update(id, data);
+      if (txType && txQty !== undefined && txPrice !== undefined) {
+        const p = products.find((prod) => prod.id === myAssets.find(a => a.id === id)?.productId);
+        const actualQty = p?.type === "Stock" ? txQty * 100 : txQty;
+        await AssetApi.addTransaction(id, {
+          type: txType.toUpperCase(),
+          quantity: actualQty,
+          price: txPrice
+        });
+      } else {
+        await AssetApi.update(id, data);
+      }
       await usePortfolioStore.getState().fetchPortfolio();
       toast.success("Aset berhasil diperbarui");
     } catch (err: any) {

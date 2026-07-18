@@ -40,6 +40,7 @@ export function TrackFormStep({
   isDeposit,
   isMF,
   isBond,
+  parsedAmount,
   tenorMonths,
   setTenorMonths,
   date,
@@ -84,6 +85,19 @@ export function TrackFormStep({
             icon={<DollarSign size={14} />}
           />
         )}
+        {picked && picked.minInvestment > 0 && (
+          <div className="flex flex-col gap-1 mt-1">
+            <p className="text-xs text-muted-foreground">
+              Minimum investment: {fmt(picked.minInvestment)}
+            </p>
+            {parsedAmount > 0 && parsedAmount < picked.minInvestment && (
+              <p className="text-xs text-orange-600 flex items-center gap-1 font-medium">
+                <AlertTriangle size={12} className="flex-shrink-0 text-orange-500" />
+                Below minimum investment of {fmt(picked.minInvestment)}
+              </p>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Current Market Value — from system seed */}
@@ -127,22 +141,52 @@ export function TrackFormStep({
       {!isDeposit && (
         <div>
           {isStock ? (
-            <InputField
-              label="Quantity (Lot)"
-              type="number" min={1} step={1} value={quantity}
-              onChange={e => setQuantity(e.target.value)}
-              placeholder="e.g. 1"
-              icon={<Layers size={14} />}
-            />
+            <div>
+              <InputField
+                label="Quantity (Lot)"
+                type="number" min={1} step={1} value={quantity}
+                onChange={e => setQuantity(e.target.value)}
+                placeholder="e.g. 1"
+                icon={<Layers size={14} />}
+              />
+              {picked && picked.lotSize > 0 && (
+                <div className="flex flex-col gap-1 mt-1">
+                  <p className="text-xs text-muted-foreground">
+                    Lot size: {picked.lotSize} shares per lot
+                  </p>
+                  {parseFloat(quantity) > 0 && parseFloat(quantity) % 1 !== 0 && (
+                    <p className="text-xs text-orange-600 flex items-center gap-1 font-medium">
+                      <AlertTriangle size={12} className="flex-shrink-0 text-orange-500" />
+                      Quantity must be in whole lots
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
           ) : isMF ? (
-            <InputField
-              label="Owned Units"
-              type="number" value={quantity}
-              readOnly
-              placeholder="Auto-calculated"
-              icon={<Layers size={14} />}
-              rightElement="[ Auto-Calc ]"
-            />
+            <div>
+              <InputField
+                label="Owned Units"
+                type="number" value={quantity}
+                readOnly
+                placeholder="Auto-calculated"
+                icon={<Layers size={14} />}
+                rightElement="[ Auto-Calc ]"
+              />
+              {picked && !picked.isFractionalAllowed && (
+                <div className="flex flex-col gap-1 mt-1">
+                  <p className="text-xs text-muted-foreground">
+                    Note: Fractional units not allowed for this product
+                  </p>
+                  {parseFloat(quantity) > 0 && parseFloat(quantity) % 1 !== 0 && (
+                    <p className="text-xs text-orange-600 flex items-center gap-1 font-medium">
+                      <AlertTriangle size={12} className="flex-shrink-0 text-orange-500" />
+                      Calculated units are fractional
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
           ) : isBond ? (
             <InputField
               label="Nominal Pokok (IDR)"
@@ -153,13 +197,6 @@ export function TrackFormStep({
               rightElement="[ Auto-Calc ]"
             />
           ) : null}
-
-          {isBond && picked && picked.minInvestment > 0 && (() => {
-            const p = picked;
-            const m = p.minInvestment;
-            const nominal = parseFloat(quantity) || 0;
-            return null;
-          })()}
         </div>
       )}
 

@@ -1,7 +1,8 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import type { AppUser, Product, Asset, ProductType } from "~/types";
 import { PRODUCT_SEED_PRICES } from '~/features/products/products.config';
-import { maxRiskForProfile } from "~/utils";
+import { maxRiskForProfile, fmtFull } from "~/utils";
+import { ProductApi } from '~/features/products/api';
 
 interface UseTrackModalProps {
   user: AppUser;
@@ -59,16 +60,67 @@ export function useTrackModal({
     return true;
   }), [products, typeFilter, search]);
 
-  const selectProduct = (p: Product) => {
-    setPicked(p);
-    setStep(1);
-    setErr("");
-    setAmount("");
-    const price = getFallbackPrice(p);
-    setCurrentVal(price > 0 ? String(price) : "");
-    setQuantity("");
-    setTenorMonths(12);
+  const [isLoadingProduct, setIsLoadingProduct] = useState(false);
+  const [productError, setProductError] = useState<string | null>(null);
+  const activeRequestIdRef = useRef(0);
+
+  const selectProduct = async (p: Product) => {
+    const requestId = ++activeRequestIdRef.current;
+    setProductError(null);
+    setIsLoadingProduct(true);
+
+    try {
+      const res = await ProductApi.getById(p.id);
+      const detailedProduct = res.data;
+      if (requestId !== activeRequestIdRef.current) return;
+
+      setPicked(detailedProduct);
+      setStep(1);
+      setErr("");
+      setAmount("");
+      const price = detailedProduct.currentPrice || getFallbackPrice(detailedProduct);
+      setCurrentVal(price > 0 ? String(price) : "");
+      setQuantity("");
+      setTenorMonths(12);
+    } catch (error) {
+      if (requestId !== activeRequestIdRef.current) return;
+      setProductError(
+        "Failed to load product details. Please try again or select another product."
+      );
+      console.error("Product fetch error:", error);
+    } finally {
+      if (requestId === activeRequestIdRef.current) {
+        setIsLoadingProduct(false);
+      }
+    }
   };
+
+  useEffect(() => {
+    if (initialProduct && step === 1 && picked === initialProduct) {
+      let active = true;
+      setIsLoadingProduct(true);
+      ProductApi.getById(initialProduct.id)
+        .then((res) => {
+          if (!active) return;
+          const detailed = res.data;
+          setPicked(detailed);
+          const price = detailed.currentPrice || getFallbackPrice(detailed);
+          setCurrentVal(price > 0 ? String(price) : "");
+        })
+        .catch((error) => {
+          console.error("Failed to load initial product details:", error);
+          if (active) {
+            setPicked({ ...initialProduct });
+          }
+        })
+        .finally(() => {
+          if (active) setIsLoadingProduct(false);
+        });
+      return () => {
+        active = false;
+      };
+    }
+  }, [initialProduct, step, picked]);
 
   const parsedAmount = parseFloat(amount) || 0;
   const parsedCurrentVal = parseFloat(currentVal) || 0;
@@ -112,13 +164,31 @@ export function useTrackModal({
       setErr("Enter the amount you invested.");
       return;
     }
+    if (picked.minInvestment && amt < picked.minInvestment) {
+      setErr(`Minimum investment is ${fmtFull(picked.minInvestment)}`);
+      return;
+    }
     if (isStock && (!quantity || parseFloat(quantity) <= 0)) {
       setErr("Enter the quantity (lot).");
       return;
     }
+    if (isStock && picked.lotSize > 0) {
+      const lots = parseFloat(quantity) || 0;
+      if (lots % 1 !== 0) {
+        setErr(`Quantity must be in whole lots (lot size: ${picked.lotSize})`);
+        return;
+      }
+    }
     if ((isMF || isBond) && (parsedCurrentVal <= 0)) {
       setErr("Market price data unavailable for this product. Cannot auto-calculate units.");
       return;
+    }
+    if (isMF && !picked.isFractionalAllowed) {
+      const units = parseFloat(quantity) || 0;
+      if (units % 1 !== 0) {
+        setErr("Fractional units not allowed for this product.");
+        return;
+      }
     }
     const qtyVal = isDeposit ? amt : (parseFloat(quantity) || amt);
     const currentValNum = isDeposit ? amt : parsedCurrentVal;
@@ -171,5 +241,8 @@ export function useTrackModal({
     selectProduct,
     parsedAmount,
     submit,
+    isLoadingProduct,
+    productError,
+    setProductError,
   };
 }

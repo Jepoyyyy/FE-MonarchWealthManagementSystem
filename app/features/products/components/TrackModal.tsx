@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { X, ChevronRight } from "lucide-react";
+import { X, ChevronRight, AlertTriangle } from "lucide-react";
 import type { AppUser, Product, Asset } from "~/types";
 import { ConfirmModal } from '~/shared/components/ConfirmModal';
 import { Btn } from '~/shared/components/Button';
@@ -74,6 +74,9 @@ export function TrackModal({
     selectProduct,
     parsedAmount,
     submit,
+    isLoadingProduct,
+    productError,
+    setProductError,
   } = useTrackModal({
     user,
     products,
@@ -92,8 +95,16 @@ export function TrackModal({
       onKeyDown={handleKeyDown}
     >
       <div
-        className={`bg-card rounded-2xl shadow-2xl border border-border w-full flex flex-col max-h-[90vh] ${step === 0 ? "max-w-170" : "max-w-130"}`}
+        className={`bg-card rounded-2xl shadow-2xl border border-border w-full flex flex-col max-h-[90vh] relative ${step === 0 ? "max-w-170" : "max-w-130"}`}
       >
+        {isLoadingProduct && (
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm rounded-2xl">
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+              <p className="text-sm text-muted-foreground">Loading product details...</p>
+            </div>
+          </div>
+        )}
         {/* Header */}
         <div
           className="flex items-center justify-between px-6 py-5 border-b border-border"
@@ -136,6 +147,20 @@ export function TrackModal({
         </div>
 
         <div className="flex-1 overflow-y-auto">
+          {step === 0 && productError && (
+            <div className="mx-6 mt-5 p-3 rounded-xl bg-red-50 border border-red-200 flex items-start gap-2.5 text-red-800">
+              <AlertTriangle size={18} className="text-red-600 mt-0.5 flex-shrink-0" />
+              <div className="flex-1 text-sm">
+                <p>{productError}</p>
+                <button
+                  onClick={() => setProductError(null)}
+                  className="text-xs text-red-600 hover:text-red-800 underline mt-1 block"
+                >
+                  Dismiss
+                </button>
+              </div>
+            </div>
+          )}
           {step === 0 ? (
             <ProductSelectorStep
               visible={visible}
