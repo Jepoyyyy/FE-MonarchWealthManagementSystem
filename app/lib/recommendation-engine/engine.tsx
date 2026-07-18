@@ -127,7 +127,7 @@ export function generateRecommendations(
     if (topVal / totalValue > 0.65) {
       const topProduct = productMap.get(topId);
       const complement = bestOf(
-        (["Money Market","Deposit","Bond","Mutual Fund","Stock"] as ProductType[]).filter(t => t !== topProduct?.type),
+        (["Money Market","Deposit","Bond","Mutual Fund","Stock","Balanced Fund","Sukuk"] as ProductType[]).filter(t => t !== topProduct?.type),
         maxRiskLv, ownedIds
       );
       recs.push({
@@ -178,7 +178,7 @@ export function generateRecommendations(
   });
 
   // 5. Diversification gaps — missing eligible product types
-  (["Money Market","Deposit","Bond","Mutual Fund","Stock"] as ProductType[])
+  (["Money Market","Deposit","Bond","Mutual Fund","Stock","Balanced Fund","Sukuk"] as ProductType[])
     .filter(t => !ownedTypes.has(t))
     .forEach(t => {
       const p = bestOf([t], maxRiskLv);

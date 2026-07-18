@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Trash2, ArrowUpRight, ArrowDownRight } from "lucide-react";
-import type { Product, Asset, Goal } from "~/types";
+import type { Product, Asset, Goal, ProductType } from "~/types";
 import { GOAL_TYPE_CONFIG } from '~/features/goals/goals.config';
 import { fmt, fmtDate, fmtPct } from "~/utils";
 import { ProductTypeBadge } from '~/features/products/components/ProductTypeBadge';
@@ -24,11 +24,11 @@ export function AssetRow({ asset, products, goals, onSelect, onRemove, onAssignG
   const ret = ((asset.currentValue - asset.amount) / asset.amount) * 100;
   const { type } = p;
 
-  const qtyLabel = type === "stock"
+  const qtyLabel = type === "Stock"
     ? `${qty} Lot`
-    : type === "mutual_fund" || type === "money_market"
+    : type === "Mutual Fund" || type === "Money Market" || type === "Balanced Fund"
       ? `${qty.toFixed(4)}`
-      : type === "deposit"
+      : type === "Deposit"
         ? "—"
         : fmt(Math.round(qty));
 
@@ -41,7 +41,7 @@ export function AssetRow({ asset, products, goals, onSelect, onRemove, onAssignG
       >
         <td className="px-4 py-3">
           <div className="flex items-center gap-2">
-            <ProductTypeBadge type={p.type} />
+            <ProductTypeBadge type={p.type as ProductType} />
             <div>
               <p className="text-xs font-semibold leading-tight text-foreground">{p.name}</p>
               <p className="text-xs text-muted-foreground">{p.issuer}</p>

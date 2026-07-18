@@ -126,6 +126,8 @@ export function ProductsView({ user, addLog, toast }: ProductsViewProps) {
               <option value="Bond">Bonds (SBN)</option>
               <option value="Deposit">Deposits</option>
               <option value="Money Market">Money Market</option>
+              <option value="Balanced Fund">Balanced Fund</option>
+              <option value="Sukuk">Sukuk</option>
             </select>
           </div>
 

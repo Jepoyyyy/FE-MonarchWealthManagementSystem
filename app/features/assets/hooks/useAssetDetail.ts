@@ -21,10 +21,10 @@ export function useAssetDetail({
   const [showConfirmCancel, setShowConfirmCancel] = useState(false);
   const [showTxModal, setShowTxModal] = useState<"buy" | "sell" | null>(null);
 
-  const isStock = product.type === "stock";
-  const isMF = product.type === "mutual_fund" || product.type === "money_market";
-  const isBond = product.type === "bond";
-  const isDeposit = product.type === "deposit";
+  const isStock = product.type === "Stock";
+  const isMF = product.type === "Mutual Fund" || product.type === "Money Market" || product.type === "Balanced Fund";
+  const isBond = product.type === "Bond" || product.type === "Sukuk";
+  const isDeposit = product.type === "Deposit";
 
   const lotNum = parseFloat(lot) || 1;
   const curValNum = asset.currentValue;

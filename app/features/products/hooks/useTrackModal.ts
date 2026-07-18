@@ -14,9 +14,9 @@ interface UseTrackModalProps {
 const getFallbackPrice = (product: Product): number => {
   const seed = PRODUCT_SEED_PRICES[product.id];
   if (seed) return seed;
-  if (product.type === "bond") return 100;
-  if (product.type === "mutual_fund" || product.type === "money_market") return 1000;
-  if (product.type === "stock") return 100;
+  if (product.type === "Bond" || product.type === "Sukuk") return 100;
+  if (product.type === "Mutual Fund" || product.type === "Balanced Fund" || product.type === "Money Market") return 1000;
+  if (product.type === "Stock") return 100;
   return 0;
 };
 
@@ -42,10 +42,10 @@ export function useTrackModal({
   const [showConfirmCancelTrack, setShowConfirmCancelTrack] = useState(false);
 
   const userMaxRisk = maxRiskForProfile(user.riskProfile, false);
-  const isStock = picked?.type === "stock";
-  const isDeposit = picked?.type === "deposit";
-  const isMF = picked?.type === "mutual_fund" || picked?.type === "money_market";
-  const isBond = picked?.type === "bond";
+  const isStock = picked?.type === "Stock";
+  const isDeposit = picked?.type === "Deposit";
+  const isMF = picked?.type === "Money Market" || picked?.type === "Mutual Fund" || picked?.type === "Balanced Fund";
+  const isBond = picked?.type === "Bond" || picked?.type === "Sukuk";
 
   const visible = useMemo(() => products.filter((p) => {
     if (!p.visible) return false;
@@ -99,7 +99,7 @@ export function useTrackModal({
     if (parsedCurrentVal > 0 && amt > 0) {
       setErr("");
       if (isMF) setQuantity((amt / parsedCurrentVal).toFixed(4));
-      if (isBond) setQuantity(String(Math.round(amt / (parsedCurrentVal / 100) / 10000) * 10000));
+      if (isBond) setQuantity((amt / (parsedCurrentVal / 100)).toFixed(4));
     } else {
       setQuantity("");
     }

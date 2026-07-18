@@ -158,14 +158,7 @@ export function TrackFormStep({
             const p = picked;
             const m = p.minInvestment;
             const nominal = parseFloat(quantity) || 0;
-            const isValid = nominal > 0 && nominal % m === 0;
-            return nominal > 0 ? (
-              <p className={`text-xs mt-0.5 ${isValid ? "text-emerald-600" : "text-red-500"}`}>
-                {isValid
-                  ? `Valid — kelipatan ${fmt(m)}`
-                  : `Harus kelipatan ${fmt(m)}`}
-              </p>
-            ) : null;
+            return null;
           })()}
         </div>
       )}

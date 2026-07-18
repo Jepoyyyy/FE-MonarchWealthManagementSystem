@@ -2,22 +2,26 @@ import type { Asset, Product, ProductType } from "~/types";
 
 /** Per-unit cost multiplier relative to face/NAV price. */
 const BUY_MULT: Record<ProductType, number> = {
-  stock: 100,
-  mutual_fund: 1,
-  money_market: 1,
-  bond: 1 / 100,
-  deposit: 1, // not used in practice — deposit hits a separate path
+  "Money Market": 1,
+  "Deposit": 1,
+  "Bond": 1 / 100,
+  "Mutual Fund": 1,
+  "Stock": 100,
+  "Balanced Fund": 1,
+  "Sukuk": 1 / 100,
 };
 
 export const PortfolioService = {
   calculateCurrentValue(asset: Asset, product: Product, quantityOverride?: number): number {
     const qty = quantityOverride ?? asset.quantity ?? 1;
     switch (product.type) {
-      case "stock": return qty * 100 * asset.currentValue;
-      case "mutual_fund":
-      case "money_market": return qty * asset.currentValue;
-      case "bond": return qty * (asset.currentValue / 100);
-      case "deposit":
+      case "Stock": return qty * 100 * asset.currentValue;
+      case "Mutual Fund":
+      case "Balanced Fund":
+      case "Money Market": return qty * asset.currentValue;
+      case "Bond":
+      case "Sukuk": return qty * (asset.currentValue / 100);
+      case "Deposit":
       default: return asset.amount;
     }
   },
@@ -49,7 +53,7 @@ export const PortfolioService = {
     const ptype = product.type;
 
     // Deposit — amount-based, no quantity concept
-    if (ptype === "deposit") {
+    if (ptype === "Deposit") {
       const next = type === "buy"
         ? { amount: curAmt + txAmount, currentValue: curAmt + txAmount }
         : { amount: Math.max(0, curAmt - txAmount), currentValue: Math.max(0, curAmt - txAmount) };

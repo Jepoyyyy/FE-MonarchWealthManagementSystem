@@ -20,15 +20,22 @@ const normalizeType = (t: string): ProductType => {
     "stock": "Stock",
     "bond": "Bond",
     "deposit": "Deposit",
-    "Balanced Fund": "Mutual Fund",
-    "Sukuk": "Bond",
+    "balanced_fund": "Balanced Fund",
+    "sukuk": "Sukuk",
     "mutual_fund": "Mutual Fund",
+    "Money Market": "Money Market",
+    "Stock": "Stock",
+    "Bond": "Bond",
+    "Deposit": "Deposit",
+    "Balanced Fund": "Balanced Fund",
+    "Sukuk": "Sukuk",
+    "Mutual Fund": "Mutual Fund",
   };
-  const mapped = typeMap[t];
+  const mapped = typeMap[t] || typeMap[t.toLowerCase()];
   if (!mapped) {
-    console.warn(`Unknown product type: "${t}". Falling back to "mutual_fund".`);
+    console.warn(`Unknown product type: "${t}". Falling back to "Mutual Fund".`);
   }
-  return mapped ?? "mutual_fund";
+  return mapped ?? "Mutual Fund";
 };
 
 export const useProductsStore = create<ProductsState>((set) => ({

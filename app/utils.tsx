@@ -35,7 +35,15 @@ export const riskLabel = (p: RiskProfile | null) =>
 
 
 export const typeLabel = (t: ProductType) =>
-  ({ money_market: "Money Market", deposit: "Deposit", bond: "Bond", mutual_fund: "Mutual Fund", stock: "Stock" }[t]);
+  ({
+    "Money Market": "Money Market",
+    "Deposit": "Deposit",
+    "Bond": "Bond",
+    "Mutual Fund": "Mutual Fund",
+    "Stock": "Stock",
+    "Balanced Fund": "Balanced Fund",
+    "Sukuk": "Sukuk",
+  }[t]);
 
 
 export const maxRiskForProfile = (p: RiskProfile | null, showHigh: boolean): number => {
