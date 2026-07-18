@@ -111,6 +111,7 @@ export function useTrackModal({
           console.error("Failed to load initial product details:", error);
           if (active) {
             setPicked({ ...initialProduct });
+            setProductError("Failed to load product details. Please try again.");
           }
         })
         .finally(() => {
@@ -151,7 +152,11 @@ export function useTrackModal({
     if (parsedCurrentVal > 0 && amt > 0) {
       setErr("");
       if (isMF) setQuantity((amt / parsedCurrentVal).toFixed(4));
-      if (isBond) setQuantity((amt / (parsedCurrentVal / 100)).toFixed(4));
+      if (isBond && picked.minInvestment > 0) {
+        setQuantity(String(Math.round(amt / (parsedCurrentVal / 100) / picked.minInvestment) * picked.minInvestment));
+      } else if (isBond) {
+        setQuantity((amt / (parsedCurrentVal / 100)).toFixed(4));
+      }
     } else {
       setQuantity("");
     }
@@ -167,6 +172,13 @@ export function useTrackModal({
     if (picked.minInvestment && amt < picked.minInvestment) {
       setErr(`Minimum investment is ${fmtFull(picked.minInvestment)}`);
       return;
+    }
+    if (isBond && picked.minInvestment > 0) {
+      const nominal = parseFloat(quantity) || 0;
+      if (nominal % picked.minInvestment !== 0) {
+        setErr(`Nominal must be a multiple of ${fmtFull(picked.minInvestment)}`);
+        return;
+      }
     }
     if (isStock && (!quantity || parseFloat(quantity) <= 0)) {
       setErr("Enter the quantity (lot).");

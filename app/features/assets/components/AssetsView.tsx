@@ -40,7 +40,7 @@ export function AssetsView({
 
   const saveAsset = async (data: Omit<Asset, "id">) => {
     try {
-      await AssetApi.create(data);
+      await AssetApi.create(data, products);
       await usePortfolioStore.getState().fetchPortfolio();
       await useGoalsStore.getState().fetchGoals();
       await useGoalsStore.getState().fetchProjections();
@@ -56,15 +56,30 @@ export function AssetsView({
   const updateAsset = async (id: string, data: Partial<Asset>, txType?: "buy" | "sell", txQty?: number, txPrice?: number) => {
     try {
       if (txType && txQty !== undefined && txPrice !== undefined) {
-        const p = products.find((prod) => prod.id === myAssets.find(a => a.id === id)?.productId);
-        const actualQty = p?.type === "Stock" ? txQty * 100 : txQty;
-        await AssetApi.addTransaction(id, {
-          type: txType.toUpperCase(),
-          quantity: actualQty,
-          price: txPrice
-        });
+        // Derive productId from store assets (not stale closure myAssets)
+        const storeAssets = usePortfolioStore.getState().assets;
+        const asset = storeAssets.find(a => a.id === id);
+        const p = asset ? products.find((prod) => prod.id === asset.productId) : undefined;
+        const action = txType === "buy" ? "BUY" : "SELL";
+        const ptype = p?.type;
+        const payload: { action: string; units?: number; amount?: number } = { action };
+
+        if (ptype === "Stock") {
+          payload.units = txQty * 100; // lots → units (shares)
+        } else if (ptype === "Mutual Fund" || ptype === "Money Market" || ptype === "Balanced Fund") {
+          if (txType === "buy") {
+            payload.units = txQty; // buy by units
+          } else {
+            payload.amount = data.amount; // sell by rupiah amount
+          }
+        } else if (ptype === "Bond" || ptype === "Sukuk") {
+          payload.units = txQty; // nominal pokok
+        } else {
+          payload.amount = data.amount; // Deposit
+        }
+        await AssetApi.addTransaction(id, payload);
       } else {
-        await AssetApi.update(id, data);
+        await AssetApi.update(id, data, products);
       }
       await usePortfolioStore.getState().fetchPortfolio();
       await useGoalsStore.getState().fetchGoals();
@@ -93,7 +108,7 @@ export function AssetsView({
 
   const assignGoal = async (assetId: string, goalId: string | undefined) => {
     try {
-      await AssetApi.update(assetId, { goalId });
+      await AssetApi.update(assetId, { goalId }, products);
       await usePortfolioStore.getState().fetchPortfolio();
       await useGoalsStore.getState().fetchGoals();
       await useGoalsStore.getState().fetchProjections();

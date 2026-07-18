@@ -59,7 +59,7 @@ export function ProductsView({ user, addLog, toast }: ProductsViewProps) {
       return;
     }
     try {
-      await AssetApi.create(data);
+      await AssetApi.create(data, products);
       try {
         addLog({
           userId: user.id,

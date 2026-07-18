@@ -10,7 +10,7 @@ function toGoalPayload(data: any) {
   const annualReturn = data.expectedReturn || 7.5;
   
   let months = monthsToGoal(target, current, monthly, annualReturn);
-  if (months < 0) {
+  if (months < 0 || !isFinite(months)) {
     months = 120; // 10 years fallback
   }
   
@@ -28,6 +28,7 @@ function toGoalPayload(data: any) {
     target_amount: target,
     monthly_contribution: monthly,
     target_date: targetDate,
+    expected_return: annualReturn,
     is_priority: data.isPriority || false,
     notes: data.notes || ""
   };

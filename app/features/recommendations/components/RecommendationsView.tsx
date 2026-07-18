@@ -52,7 +52,7 @@ export function RecommendationsView({
   const saveTracked = async (data: Omit<Asset, "id">) => {
     const p = products.find((pr) => pr.id === data.productId)!;
     try {
-      await AssetApi.create(data as any);
+      await AssetApi.create(data as any, products);
       addLog({
         userId: user.id,
         userName: user.name,
