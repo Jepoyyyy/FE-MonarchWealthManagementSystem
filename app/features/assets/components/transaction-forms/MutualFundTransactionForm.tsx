@@ -8,7 +8,7 @@ interface MutualFundFormProps {
   type: "buy" | "sell";
   currentPrice: number; 
   onClose: () => void;
-  onSubmit: (data: { amount: number; currentValue: number; quantity: number }) => void; //add logic
+  onSubmit: (data: { amount: number; currentValue: number; quantity: number; method: "amount" | "units" }) => void;
 }
 
 export function MutualFundTransactionForm({ type, currentPrice, onClose, onSubmit }: MutualFundFormProps) {
@@ -26,7 +26,7 @@ export function MutualFundTransactionForm({ type, currentPrice, onClose, onSubmi
       setErr("Masukkan nilai yang valid.");
       return;
     }
-    onSubmit({ amount: totalAmt, currentValue: currentPrice, quantity: units });
+    onSubmit({ amount: totalAmt, currentValue: currentPrice, quantity: units, method });
   };
 
   return (

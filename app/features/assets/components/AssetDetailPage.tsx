@@ -6,6 +6,7 @@ import { ProductTypeBadge } from '~/features/products/components/ProductTypeBadg
 import { RiskLevelBadge } from '~/features/profile/components/RiskLevelBadge';
 import { ConfirmModal } from '~/shared/components/ConfirmModal';
 import { AddTransactionModal } from "./AddTransactionModal";
+import { TransactionHistoryTable } from "./TransactionHistoryTable";
 import { Btn } from '~/shared/components/Button';
 import { useAssetDetail } from '~/features/assets/hooks/useAssetDetail';
 import { usePortfolioStore } from '~/features/assets/portfolio.store';
@@ -261,6 +262,9 @@ export function AssetDetailPage({
           </div>
         </div>
       )}
+
+      {/* Transaction History */}
+      <TransactionHistoryTable assetId={asset.id} />
 
       {/* Action buttons */}
       <div className="flex gap-3">

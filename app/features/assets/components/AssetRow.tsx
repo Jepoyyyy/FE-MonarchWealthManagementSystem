@@ -7,6 +7,7 @@ import { ProductTypeBadge } from '~/features/products/components/ProductTypeBadg
 import { RiskLevelBadge } from '~/features/profile/components/RiskLevelBadge';
 import { ConfirmModal } from '~/shared/components/ConfirmModal';
 import { Btn } from '~/shared/components/Button';
+import { usePortfolioStore } from '~/features/assets/portfolio.store';
 
 interface AssetRowProps {
   asset: Asset;
@@ -20,8 +21,10 @@ interface AssetRowProps {
 export function AssetRow({ asset, products, goals, onSelect, onRemove, onAssignGoal }: AssetRowProps) {
   const [confirmRemoveId, setConfirmRemoveId] = useState<string | null>(null);
   const p = products.find((pr) => pr.id === asset.productId) || { name: "Unknown", issuer: "Unknown", type: "stock" as const, riskLevel: 1 };
+  const pnl = usePortfolioStore((s) => s.pnlData.find((x) => x.assetId === asset.id));
+  const curVal = pnl?.currentValue ?? asset.currentValue;
   const qty = asset.quantity ?? asset.amount;
-  const ret = ((asset.currentValue - asset.amount) / asset.amount) * 100;
+  const ret = ((curVal - asset.amount) / asset.amount) * 100;
   const { type } = p;
 
   const qtyLabel = type === "Stock"
@@ -74,7 +77,7 @@ export function AssetRow({ asset, products, goals, onSelect, onRemove, onAssignG
           className="px-4 py-3 text-xs font-semibold text-foreground"
           style={{ fontFamily: "var(--font-mono)" }}
         >
-          {fmt(asset.currentValue)}
+          {fmt(curVal)}
         </td>
         <td className="px-4 py-3">
           <span

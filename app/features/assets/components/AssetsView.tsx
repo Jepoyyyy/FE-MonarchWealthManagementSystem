@@ -53,7 +53,7 @@ export function AssetsView({
     }
   };
 
-  const updateAsset = async (id: string, data: Partial<Asset>, txType?: "buy" | "sell", txQty?: number, txPrice?: number) => {
+  const updateAsset = async (id: string, data: Partial<Asset>, txType?: "buy" | "sell", txQty?: number, txPrice?: number, txMethod?: "amount" | "units") => {
     try {
       if (txType && txQty !== undefined && txPrice !== undefined) {
         // Derive productId from store assets (not stale closure myAssets)
@@ -68,7 +68,11 @@ export function AssetsView({
           payload.units = txQty * 100; // lots → units (shares)
         } else if (ptype === "Mutual Fund" || ptype === "Money Market" || ptype === "Balanced Fund") {
           if (txType === "buy") {
-            payload.units = txQty; // buy by units
+            if (txMethod === "amount") {
+              payload.amount = data.amount; // buy by rupiah amount
+            } else {
+              payload.units = txQty; // buy by units
+            }
           } else {
             payload.amount = data.amount; // sell by rupiah amount
           }

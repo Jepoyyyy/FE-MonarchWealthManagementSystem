@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, useEffect } from "react";
-import { Plus, Wallet, TrendingDown, DollarSign, Target, TrendingUp, Calculator, Star } from "lucide-react";
+import { Plus, Wallet, TrendingDown, DollarSign, Target, TrendingUp, Calculator, Star, Edit3 } from "lucide-react";
 import type { AppUser, Goal, FinancialProfile, Asset, Product } from "~/types";
 import { fmt } from "~/utils";
 import { PageHeader } from '~/shared/components/PageHeader';
@@ -8,6 +8,7 @@ import { Btn } from '~/shared/components/Button';
 import { GoalCard } from "./GoalCard";
 import { GoalFormModal } from "./GoalFormModal";
 import { WealthCalculator } from "./WealthCalculator";
+import { FinancialProfileModal } from '~/features/finances';
 import { useGoalsStore } from '~/features/goals/goals.store';
 import { GoalApi } from '~/features/goals/api';
 
@@ -32,6 +33,7 @@ export function GoalsView({
   const [showAddGoal, setShowAddGoal] = useState(false);
   const [editGoal, setEditGoal] = useState<Goal | null>(null);
   const [calcDraft, setCalcDraft] = useState<FinancialProfile | null>(null);
+  const [showFinProfileModal, setShowFinProfileModal] = useState(false);
 
   const { goals, loading, fetchGoals } = useGoalsStore();
 
@@ -73,23 +75,30 @@ export function GoalsView({
     [isAutoAlloc, surplus, priorityGoal]
   );
 
-  const handleAutoAlloc = (pct: number) => {
-    if (!priorityGoal || surplus <= 0) return;
-    const p = Math.min(Math.max(pct, 0), 100);
-    const primaryAmt = Math.round((surplus * p) / 100);
-    const remaining = Math.max(0, surplus - primaryAmt);
-    const otherCount = goals.filter((g) => !g.isPriority).length;
-    const eachOther = otherCount > 0 ? Math.floor(remaining / otherCount) : 0;
+  const handleAutoAlloc = async (pct: number) => {
+    const surplus = finProfile?.monthlyIncome
+      ? finProfile.monthlyIncome * (pct / 100)
+      : 0;
 
-    // Local state updating is removed since backend handles it, but for UI responsiveness we might want to re-fetch
-    goals.forEach(async (g) => {
-       const amt = g.isPriority ? primaryAmt : eachOther;
-       if (g.monthlyContribution !== amt) {
-          await GoalApi.update(g.id, { ...g, monthlyContribution: amt } as any);
-       }
-    });
-    fetchGoals();
-  };
+      const priorityGoal = goals.find((g) => g.isPriority);
+      const primaryAmt = priorityGoal ? Math.floor(surplus * 0.6) : 0;
+      const remaining = Math.max(0, surplus - primaryAmt);
+      const otherCount = goals.filter((g) => !g.isPriority).length;
+      const eachOther = otherCount > 0 ? Math.floor(remaining / otherCount) : 0;
+
+      // Wait for all updates to complete before refetching
+      await Promise.all(
+        goals.map(async (g) => {
+          const amt = g.isPriority ? primaryAmt : eachOther;
+          if (g.monthlyContribution !== amt) {
+            await GoalApi.update(g.id, { ...g, monthlyContribution: amt } as any);
+          }
+        })
+      );
+    
+      // Now fetch fresh data after all updates complete
+      await fetchGoals();
+    };
 
   const addGoal = async (data: Omit<Goal, "id">) => {
     try {
@@ -169,6 +178,23 @@ export function GoalsView({
     toast.success("Data kalkulator berhasil disimpan");
   }, [calcDraft, setFinProfile, toast]);
 
+  const handleSaveFinProfile = useCallback((data: any) => {
+    setFinProfile({
+      monthlyIncome: data.monthlyIncome,
+      expenses: {
+        housing: data.housing,
+        food: data.food,
+        transport: data.transport,
+        utilities: data.utilities,
+        healthcare: data.healthcare,
+        entertainment: data.entertainment,
+        insurance: data.insurance,
+        other: data.other,
+      },
+    });
+    toast.success("Financial profile updated successfully");
+  }, [setFinProfile, toast]);
+
   const avgFunded = useMemo(
     () =>
       goals.length > 0
@@ -185,6 +211,9 @@ export function GoalsView({
         title="Financial Goals"
         action={
           <div className="flex items-center gap-2">
+            <Btn variant="secondary" size="sm" onClick={() => setShowFinProfileModal(true)}>
+              <Edit3 size={14} /> Edit Profile
+            </Btn>
             <Btn variant="secondary" size="sm" onClick={() => setShowCalc((s) => !s)}>
               <Calculator size={14} /> {showCalc ? "Hide" : "Show"} Calculator
             </Btn>
@@ -326,6 +355,24 @@ export function GoalsView({
           }
         />
       )}
+
+      {/* Financial Profile Modal */}
+      <FinancialProfileModal
+        open={showFinProfileModal}
+        onClose={() => setShowFinProfileModal(false)}
+        onSave={handleSaveFinProfile}
+        initialData={{
+          monthlyIncome: finProfile.monthlyIncome,
+          housing: finProfile.expenses.housing || 0,
+          food: finProfile.expenses.food || 0,
+          transport: finProfile.expenses.transport || 0,
+          utilities: finProfile.expenses.utilities || 0,
+          healthcare: finProfile.expenses.healthcare || 0,
+          entertainment: finProfile.expenses.entertainment || 0,
+          insurance: finProfile.expenses.insurance || 0,
+          other: finProfile.expenses.other || 0,
+        }}
+      />
     </div>
   );
 }

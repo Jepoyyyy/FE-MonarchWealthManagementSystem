@@ -10,18 +10,22 @@ function toDateArray(dateStr: string | undefined): number[] | undefined {
 function mapQty(asset: any, products: any[]) {
   const p = products.find(prod => prod.id === asset.productId);
   const units = asset.units ?? asset.quantity ?? 0;
-  return p?.type === "Stock" ? units / 100 : units;
+  // Use actual product lot size instead of hardcoded 100
+  const lotSize = p?.lotSize || 1;
+  return p?.type === "Stock" ? units / lotSize : units;
 }
 
 function toAssetPayload(data: Omit<Asset, "id">, products: any[]) {
   const p = products.find(prod => prod.id === data.productId);
   const isStock = p?.type === "Stock";
-  const units = isStock && data.quantity ? data.quantity * 100 : data.quantity;
+  // Use actual product lot size instead of hardcoded 100
+  const lotSize = p?.lotSize || 1;
+  const units = isStock && data.quantity ? data.quantity * lotSize : data.quantity;
   return {
     product_id: data.productId,
     amount: data.amount,
     purchase_date: toDateArray(data.purchaseDate),
-    current_value: data.currentValue,
+    // Remove current_value - backend calculates this (units × current_price)
     units: units,
     goal_id: data.goalId,
     tenor_months: data.tenorMonths,
@@ -67,4 +71,5 @@ export const AssetApi = {
   addTransaction: (id: string, data: { action: string, units?: number, amount?: number }) => api.post(`/api/v1/me/assets/${id}/transactions`, data),
   fetchPnL: () => api.get<AssetsPnLResponse[]>("/api/v1/me/assets/pnl"),
   fetchLogs: () => api.get<TransactionHistory[]>("/api/v1/me/assets/transaction-logs"),
+  fetchAssetTransactions: (assetId: string) => api.get<TransactionHistory[]>(`/api/v1/me/assets/${assetId}/transactions`),
 };

@@ -14,7 +14,7 @@ interface AddTransactionModalProps {
   product: Product;
   type: "buy" | "sell";
   onClose: () => void;
-  onSaveTransaction: (data: { amount: number; currentValue: number; quantity?: number }) => void;
+  onSaveTransaction: (data: { amount: number; currentValue: number; quantity?: number; method?: "amount" | "units" }) => void;
 }
 
 export function AddTransactionModal({ asset, product, type, onClose, onSaveTransaction }: AddTransactionModalProps) {
