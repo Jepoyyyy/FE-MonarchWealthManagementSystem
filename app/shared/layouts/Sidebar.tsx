@@ -16,6 +16,7 @@ import {
 import type { AppUser } from "~/shared/types/common";
 import { Btn } from "~/shared/components/Button";
 import { RiskBadge } from '~/features/profile/components/RiskBadge';
+import { navigationItems, adminNavigationItems } from "~/config/navigation";
 
 interface SidebarProps {
   user: AppUser;
@@ -32,22 +33,7 @@ export function Sidebar({ user, onLogout, isOpen = false, onClose }: SidebarProp
     .slice(0, 2)
     .toUpperCase();
 
-  const navItems =
-    user.role === "admin"
-      ? [
-          { name: "Overview", href: "/admin", icon: BarChart3, end: true },
-          { name: "Products", href: "/admin/products", icon: Layers },
-          { name: "Users", href: "/admin/users", icon: Users },
-          { name: "Audit Trail", href: "/admin/audit", icon: FileText },
-        ]
-      : [
-          { name: "Dashboard", href: "/", icon: Home, end: true },
-          { name: "Products", href: "/products", icon: Layers },
-          { name: "Assets", href: "/assets", icon: Briefcase },
-          { name: "Goals", href: "/goals", icon: Target },
-          { name: "Recommendations", href: "/recommendations", icon: Star },
-          { name: "Progress", href: "/progress", icon: TrendingUp },
-        ];
+  const navItems = user.role === "admin" ? adminNavigationItems : navigationItems;
 
   return (
     <>

@@ -1,3 +1,5 @@
+import type { UserRole, UserStatus, RiskProfile } from "~/types";
+
 export interface AuditLog {
   id: string; 
   userId: string; 
@@ -8,18 +10,29 @@ export interface AuditLog {
   category: "auth" | "portfolio" | "admin" | "questionnaire";
 }
 
+export interface AdminUserDetail {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  status: UserStatus;
+  riskProfile: RiskProfile | null;
+  questionnaireCompleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface AdminDashboardDTO {
-  totalAUM: number;
-  activeUsers: number;
-  totalUsers: number;
-  activeProducts: number;
-  totalProducts: number;
-  totalEvents: number;
-  riskProfileDist: {
-    riskAverse: number;
+  aum: number;
+  user_count: number;
+  active_user_count: number;
+  product_count: number;
+  active_product_count: number;
+  total_audit_events: number;
+  risk_profiles: {
+    risk_averse: number;
     moderate: number;
-    riskTaker: number;
+    risk_taker: number;
   };
-  recentActivity: any[];
-  aumHistory?: { month: number; value: number }[];
+  aum_trend: { month: number; value: number }[];
 }

@@ -5,6 +5,8 @@ import {
   Target,
   Lightbulb,
   TrendingUp,
+  Users,
+  ClipboardList,
   type LucideIcon,
 } from "lucide-react";
 
@@ -22,4 +24,11 @@ export const navigationItems: NavigationItem[] = [
   { name: "Goals", href: "/goals", icon: Target },
   { name: "Recommendations", href: "/recommendations", icon: Lightbulb },
   { name: "Progress", href: "/progress", icon: TrendingUp },
+];
+
+export const adminNavigationItems: NavigationItem[] = [
+  { name: "Overview",  href: "/admin",          icon: LayoutDashboard, end: true },
+  { name: "Users",     href: "/admin/users",    icon: Users },
+  { name: "Products",  href: "/admin/products", icon: Package },
+  { name: "Audit Log", href: "/admin/audit",    icon: ClipboardList },
 ];

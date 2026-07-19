@@ -1,7 +1,7 @@
-import React, { useState, useMemo, Suspense, useEffect } from "react";
-import { Target, TrendingUp, Calendar, DollarSign, Percent, AlertTriangle, Wallet, Clock, BarChart3 } from "lucide-react";
-import type { AppUser, Goal, Asset, Product, FinancialProfile } from "~/types";
-import { fmt, fmtDate, genHistory, projectedDate, fmtPct, fmtDuration, fmtFull } from "~/utils";
+import React, { useMemo, Suspense, useEffect } from "react";
+import { TrendingUp, Percent, Wallet, Clock, BarChart3 } from "lucide-react";
+import type { AppUser, Goal, Product, FinancialProfile } from "~/types";
+import { fmt, fmtPct, fmtDuration, fmtFull } from "~/utils";
 import { GOAL_MAX_MONTHS, GOAL_TYPE_CONFIG } from '~/features/goals/goals.config';
 import { ProductTypeBadge } from '~/features/products/components/ProductTypeBadge';
 import { PageHeader } from '~/shared/components/PageHeader';
