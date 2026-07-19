@@ -25,18 +25,6 @@ export function ProgressView({ user, products, goals, finProfile }: ProgressView
     fetchPortfolio();
   }, [fetchPortfolio]);
 
-  if (loading || !goalProgress || goalProgress.length === 0) {
-    return (
-      <div className="space-y-6">
-        <PageHeader
-          title="Portfolio Progress"
-          subtitle="Loading goal progress data..."
-        />
-        <div className="h-96 bg-muted animate-pulse rounded-xl" />
-      </div>
-    );
-  }
-
   const totalValue = pnlData.reduce((s, a) => s + a.currentValue, 0);
   const totalCost = pnlData.reduce((s, a) => s + (a.units * a.avg_price), 0);
   const portfolioGain = totalValue - totalCost;
@@ -50,6 +38,48 @@ export function ProgressView({ user, products, goals, finProfile }: ProgressView
     Math.round((Date.now() - earliestMs) / (1000 * 60 * 60 * 24 * 30.44))
   );
   const avgMonthlyIncome = portfolioGain / monthsHeld;
+
+  const HORIZON = 60;
+  const chartData = useMemo(() => {
+    if (!goalProgress) return [];
+    return Array.from({ length: HORIZON + 1 }, (_, i) => {
+      // Portfolio growth projection (existing logic - keep for reference)
+      const growthOnly = totalValue + avgMonthlyIncome * i;
+      
+      // Goal-aware projection: sum all goals' projected values
+      let withSavings = 0;
+      goalProgress.forEach((gp) => {
+        const monthlyGrowthRate = gp.current_saved > 0 
+          ? gp.avg_monthly_growth / gp.current_saved 
+          : 0;
+        
+        let goalValue = gp.current_saved;
+        for (let m = 0; m < i; m++) {
+          goalValue = goalValue * (1 + monthlyGrowthRate) + gp.monthly_contribution;
+        }
+        withSavings += goalValue;
+      });
+      
+      return {
+        month: i,
+        label: i === 0 ? "Now" : i % 12 === 0 ? `${i / 12}yr` : i === HORIZON ? `${HORIZON}mo` : undefined,
+        growthOnly: Math.round(growthOnly),
+        withSavings: Math.round(withSavings),
+      };
+    });
+  }, [goalProgress, totalValue, avgMonthlyIncome]);
+
+  if (loading || !goalProgress || goalProgress.length === 0) {
+    return (
+      <div className="space-y-6">
+        <PageHeader
+          title="Portfolio Progress"
+          subtitle="Loading goal progress data..."
+        />
+        <div className="h-96 bg-muted animate-pulse rounded-xl" />
+      </div>
+    );
+  }
 
   const totalMonthlyContribution = goalProgress.reduce((s, gp) => s + gp.monthly_contribution, 0);
   const totalAvgMonthlyGrowth = goalProgress.reduce((s, gp) => s + gp.avg_monthly_growth, 0);
@@ -114,41 +144,12 @@ export function ProgressView({ user, products, goals, finProfile }: ProgressView
     avgMonthlyGrowth: number;
   }[];
 
+  const goalLines = goalETAs.filter((g) => g.etaMonths > 0 && g.etaMonths <= HORIZON);
+
   const totalMonthlySavings =
     Object.values(finProfile.expenses).length > 0
       ? finProfile.monthlyIncome - (Object.values(finProfile.expenses) as number[]).reduce((a, b) => a + b, 0)
       : 0;
-
-  const HORIZON = 60;
-  const chartData = useMemo(() => {
-    return Array.from({ length: HORIZON + 1 }, (_, i) => {
-      // Portfolio growth projection (existing logic - keep for reference)
-      const growthOnly = totalValue + avgMonthlyIncome * i;
-      
-      // Goal-aware projection: sum all goals' projected values
-      let withSavings = 0;
-      goalProgress.forEach((gp) => {
-        const monthlyGrowthRate = gp.current_saved > 0 
-          ? gp.avg_monthly_growth / gp.current_saved 
-          : 0;
-        
-        let goalValue = gp.current_saved;
-        for (let m = 0; m < i; m++) {
-          goalValue = goalValue * (1 + monthlyGrowthRate) + gp.monthly_contribution;
-        }
-        withSavings += goalValue;
-      });
-      
-      return {
-        month: i,
-        label: i === 0 ? "Now" : i % 12 === 0 ? `${i / 12}yr` : i === HORIZON ? `${HORIZON}mo` : undefined,
-        growthOnly: Math.round(growthOnly),
-        withSavings: Math.round(withSavings),
-      };
-    });
-  }, [goalProgress, totalValue, avgMonthlyIncome]);
-
-  const goalLines = goalETAs.filter((g) => g.etaMonths > 0 && g.etaMonths <= HORIZON);
 
   const retPct = totalCost > 0 ? (portfolioGain / totalCost) * 100 : 0;
 
