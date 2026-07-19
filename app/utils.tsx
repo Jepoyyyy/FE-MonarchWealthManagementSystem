@@ -64,13 +64,20 @@ export const genHistory = (total: number) => {
   });
 };
 
-export const categoryBadge = (c: AuditLog["category"]) =>
+export const categoryBadge = (c: string) =>
   ({
-    auth: "bg-blue-100 text-blue-700 border-blue-200",
-    portfolio: "bg-emerald-100 text-emerald-700 border-emerald-200",
-    admin: "bg-purple-100 text-purple-700 border-purple-200",
-    questionnaire: "bg-amber-100 text-amber-700 border-amber-200",
-  }[c]);
+    auth:           "bg-blue-100 text-blue-700 border-blue-200",
+    AUTH:           "bg-blue-100 text-blue-700 border-blue-200",
+    portfolio:      "bg-emerald-100 text-emerald-700 border-emerald-200",
+    GOAL:           "bg-emerald-100 text-emerald-700 border-emerald-200",
+    ASSET:          "bg-emerald-100 text-emerald-700 border-emerald-200",
+    admin:          "bg-purple-100 text-purple-700 border-purple-200",
+    PRODUCT:        "bg-purple-100 text-purple-700 border-purple-200",
+    USER:           "bg-purple-100 text-purple-700 border-purple-200",
+    questionnaire:  "bg-amber-100 text-amber-700 border-amber-200",
+    RISK_PROFILE:   "bg-amber-100 text-amber-700 border-amber-200",
+    FINANCES:       "bg-orange-100 text-orange-700 border-orange-200",
+  } as Record<string, string>)[c] ?? "bg-gray-100 text-gray-600 border-gray-200";
 
 export const statusBadge = (s: UserStatus) =>
   ({

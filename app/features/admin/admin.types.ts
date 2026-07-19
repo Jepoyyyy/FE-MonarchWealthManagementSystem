@@ -7,7 +7,8 @@ export interface AuditLog {
   action: string; 
   details: string; 
   timestamp: string;
-  category: "auth" | "portfolio" | "admin" | "questionnaire";
+  category: string;
+  changedValue?: string | null;
 }
 
 export interface AdminUserDetail {

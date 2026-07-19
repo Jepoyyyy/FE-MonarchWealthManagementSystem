@@ -11,6 +11,10 @@ export interface AuditQueryParams {
   page?: number;
   size?: number;
   sort?: string;
+  category?: string;
+  search?: string;
+  from?: string;
+  to?: string;
 }
 
 export const AdminApi = {
@@ -39,6 +43,18 @@ export const AdminApi = {
     query.set('size', String(params.size ?? 20));
     if (params.sort) query.set('sort', params.sort);
     return api.get<Page<AuditLog>>(`/api/v1/admin/audit?${query.toString()}`);
+  },
+
+  searchAuditLogs: (params: AuditQueryParams = {}) => {
+    const query = new URLSearchParams();
+    query.set('page', String(params.page ?? 0));
+    query.set('size', String(params.size ?? 20));
+    if (params.sort) query.set('sort', params.sort);
+    if (params.category) query.set('category', params.category);
+    if (params.search) query.set('search', params.search);
+    if (params.from) query.set('from', params.from);
+    if (params.to) query.set('to', params.to);
+    return api.get<Page<AuditLog>>(`/api/v1/admin/audit/search?${query.toString()}`);
   },
 
   // Products management
