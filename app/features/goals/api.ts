@@ -28,6 +28,7 @@ function toGoalPayload(data: any) {
     monthly_contribution: monthly,
     target_date: targetDate,
     is_priority: data.isPriority || false,
+    current_amount: current,
     notes: data.notes || ""
   };
 }
@@ -38,8 +39,8 @@ function fromGoalResponse(data: any): Goal {
     id: data.id,
     name: data.name,
     type: typeMapped as GoalType,
-    targetAmount: data.target_amount ?? data.targetAmount ?? 0,
-    currentSaved: data.current_saved ?? data.currentSaved ?? 0,
+    targetAmount: data.target_amount ?? 0,
+    currentSaved: data.current_amount ?? 0,
     monthlyContribution: data.monthly_contribution ?? data.monthlyContribution ?? 0,
     isPriority: data.is_priority ?? data.isPriority ?? false,
     color: data.color || GOAL_TYPE_CONFIG[typeMapped as GoalType]?.color || "#10b981",
