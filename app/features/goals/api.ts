@@ -1,5 +1,5 @@
 import { api } from '~/shared/api/client';
-import type { Goal, GoalRegistrationDTO, GoalProjectionDTO, GoalType } from '~/types';
+import type { Goal, GoalRegistrationDTO, GoalProjectionDTO, GoalType, GoalProgressResponse } from '~/types';
 import { monthsToGoal } from '~/utils';
 import { GOAL_TYPE_CONFIG, GOAL_MAX_MONTHS } from './goals.config';
 
@@ -89,6 +89,9 @@ export const GoalApi = {
       ...res,
       data: (res.data || []).map(fromGoalResponse)
     };
+  },
+  fetchProgress: async () => {
+    return api.get<GoalProgressResponse[]>("/api/v1/me/goals/progress");
   },
   projections: async () => {
     const res = await api.get<any[]>("/api/v1/me/goals/projections");

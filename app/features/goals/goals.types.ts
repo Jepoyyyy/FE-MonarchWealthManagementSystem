@@ -39,3 +39,18 @@ export interface GoalProjectionDTO {
   totalContributions: number;
   totalReturns: number;
 }
+
+export interface GoalProgressResponse {
+  goal_id: string;
+  goal_name: string;
+  goal_type: string;
+  target_amount: number;
+  current_saved: number;
+  monthly_contribution: number;
+  assigned_assets_count: number;
+  total_potential_pnl: number;
+  total_potential_pnl_percent: number;
+  avg_monthly_growth: number;
+  projected_eta_months: number;
+  is_priority: boolean;
+}

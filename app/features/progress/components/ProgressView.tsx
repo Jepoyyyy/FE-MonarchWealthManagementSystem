@@ -19,11 +19,23 @@ interface ProgressViewProps {
 }
 
 export function ProgressView({ user, products, goals, finProfile }: ProgressViewProps) {
-  const { assets: myAssets, pnlData, fetchPortfolio } = usePortfolioStore();
+  const { assets: myAssets, pnlData, goalProgress, loading, fetchPortfolio } = usePortfolioStore();
 
   useEffect(() => {
     fetchPortfolio();
   }, [fetchPortfolio]);
+
+  if (loading || !goalProgress || goalProgress.length === 0) {
+    return (
+      <div className="space-y-6">
+        <PageHeader
+          title="Portfolio Progress"
+          subtitle="Loading goal progress data..."
+        />
+        <div className="h-96 bg-muted animate-pulse rounded-xl" />
+      </div>
+    );
+  }
 
   const totalValue = pnlData.reduce((s, a) => s + a.currentValue, 0);
   const totalCost = pnlData.reduce((s, a) => s + (a.units * a.avg_price), 0);
@@ -39,8 +51,11 @@ export function ProgressView({ user, products, goals, finProfile }: ProgressView
   );
   const avgMonthlyIncome = portfolioGain / monthsHeld;
 
-  const monthlyTarget = goals.reduce((s, g) => s + g.monthlyContribution, 0);
-  const performanceRatio = monthlyTarget > 0 ? (avgMonthlyIncome / monthlyTarget) * 100 : null;
+  const totalMonthlyContribution = goalProgress.reduce((s, gp) => s + gp.monthly_contribution, 0);
+  const totalAvgMonthlyGrowth = goalProgress.reduce((s, gp) => s + gp.avg_monthly_growth, 0);
+  const performanceRatio = totalMonthlyContribution > 0 
+    ? (totalAvgMonthlyGrowth / totalMonthlyContribution) * 100 
+    : null;
 
   const perfStatus: "danger" | "warning" | "good" | null =
     performanceRatio === null
@@ -75,11 +90,29 @@ export function ProgressView({ user, products, goals, finProfile }: ProgressView
     },
   };
 
-  const goalETAs = goals.map((g) => {
-    const remaining = g.targetAmount - totalValue;
-    const etaMonths = avgMonthlyIncome > 0 ? Math.ceil(remaining / avgMonthlyIncome) : -1;
-    return { goal: g, adjTarget: g.targetAmount, remaining, etaMonths };
-  });
+  const goalETAs = goalProgress.map((gp) => {
+    const goal = goals.find(g => g.id === gp.goal_id);
+    if (!goal) return null;
+    
+    const remaining = gp.target_amount - gp.current_saved;
+    const etaMonths = gp.projected_eta_months;
+    
+    return { 
+      goal, 
+      adjTarget: gp.target_amount, 
+      remaining, 
+      etaMonths,
+      currentSaved: gp.current_saved,
+      avgMonthlyGrowth: gp.avg_monthly_growth,
+    };
+  }).filter(Boolean) as {
+    goal: Goal;
+    adjTarget: number;
+    remaining: number;
+    etaMonths: number;
+    currentSaved: number;
+    avgMonthlyGrowth: number;
+  }[];
 
   const totalMonthlySavings =
     Object.values(finProfile.expenses).length > 0
@@ -89,12 +122,23 @@ export function ProgressView({ user, products, goals, finProfile }: ProgressView
   const HORIZON = 60;
   const chartData = useMemo(() => {
     return Array.from({ length: HORIZON + 1 }, (_, i) => {
+      // Portfolio growth projection (existing logic - keep for reference)
       const growthOnly = totalValue + avgMonthlyIncome * i;
-      const r = avgMonthlyIncome > 0 && totalValue > 0 ? avgMonthlyIncome / totalValue : 0;
-      let withSavings = totalValue;
-      for (let m = 0; m < i; m++) {
-        withSavings = withSavings * (1 + r) + Math.max(totalMonthlySavings, 0);
-      }
+      
+      // Goal-aware projection: sum all goals' projected values
+      let withSavings = 0;
+      goalProgress.forEach((gp) => {
+        const monthlyGrowthRate = gp.current_saved > 0 
+          ? gp.avg_monthly_growth / gp.current_saved 
+          : 0;
+        
+        let goalValue = gp.current_saved;
+        for (let m = 0; m < i; m++) {
+          goalValue = goalValue * (1 + monthlyGrowthRate) + gp.monthly_contribution;
+        }
+        withSavings += goalValue;
+      });
+      
       return {
         month: i,
         label: i === 0 ? "Now" : i % 12 === 0 ? `${i / 12}yr` : i === HORIZON ? `${HORIZON}mo` : undefined,
@@ -102,7 +146,7 @@ export function ProgressView({ user, products, goals, finProfile }: ProgressView
         withSavings: Math.round(withSavings),
       };
     });
-  }, [totalValue, avgMonthlyIncome, totalMonthlySavings]);
+  }, [goalProgress, totalValue, avgMonthlyIncome]);
 
   const goalLines = goalETAs.filter((g) => g.etaMonths > 0 && g.etaMonths <= HORIZON);
 
@@ -173,7 +217,7 @@ export function ProgressView({ user, products, goals, finProfile }: ProgressView
               />
             </div>
             <p className="text-xs mt-1 text-muted-foreground" style={{ fontFamily: "var(--font-mono)" }}>
-              {fmt(avgMonthlyIncome)}/mo <span className="mx-1">vs</span> {fmt(monthlyTarget)}/mo target
+              {fmt(totalAvgMonthlyGrowth)}/mo <span className="mx-1">vs</span> {fmt(totalMonthlyContribution)}/mo target
             </p>
           </div>
         </div>
@@ -199,7 +243,7 @@ export function ProgressView({ user, products, goals, finProfile }: ProgressView
           <div className="px-5 py-4 border-b border-border">
             <h3 className="font-semibold text-foreground">Goal Timeline</h3>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Months to reach each goal = (Target − Current Portfolio) ÷ avg monthly portfolio income
+              Months to reach each goal = (Target − Current Saved) ÷ (Monthly Contribution + Avg Monthly Growth)
             </p>
           </div>
           <table className="w-full text-sm min-w-125">
