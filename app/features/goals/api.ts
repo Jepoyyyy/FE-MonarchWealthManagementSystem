@@ -83,6 +83,13 @@ export const GoalApi = {
     };
   },
   delete: (id: string) => api.delete(`/api/v1/me/goals/${id}`),
+  autoAllocate: async (percentage: number) => {
+    const res = await api.post<any[]>(`/api/v1/me/goals/auto-allocate?percentage=${percentage}`);
+    return {
+      ...res,
+      data: (res.data || []).map(fromGoalResponse)
+    };
+  },
   projections: async () => {
     const res = await api.get<any[]>("/api/v1/me/goals/projections");
     return {

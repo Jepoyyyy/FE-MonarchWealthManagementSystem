@@ -2,13 +2,12 @@ import { useState, useMemo } from "react";
 import { CheckCircle } from "lucide-react";
 import type { AppUser, Asset, Product, Goal, FinancialProfile, AuditLog } from "~/types";
 import { riskLabel, fmt, fmtFull, fmtPct } from "~/utils";
-import { calcHealthScore, generateRecommendations } from '~/lib/recommendation-engine/engine';
 import { PageHeader } from '~/shared/components/PageHeader';
 import { ScoreRing } from '~/features/profile/components/ScoreRing';
 import { SubScore } from '~/features/profile/components/SubScore';
 import { RecommendationCard } from '~/features/recommendations/components/RecommendationCard';
 import { TrackModal } from '~/features/products/components/TrackModal';
-import { useRecommendationsStore } from '~/features/recommendations/recommendations.store';
+import { useRecommendationsStore, useHealthScore } from '~/features/recommendations';
 import { useEffect } from "react";
 import { AssetApi } from '~/features/assets/api';
 import { handleGlobalApiError } from '~/shared/api';
@@ -41,13 +40,16 @@ export function RecommendationsView({
     fetchRecommendations();
   }, [fetchRecommendations]);
 
-  const score = useMemo(
-    () => calcHealthScore(user, myAssets, products, goals, finProfile),
-    [user, myAssets, products, goals, finProfile]
-  );
+  const { health, loading: healthLoading } = useHealthScore();
   const recs = recommendations;
 
-  const scoreColor = score.total >= 70 ? "#10b981" : score.total >= 45 ? "#f59e0b" : "#ef4444";
+  const emergencyScore = health?.components?.find((c) => c.componentName === "emergency")?.score ?? 0;
+  const diversificationScore = health?.components?.find((c) => c.componentName === "diversification")?.score ?? 0;
+  const goalCoverageScore = health?.components?.find((c) => c.componentName === "goalCoverage")?.score ?? 0;
+  const riskAlignmentScore = health?.components?.find((c) => c.componentName === "riskAlignment")?.score ?? 0;
+  const totalScore = health?.totalScore ?? 0;
+
+  const scoreColor = totalScore >= 70 ? "#10b981" : totalScore >= 45 ? "#f59e0b" : "#ef4444";
 
   const saveTracked = async (data: Omit<Asset, "id">) => {
     const p = products.find((pr) => pr.id === data.productId)!;
@@ -72,7 +74,19 @@ export function RecommendationsView({
 
   const highCount = recs.filter((r) => r.priority === "high").length;
 
-
+  if (healthLoading && !health) {
+    return (
+      <div className="space-y-6">
+        <PageHeader
+          title="Recommendations"
+          subtitle={`Personalised for your ${riskLabel(user.riskProfile)} profile`}
+        />
+        <div className="bg-card rounded-xl border border-border p-12 flex flex-col items-center justify-center text-center animate-pulse text-muted-foreground">
+          Calculating portfolio health...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -94,7 +108,7 @@ export function RecommendationsView({
       {/* Score ring & breakdown */}
       <div className="grid lg:grid-cols-3 gap-5">
         <div className="bg-card rounded-xl border border-border p-4 md:p-6 flex flex-col md:flex-row items-center gap-4 md:gap-6">
-          <ScoreRing score={score.total} />
+          <ScoreRing score={totalScore} />
           <div className="flex-1">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
               Portfolio Health
@@ -103,7 +117,7 @@ export function RecommendationsView({
               className="text-2xl font-bold mb-1"
               style={{ fontFamily: "var(--font-serif)", color: scoreColor }}
             >
-              {score.total >= 70 ? "Healthy" : score.total >= 45 ? "Needs attention" : "Action required"}
+              {totalScore >= 70 ? "Healthy" : totalScore >= 45 ? "Needs attention" : "Action required"}
             </p>
             <p className="text-xs text-muted-foreground leading-relaxed">
               {highCount > 0
@@ -121,23 +135,23 @@ export function RecommendationsView({
           <div className="grid grid-cols-2 gap-x-8 gap-y-4">
             <SubScore
               label="Emergency Fund"
-              score={score.emergency}
-              color={score.emergency >= 18 ? "#10b981" : score.emergency >= 10 ? "#f59e0b" : "#ef4444"}
+              score={emergencyScore}
+              color={emergencyScore >= 18 ? "#10b981" : emergencyScore >= 10 ? "#f59e0b" : "#ef4444"}
             />
             <SubScore
               label="Diversification"
-              score={score.diversification}
-              color={score.diversification >= 18 ? "#10b981" : score.diversification >= 10 ? "#f59e0b" : "#ef4444"}
+              score={diversificationScore}
+              color={diversificationScore >= 18 ? "#10b981" : diversificationScore >= 10 ? "#f59e0b" : "#ef4444"}
             />
             <SubScore
               label="Goal Coverage"
-              score={score.goalCoverage}
-              color={score.goalCoverage >= 18 ? "#10b981" : score.goalCoverage >= 10 ? "#f59e0b" : "#ef4444"}
+              score={goalCoverageScore}
+              color={goalCoverageScore >= 18 ? "#10b981" : goalCoverageScore >= 10 ? "#f59e0b" : "#ef4444"}
             />
             <SubScore
               label="Risk Alignment"
-              score={score.riskAlignment}
-              color={score.riskAlignment >= 18 ? "#10b981" : score.riskAlignment >= 10 ? "#f59e0b" : "#ef4444"}
+              score={riskAlignmentScore}
+              color={riskAlignmentScore >= 18 ? "#10b981" : riskAlignmentScore >= 10 ? "#f59e0b" : "#ef4444"}
             />
           </div>
           <div className="mt-4 pt-4 border-t border-border grid grid-cols-3 gap-4 text-xs">

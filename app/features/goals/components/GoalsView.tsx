@@ -76,37 +76,13 @@ export function GoalsView({
   );
 
   const handleAutoAlloc = async (pct: number) => {
-    const surplus = finProfile?.monthlyIncome
-      ? finProfile.monthlyIncome * (pct / 100)
-      : 0;
-
-      const priorityGoal = goals.find((g) => g.isPriority);
-      const primaryAmt = priorityGoal ? Math.floor(surplus * 0.6) : 0;
-      const remaining = Math.max(0, surplus - primaryAmt);
-      const otherCount = goals.filter((g) => !g.isPriority).length;
-      const eachOther = otherCount > 0 ? Math.floor(remaining / otherCount) : 0;
-
-      // Wait for all updates to complete before refetching
-      await Promise.all(
-        goals.map(async (g) => {
-          const amt = g.isPriority ? primaryAmt : eachOther;
-          if (g.monthlyContribution !== amt) {
-            await GoalApi.update(g.id, {
-              name: g.name,
-              targetAmount: g.targetAmount,
-              currentSaved: g.currentSaved,
-              monthlyContribution: amt,
-              isPriority: g.isPriority,
-              priority: "MEDIUM",
-              color: g.color,
-            });
-          }
-        })
-      );
-    
-      // Now fetch fresh data after all updates complete
+    try {
+      await GoalApi.autoAllocate(pct);
       await fetchGoals();
-    };
+    } catch (err: any) {
+      toast.error("Gagal mengalokasi surplus", { description: err.message });
+    }
+  };
 
   const addGoal = async (data: Omit<Goal, "id">) => {
     try {
@@ -368,6 +344,16 @@ export function GoalsView({
           monthlyIncome={finProfile.monthlyIncome}
           portfolioReturn={portfolioReturn}
           isAutoAlloc={isAutoAlloc}
+          autoMonthlyAmount={
+            isAutoAlloc && surplus > 0
+              ? (() => {
+                  const primaryAmt = Math.round((surplus * primaryPct) / 100);
+                  const remaining = Math.max(0, surplus - primaryAmt);
+                  // When adding a new other goal, the total other goals count will be otherGoals.length + 1
+                  return Math.floor(remaining / (otherGoals.length + 1));
+                })()
+              : undefined
+          }
         />
       )}
       {editGoal && (

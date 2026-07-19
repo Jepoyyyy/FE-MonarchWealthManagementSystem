@@ -31,7 +31,7 @@ export interface HealthScoreDTO {
   totalScore: number;
   maxScore: number;
   status: string;
-  "portofolio-value": number;
+  "portfolio-value": number;
   "available-surplus": number;
   components: HealthComponent[];
 }

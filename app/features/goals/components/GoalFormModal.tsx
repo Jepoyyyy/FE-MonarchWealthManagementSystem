@@ -62,10 +62,13 @@ export function GoalFormModal({
       setErr("Target amount must be greater than 0.");
       return;
     }
-    // For non-priority goals in auto-allocation mode, allow 0 contribution
-    // Priority goals always need a manual contribution > 0
-    const needsManualContribution = !autoDisabled || isPriority;
-    if (needsManualContribution && (!m || m <= 0)) {
+    if (t > 100_000_000) {
+      setErr("Target amount cannot exceed Rp 100,000,000.");
+      return;
+    }
+    // Priority goals always need a manual contribution > 0.
+    // Non-priority goals can have 0/empty contribution (e.g. for auto-allocation or initial state)
+    if (isPriority && (!m || m <= 0)) {
       setErr("Monthly contribution must be greater than 0.");
       return;
     }
