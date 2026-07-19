@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, useEffect } from "react";
-import { Plus, Wallet, TrendingDown, DollarSign, Target, TrendingUp, Calculator, Star, Edit3 } from "lucide-react";
+import { Plus, Wallet, TrendingDown, DollarSign, Target, TrendingUp, Star, Edit3 } from "lucide-react";
 import type { AppUser, Goal, FinancialProfile, Asset, Product } from "~/types";
 import { fmt } from "~/utils";
 import { PageHeader } from '~/shared/components/PageHeader';
@@ -7,7 +7,6 @@ import { StatCard } from '~/features/dashboard/components/StatCard';
 import { Btn } from '~/shared/components/Button';
 import { GoalCard } from "./GoalCard";
 import { GoalFormModal } from "./GoalFormModal";
-import { WealthCalculator } from "./WealthCalculator";
 import { FinancialProfileModal } from '~/features/finances';
 import { useGoalsStore } from '~/features/goals/goals.store';
 import { GoalApi } from '~/features/goals/api';
@@ -29,10 +28,8 @@ export function GoalsView({
   products,
   toast,
 }: GoalsViewProps) {
-  const [showCalc, setShowCalc] = useState(false);
   const [showAddGoal, setShowAddGoal] = useState(false);
   const [editGoal, setEditGoal] = useState<Goal | null>(null);
-  const [calcDraft, setCalcDraft] = useState<FinancialProfile | null>(null);
   const [showFinProfileModal, setShowFinProfileModal] = useState(false);
 
   const { goals, loading, fetchGoals } = useGoalsStore();
@@ -171,23 +168,6 @@ export function GoalsView({
     }
   };
 
-  const updateIncome = useCallback(
-    (val: string) => setCalcDraft((cur) => ({ ...(cur ?? finProfile), monthlyIncome: parseFloat(val) || 0 })),
-    [finProfile]
-  );
-  const updateExpense = useCallback(
-    (key: string, val: string) =>
-      setCalcDraft((cur) => ({
-        ...(cur ?? finProfile),
-        expenses: { ...(cur ?? finProfile).expenses, [key]: parseFloat(val) || 0 },
-      })),
-    [finProfile]
-  );
-  const handleSaveCalc = useCallback(() => {
-    if (calcDraft) setFinProfile(calcDraft);
-    setCalcDraft(null);
-    toast.success("Data kalkulator berhasil disimpan");
-  }, [calcDraft, setFinProfile, toast]);
 
   const handleSaveFinProfile = useCallback((data: any) => {
     setFinProfile({
@@ -225,9 +205,6 @@ export function GoalsView({
             <Btn variant="secondary" size="sm" onClick={() => setShowFinProfileModal(true)}>
               <Edit3 size={14} /> Edit Profile
             </Btn>
-            <Btn variant="secondary" size="sm" onClick={() => setShowCalc((s) => !s)}>
-              <Calculator size={14} /> {showCalc ? "Hide" : "Show"} Calculator
-            </Btn>
             <Btn size="sm" onClick={() => setShowAddGoal(true)}>
               <Plus size={14} /> Add Goal
             </Btn>
@@ -256,27 +233,7 @@ export function GoalsView({
         />
       </div>
 
-      {/* Income & Expense Calculator */}
-      {showCalc && (
-        <WealthCalculator
-          surplus={surplus}
-          totalExpenses={totalExpenses}
-          portfolioReturn={portfolioReturn}
-          finProfile={finProfile}
-          calcDraft={calcDraft}
-          updateIncome={updateIncome}
-          updateExpense={updateExpense}
-          handleSaveCalc={handleSaveCalc}
-          totalAllocated={totalAllocated}
-          unallocated={unallocated}
-          isAutoAlloc={isAutoAlloc}
-          priorityGoal={priorityGoal}
-          primaryPct={primaryPct}
-          otherGoals={otherGoals}
-          goals={goals}
-          handleAutoAlloc={handleAutoAlloc}
-        />
-      )}
+
 
       {/* No goals state */}
       {goals.length === 0 && (
