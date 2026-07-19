@@ -5,7 +5,7 @@ import { monthsToGoal, monthlyNeeded, maxRiskForProfile, riskLabel, typeLabel, f
 export const analyzeGoal = (goal: Goal, effectiveCurrentSaved?: number): GoalAnalysis => {
   const saved = effectiveCurrentSaved ?? goal.currentSaved;
 
-  const months = monthsToGoal(goal.targetAmount, saved, goal.monthlyContribution, goal.expectedReturn);
+  const months = monthsToGoal(goal.targetAmount, saved, goal.monthlyContribution);
 
   if (saved >= goal.targetAmount) {
     return { status: "reached", months: 0, headline: "Goal reached!", detail: "You've fully funded this goal. Consider redirecting contributions elsewhere." };
@@ -18,7 +18,7 @@ export const analyzeGoal = (goal: Goal, effectiveCurrentSaved?: number): GoalAna
   const fastM = GOAL_FAST_MONTHS[goal.type];
 
   if (months > maxM) {
-    const needed = monthlyNeeded(goal.targetAmount, saved, maxM, goal.expectedReturn);
+    const needed = monthlyNeeded(goal.targetAmount, saved, maxM);
     return {
       status: "too_little",
       months,
@@ -147,7 +147,7 @@ export function generateRecommendations(
     if (!types.some(t => ownedTypes.has(t))) {
       const p = bestOf(types, maxRiskLv + 1, ownedIds);
       if (p) {
-        const months = monthsToGoal(priorityGoal.targetAmount, priorityGoal.currentSaved, priorityGoal.monthlyContribution, priorityGoal.expectedReturn);
+        const months = monthsToGoal(priorityGoal.targetAmount, priorityGoal.currentSaved, priorityGoal.monthlyContribution);
         recs.push({
           id: `goal-priority`, priority: "high", category: "goal",
           title: `Start building toward "${priorityGoal.name}"`,
@@ -165,7 +165,7 @@ export function generateRecommendations(
     if (!types.some(t => ownedTypes.has(t))) {
       const p = bestOf(types, maxRiskLv + 1, ownedIds);
       if (p && !recs.some(r => r.product?.id === p.id)) {
-        const months = monthsToGoal(goal.targetAmount, goal.currentSaved, goal.monthlyContribution, goal.expectedReturn);
+        const months = monthsToGoal(goal.targetAmount, goal.currentSaved, goal.monthlyContribution);
         recs.push({
           id: `goal-${goal.id}`, priority: "medium", category: "goal",
           title: `No product aligned with "${goal.name}"`,

@@ -91,7 +91,15 @@ export function GoalsView({
         goals.map(async (g) => {
           const amt = g.isPriority ? primaryAmt : eachOther;
           if (g.monthlyContribution !== amt) {
-            await GoalApi.update(g.id, { ...g, monthlyContribution: amt } as any);
+            await GoalApi.update(g.id, {
+              name: g.name,
+              targetAmount: g.targetAmount,
+              currentSaved: g.currentSaved,
+              monthlyContribution: amt,
+              isPriority: g.isPriority,
+              priority: "MEDIUM",
+              color: g.color,
+            });
           }
         })
       );
@@ -107,7 +115,17 @@ export function GoalsView({
         description: `"${data.name}" — target ${fmt(data.targetAmount)}`,
       });
       setShowAddGoal(false);
-      fetchGoals();
+      
+      // Fetch updated goals first
+      await fetchGoals();
+      
+      // If auto-allocation is active and this is a non-priority goal, trigger recalculation
+      if (isAutoAlloc && !data.isPriority && surplus > 0) {
+        // Give a moment for state to update, then trigger auto-allocation
+        setTimeout(() => {
+          handleAutoAlloc(primaryPct);
+        }, 100);
+      }
     } catch (err: any) {
       toast.error("Gagal menambah goal", { description: err.message });
       throw err;
@@ -127,7 +145,16 @@ export function GoalsView({
             }
           : data;
 
-      await GoalApi.update(editGoal.id, finalData as any);
+      // Transform to proper DTO (exclude type, color, etc.)
+      await GoalApi.update(editGoal.id, {
+        name: finalData.name,
+        targetAmount: finalData.targetAmount,
+        currentSaved: finalData.currentSaved,
+        monthlyContribution: finalData.monthlyContribution,
+        isPriority: finalData.isPriority,
+        priority: finalData.isPriority ? "HIGH" : "MEDIUM",
+        color: finalData.color,
+      });
       toast.success("Goal berhasil diperbarui", { description: `"${finalData.name}"` });
       setEditGoal(null);
       fetchGoals();
@@ -141,7 +168,15 @@ export function GoalsView({
     try {
       const g = goals.find((x) => x.id === id);
       if (g) {
-         await GoalApi.update(g.id, { ...g, isPriority: true } as any);
+         await GoalApi.update(g.id, {
+           name: g.name,
+           targetAmount: g.targetAmount,
+           currentSaved: g.currentSaved,
+           monthlyContribution: g.monthlyContribution,
+           isPriority: true,
+           priority: "HIGH",
+           color: g.color,
+         });
          toast.success("Priority goal diperbarui", { description: `"${g.name}" sekarang menjadi prioritas` });
          fetchGoals();
       }

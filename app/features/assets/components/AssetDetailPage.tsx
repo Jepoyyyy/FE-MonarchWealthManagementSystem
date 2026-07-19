@@ -15,7 +15,7 @@ interface AssetDetailPageProps {
   asset: Asset;
   product: Product;
   goals: Goal[];
-  onSave: (id: string, data: Partial<Asset>, txType?: "buy" | "sell", txQty?: number, txPrice?: number) => void;
+  onSave: (id: string, data: Partial<Asset>, txType?: "buy" | "sell", txQty?: number, txPrice?: number, txMethod?: "amount" | "units") => void;
   onDelete: (id: string) => void;
   onBack: () => void;
 }
@@ -123,7 +123,7 @@ export function AssetDetailPage({
           type={showTxModal}
           onClose={() => setShowTxModal(null)}
           onSaveTransaction={(txData) => {
-            onSave(asset.id, { amount: txData.amount }, showTxModal, txData.quantity, txData.currentValue);
+            onSave(asset.id, { amount: txData.amount }, showTxModal, txData.quantity, txData.currentValue, txData.method);
             setShowTxModal(null);
           }}
         />

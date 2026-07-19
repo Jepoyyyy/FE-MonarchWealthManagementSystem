@@ -84,22 +84,11 @@ export const monthsToGoal = (
   target: number,
   current: number,
   monthly: number,
-  annualReturn: number
 ): number => {
   if (current >= target) return 0;
   if (monthly <= 0) return -1;
-  const r = annualReturn / 100 / 12;
-  if (r === 0) {
-    const m = Math.ceil((target - current) / monthly);
-    return m > 1200 ? -1 : m;
-  }
-  let v = current;
-  let n = 0;
-  while (v < target && n < 1200) {
-    v = v * (1 + r) + monthly;
-    n++;
-  }
-  return n >= 1200 ? -1 : n;
+  const m = Math.ceil((target - current) / monthly);
+  return m > 1200 ? -1 : m;
 };
 
 export const fmtDuration = (months: number): string => {
@@ -124,12 +113,7 @@ export const monthlyNeeded = (
   target: number,
   current: number,
   months: number,
-  annualReturn: number
 ): number => {
   if (months <= 0) return 0;
-  const r = annualReturn / 100 / 12;
-  if (r === 0) return Math.max(0, Math.round((target - current) / months));
-  const g = Math.pow(1 + r, months);
-  const pmt = ((target - current * g) * r) / (g - 1);
-  return Math.max(0, Math.round(pmt));
+  return Math.max(0, Math.round((target - current) / months));
 };

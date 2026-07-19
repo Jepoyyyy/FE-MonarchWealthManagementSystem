@@ -1,18 +1,17 @@
 import { api } from '~/shared/api/client';
 import type { Goal, GoalRegistrationDTO, GoalProjectionDTO, GoalType } from '~/types';
 import { monthsToGoal } from '~/utils';
-import { GOAL_TYPE_CONFIG } from './goals.config';
+import { GOAL_TYPE_CONFIG, GOAL_MAX_MONTHS } from './goals.config';
 
 function toGoalPayload(data: any) {
   const target = data.targetAmount;
   const current = data.currentSaved || 0;
   const monthly = data.monthlyContribution;
-  const annualReturn = data.expectedReturn || 7.5;
-  
-  let months = monthsToGoal(target, current, monthly, annualReturn);
-  if (months < 0 || !isFinite(months)) {
-    months = 120; // 10 years fallback
-  }
+  const maxMonths = GOAL_MAX_MONTHS[(data.type as GoalType)] ?? 60;
+
+  let months = monthsToGoal(target, current, monthly);
+  // Clamp: must be [1, maxMonths] — backend enforces both @Future and per-type max
+  months = Math.min(Math.max(months <= 0 ? maxMonths : months, 1), maxMonths);
   
   const d = new Date();
   d.setMonth(d.getMonth() + months);
@@ -28,7 +27,6 @@ function toGoalPayload(data: any) {
     target_amount: target,
     monthly_contribution: monthly,
     target_date: targetDate,
-    expected_return: annualReturn,
     is_priority: data.isPriority || false,
     notes: data.notes || ""
   };
@@ -43,7 +41,6 @@ function fromGoalResponse(data: any): Goal {
     targetAmount: data.target_amount ?? data.targetAmount ?? 0,
     currentSaved: data.current_saved ?? data.currentSaved ?? 0,
     monthlyContribution: data.monthly_contribution ?? data.monthlyContribution ?? 0,
-    expectedReturn: data.expected_return ?? data.expectedReturn ?? 7.5,
     isPriority: data.is_priority ?? data.isPriority ?? false,
     color: data.color || GOAL_TYPE_CONFIG[typeMapped as GoalType]?.color || "#10b981",
     notes: data.notes || undefined,

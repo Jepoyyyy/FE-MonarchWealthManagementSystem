@@ -7,7 +7,6 @@ export interface Goal {
   targetAmount: number;
   currentSaved: number;
   monthlyContribution: number;
-  expectedReturn: number;
   isPriority: boolean;
   color: string;
   notes?: string;
@@ -25,11 +24,9 @@ export interface GoalAnalysis {
 
 export interface GoalRegistrationDTO {
   name: string;
-  type: string;
   targetAmount: number;
   currentSaved: number;
   monthlyContribution: number;
-  expectedReturn: number;
   priority: "HIGH" | "MEDIUM" | "LOW";
   isPriority: boolean;
   color: string;

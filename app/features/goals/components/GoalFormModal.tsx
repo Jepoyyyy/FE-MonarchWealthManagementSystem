@@ -62,7 +62,10 @@ export function GoalFormModal({
       setErr("Target amount must be greater than 0.");
       return;
     }
-    if (!autoDisabled && (!m || m <= 0)) {
+    // For non-priority goals in auto-allocation mode, allow 0 contribution
+    // Priority goals always need a manual contribution > 0
+    const needsManualContribution = !autoDisabled || isPriority;
+    if (needsManualContribution && (!m || m <= 0)) {
       setErr("Monthly contribution must be greater than 0.");
       return;
     }
@@ -76,7 +79,6 @@ export function GoalFormModal({
         targetAmount: t,
         currentSaved: s,
         monthlyContribution: m,
-        expectedReturn: portfolioReturn ?? 7.5,
         isPriority,
         color: GOAL_TYPE_CONFIG[type].color,
         notes: notes.trim() || undefined,
@@ -101,8 +103,7 @@ export function GoalFormModal({
       ? monthsToGoal(
           parseFloat(target),
           parseFloat(saved) || 0,
-          activeMonthly,
-          portfolioReturn ?? 7.5
+          activeMonthly
         )
       : null;
 
