@@ -36,3 +36,34 @@ export interface AdminDashboardDTO {
   };
   aum_trend: { month: number; value: number }[];
 }
+
+export interface AdminProductCreateDTO {
+  code: string;
+  name: string;
+  issuer: string;
+  type: string;
+  riskLevel: number;
+  annualReturn: number;
+  minInvestment: number;
+  currentPrice: number;
+  description: string;
+  tenor?: string;
+  lotSize: number;
+  isFractionalAllowed: boolean;
+  visible: boolean;
+}
+
+export interface AdminProductUpdateDTO {
+  name?: string;
+  issuer?: string;
+  type?: string;
+  riskLevel?: number;
+  annualReturn?: number;
+  minInvestment?: number;
+  currentPrice?: number;
+  description?: string;
+  tenor?: string;
+  lotSize?: number;
+  isFractionalAllowed?: boolean;
+  visible?: boolean;
+}
