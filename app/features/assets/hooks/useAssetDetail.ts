@@ -29,8 +29,13 @@ export function useAssetDetail({
   const isBond = product.type === "Bond" || product.type === "Sukuk";
   const isDeposit = product.type === "Deposit";
 
-  const lotNum = pnl ? pnl.units : (asset.quantity ?? 1);
-  const avgVal = pnl ? pnl.avg_price : (asset.quantity && asset.quantity > 0 ? asset.amount / asset.quantity : asset.amount);
+  const lotSize = product.lotSize || 100;
+  const lotNum = pnl ? (isStock ? pnl.units / lotSize : pnl.units) : (asset.quantity ?? 1);
+  const avgVal = pnl
+    ? pnl.avg_price
+    : (asset.quantity && asset.quantity > 0
+      ? (isStock ? asset.amount / (asset.quantity * lotSize) : asset.amount / asset.quantity)
+      : asset.amount);
   const currentAssetValue = pnl ? pnl.currentValue : asset.currentValue;
 
   const pnlAmt = pnl ? pnl.potential_pnl : (currentAssetValue - asset.amount);

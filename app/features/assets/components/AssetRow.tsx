@@ -7,6 +7,7 @@ import { ProductTypeBadge } from '~/features/products/components/ProductTypeBadg
 import { ConfirmModal } from '~/shared/components/ConfirmModal';
 import { Btn } from '~/shared/components/Button';
 import { usePortfolioStore } from '~/features/assets/portfolio.store';
+import { useProductsStore } from '~/features/products/products.store';
 
 interface AssetRowProps {
   asset: Asset;
@@ -19,10 +20,16 @@ interface AssetRowProps {
 export function AssetRow({ asset, goals, onSelect, onRemove, onAssignGoal }: AssetRowProps) {
   const [confirmRemoveId, setConfirmRemoveId] = useState<string | null>(null);
   const pnl = usePortfolioStore((s) => s.pnlData.find((x) => x.assetId === asset.id));
+  const product = useProductsStore((s) => s.products.find((p) => p.id === asset.productId));
+  const lotSize = product?.lotSize || 100;
+  const assetType = asset.type || product?.type || "Stock";
+  const isStock = assetType === "Stock";
+
   const curVal = pnl?.currentValue ?? asset.currentValue;
-  const qty = asset.quantity ?? asset.amount;
+  const qty = pnl
+    ? (isStock ? pnl.units / lotSize : pnl.units)
+    : (asset.quantity ?? asset.amount);
   const ret = ((curVal - asset.amount) / asset.amount) * 100;
-  const assetType = asset.type || "Stock";
 
   const qtyLabel = assetType === "Stock"
     ? `${qty} Lot`
