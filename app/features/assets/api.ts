@@ -34,13 +34,30 @@ function toAssetPayload(data: Omit<Asset, "id">, products: any[]) {
   };
 }
 
+function mapAsset(asset: any, products: any[]): Asset {
+  const camel = {
+    id: asset.id,
+    userId: asset.user_id,
+    productId: asset.product_id,
+    goalId: asset.goal_id,
+    amount: asset.amount,
+    units: asset.units,
+    currentValue: asset.current_value,
+    platform: asset.platform,
+    notes: asset.notes,
+    purchaseDate: (asset.purchase_date ?? "").split(" ")[0],
+    updatedAt: asset.updated_at,
+  };
+  return {
+    ...camel,
+    quantity: mapQty(camel, products),
+  } as Asset;
+}
+
 export const AssetApi = {
   list: async (products: any[]) => {
     const res = await api.get<any[]>("/api/v1/me/assets");
-    const mapped = (res.data ?? []).map((asset) => ({
-      ...asset,
-      quantity: mapQty(asset, products)
-    }));
+    const mapped = (res.data ?? []).map((asset) => mapAsset(asset, products));
     return { ...res, data: mapped };
   },
 
@@ -48,20 +65,14 @@ export const AssetApi = {
     const res = await api.post<any>("/api/v1/me/assets", toAssetPayload(data, products));
     return {
       ...res,
-      data: {
-        ...res.data,
-        quantity: mapQty(res.data, products)
-      }
+      data: mapAsset(res.data, products),
     };
   },
 
   update: async (id: string, data: Partial<Asset>, products: any[]) => {
     const res = await api.put<any>(`/api/v1/me/assets/${id}`, { goalId: data.goalId });
     return {
-      data: {
-        ...res.data,
-        quantity: mapQty(res.data, products)
-      }
+      data: mapAsset(res.data, products),
     };
   },
 
