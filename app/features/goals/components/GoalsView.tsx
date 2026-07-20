@@ -5,6 +5,7 @@ import { PageHeader } from "~/shared/components/PageHeader";
 import { Btn } from "~/shared/components/Button";
 import { FinancialProfileModal } from "~/features/finances";
 import { useGoalsStore } from "~/features/goals/goals.store";
+import { usePortfolioStore } from "~/features/assets/portfolio.store";
 import { GoalApi } from "~/features/goals/api";
 
 // Calculations
@@ -47,6 +48,9 @@ export function GoalsView({
 
   // Data layer
   const { goals, fetchGoals, fetchProjections } = useGoalsStore();
+  const fetchPortfolio = usePortfolioStore((s) => s.fetchPortfolio);
+  const portfolioLoading = usePortfolioStore((s) => s.loading);
+  const isLoading = portfolioLoading;
 
   // Custom hooks - business logic extraction
   const portfolio = usePortfolio(assets, products, user.id);
@@ -68,7 +72,8 @@ export function GoalsView({
   // Initial data fetch
   useEffect(() => {
     fetchGoals();
-  }, [fetchGoals]);
+    fetchPortfolio();
+  }, [fetchGoals, fetchPortfolio]);
 
   // Calculated metrics
   const avgFunded = calculateAverageFunded(goals);
@@ -147,43 +152,53 @@ export function GoalsView({
         }
       />
 
-      {/* Summary Stats */}
-      <GoalsSummaryStats
-        finProfile={finProfile}
-        totalExpenses={summary.totalExpenses}
-        surplus={summary.surplus}
-        unallocated={summary.unallocated}
-        avgFunded={avgFunded}
-        portfolioReturn={portfolio.weightedReturn}
-      />
-
-      {/* Empty State */}
-      {goals.length === 0 && <EmptyGoalsState onCreateGoal={() => setShowAddGoal(true)} />}
-
-      {/* Priority Goal */}
-      {autoAlloc.priorityGoal && (
-        <PriorityGoalSection
-          goal={autoAlloc.priorityGoal}
-          surplus={summary.surplus}
-          assignedAssets={portfolio.assets.filter((a) => a.goalId === autoAlloc.priorityGoal!.id)}
-          products={products}
-          onSetPriority={handleSetPriority}
-          onEdit={setEditGoal}
-          onDelete={operations.deleteGoal}
-        />
+      {isLoading && (
+        <div className="flex items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>
       )}
 
-      {/* Other Goals Grid */}
-      <OtherGoalsGrid
-        goals={autoAlloc.otherGoals}
-        hasPriorityGoal={!!autoAlloc.priorityGoal}
-        surplus={summary.surplus}
-        userAssets={portfolio.assets}
-        products={products}
-        onSetPriority={handleSetPriority}
-        onEdit={setEditGoal}
-        onDelete={operations.deleteGoal}
-      />
+      {!isLoading && (
+        <>
+          {/* Summary Stats */}
+          <GoalsSummaryStats
+            finProfile={finProfile}
+            totalExpenses={summary.totalExpenses}
+            surplus={summary.surplus}
+            unallocated={summary.unallocated}
+            avgFunded={avgFunded}
+            portfolioReturn={portfolio.weightedReturn}
+          />
+
+          {/* Empty State */}
+          {goals.length === 0 && <EmptyGoalsState onCreateGoal={() => setShowAddGoal(true)} />}
+
+          {/* Priority Goal */}
+          {autoAlloc.priorityGoal && (
+            <PriorityGoalSection
+              goal={autoAlloc.priorityGoal}
+              surplus={summary.surplus}
+              assignedAssets={portfolio.assets.filter((a) => a.goalId === autoAlloc.priorityGoal!.id)}
+              products={products}
+              onSetPriority={handleSetPriority}
+              onEdit={setEditGoal}
+              onDelete={operations.deleteGoal}
+            />
+          )}
+
+          {/* Other Goals Grid */}
+          <OtherGoalsGrid
+            goals={autoAlloc.otherGoals}
+            hasPriorityGoal={!!autoAlloc.priorityGoal}
+            surplus={summary.surplus}
+            userAssets={portfolio.assets}
+            products={products}
+            onSetPriority={handleSetPriority}
+            onEdit={setEditGoal}
+            onDelete={operations.deleteGoal}
+          />
+        </>
+      )}
 
       {/* Modals */}
       {showAddGoal && (
