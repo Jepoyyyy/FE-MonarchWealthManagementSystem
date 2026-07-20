@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Plus, Wallet, DollarSign, Percent, Briefcase, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import type { AppUser, Product, Asset, Goal, AuditLog } from "~/types";
-import { fmt, fmtFull, fmtPct } from "~/utils";
+import { fmt, fmtPct } from "~/utils";
 import { PageHeader } from '~/shared/components/PageHeader';
 import { StatCard } from '~/features/dashboard/components/StatCard';
 import { Btn } from '~/shared/components/Button';
@@ -11,7 +11,6 @@ import { AssetRow } from "./AssetRow";
 import { AssetApi } from '~/features/assets/api';
 import { usePortfolioStore } from '~/features/assets/portfolio.store';
 import { useGoalsStore } from '~/features/goals/goals.store';
-import { PortfolioService } from '~/features/assets/portfolio.service';
 import { handleGlobalApiError } from '~/shared/api';
 import { toast } from 'sonner';
 

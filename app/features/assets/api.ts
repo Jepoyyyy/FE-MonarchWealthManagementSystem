@@ -56,13 +56,11 @@ export const AssetApi = {
   },
 
   update: async (id: string, data: Partial<Asset>, products: any[]) => {
-    await api.put<any>(`/api/v1/me/assets/${id}`, { goalId: data.goalId });
-    // PUT response may lack productId — GET the full resource for accurate qty mapping
-    const full = await api.get<any>(`/api/v1/me/assets/${id}`);
+    const res = await api.put<any>(`/api/v1/me/assets/${id}`, { goalId: data.goalId });
     return {
       data: {
-        ...full.data,
-        quantity: mapQty(full.data, products)
+        ...res.data,
+        quantity: mapQty(res.data, products)
       }
     };
   },
