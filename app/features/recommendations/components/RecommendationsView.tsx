@@ -26,14 +26,12 @@ export function RecommendationsView({
   user,
   assets,
   products,
-  goals,
   finProfile,
   addLog,
   toast,
 }: RecommendationsViewProps) {
   const myAssets = assets.filter((a) => a.userId === user.id);
   const [trackingProduct, setTrackingProduct] = useState<Product | null>(null);
-
   const { recommendations, loading, fetchRecommendations } = useRecommendationsStore();
 
   useEffect(() => {

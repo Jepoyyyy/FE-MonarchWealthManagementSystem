@@ -12,6 +12,7 @@ CLAUDE.md
 /graphify-out/
 /test-result/
 /test/
+*.md
 
 # React Router
 /.react-router/

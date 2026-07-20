@@ -9,11 +9,13 @@ interface RecommendationsState {
   fetchRecommendations: () => Promise<void>;
 }
 
-export const useRecommendationsStore = create<RecommendationsState>((set) => ({
+export const useRecommendationsStore = create<RecommendationsState>((set, get) => ({
   recommendations: [],
   loading: false,
   error: null,
-  fetchRecommendations: async () => {
+  fetchRecommendations: async () => { 
+    if (get().loading) return;
+
     set({ loading: true, error: null });
     try {
       const res = await RecommendationApi.generate();

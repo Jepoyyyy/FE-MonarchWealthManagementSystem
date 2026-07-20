@@ -1,15 +1,27 @@
-import React, { useState, useMemo, useCallback, useEffect } from "react";
-import { Plus, Wallet, TrendingDown, DollarSign, Target, TrendingUp, Star, Edit3 } from "lucide-react";
+import React, { useState, useEffect, useCallback } from "react";
+import { Plus, Edit3 } from "lucide-react";
 import type { AppUser, Goal, FinancialProfile, Asset, Product } from "~/types";
-import { fmt } from "~/utils";
-import { PageHeader } from '~/shared/components/PageHeader';
-import { StatCard } from '~/features/dashboard/components/StatCard';
-import { Btn } from '~/shared/components/Button';
-import { GoalCard } from "./GoalCard";
-import { GoalFormModal } from "./GoalFormModal";
-import { FinancialProfileModal } from '~/features/finances';
-import { useGoalsStore } from '~/features/goals/goals.store';
-import { GoalApi } from '~/features/goals/api';
+import { PageHeader } from "~/shared/components/PageHeader";
+import { Btn } from "~/shared/components/Button";
+import { FinancialProfileModal } from "~/features/finances";
+import { useGoalsStore } from "~/features/goals/goals.store";
+import { GoalApi } from "~/features/goals/api";
+
+// Calculations
+import { calculateAverageFunded } from "~/features/goals/goals.calculations";
+
+// Custom hooks
+import { usePortfolio } from "~/features/goals/hooks/usePortfolio";
+import { useFinancialSummary } from "~/features/goals/hooks/useFinancialSummary";
+import { useAutoAllocation } from "~/features/goals/hooks/useAutoAllocation";
+import { useGoalOperations } from "~/features/goals/hooks/useGoalOperations";
+
+// UI components
+import { GoalsSummaryStats } from "~/features/goals/components/GoalsSummaryStats";
+import { EmptyGoalsState } from "~/features/goals/components/EmptyGoalsState";
+import { PriorityGoalSection } from "~/features/goals/components/PriorityGoalSection";
+import { OtherGoalsGrid } from "~/features/goals/components/OtherGoalsGrid";
+import { GoalFormModal } from "~/features/goals/components/GoalFormModal";
 
 interface GoalsViewProps {
   user: AppUser;
@@ -28,193 +40,99 @@ export function GoalsView({
   products,
   toast,
 }: GoalsViewProps) {
+  // UI state
   const [showAddGoal, setShowAddGoal] = useState(false);
   const [editGoal, setEditGoal] = useState<Goal | null>(null);
   const [showFinProfileModal, setShowFinProfileModal] = useState(false);
 
-  const { goals, loading, fetchGoals, fetchProjections } = useGoalsStore();
+  // Data layer
+  const { goals, fetchGoals, fetchProjections } = useGoalsStore();
 
+  // Custom hooks - business logic extraction
+  const portfolio = usePortfolio(assets, products, user.id);
+  const summary = useFinancialSummary(finProfile, goals);
+
+  const autoAlloc = useAutoAllocation(
+    goals,
+    summary.surplus,
+    fetchGoals,
+    (msg) => toast.error("Gagal mengalokasi surplus", { description: msg })
+  );
+
+  const operations = useGoalOperations(
+    fetchGoals,
+    (msg, desc) => toast.success(msg, { description: desc }),
+    (msg, desc) => toast.error(msg, { description: desc })
+  );
+
+  // Initial data fetch
   useEffect(() => {
     fetchGoals();
   }, [fetchGoals]);
 
-  const totalExpenses = useMemo(
-    () => Object.values(finProfile.expenses).reduce((a, b) => a + b, 0),
-    [finProfile.expenses]
-  );
-  const surplus = useMemo(() => finProfile.monthlyIncome - totalExpenses, [finProfile.monthlyIncome, totalExpenses]);
-  const totalAllocated = useMemo(() => goals.reduce((s, g) => s + g.monthlyContribution, 0), [goals]);
-  const unallocated = useMemo(() => surplus - totalAllocated, [surplus, totalAllocated]);
+  // Calculated metrics
+  const avgFunded = calculateAverageFunded(goals);
 
-  const myAssets = useMemo(() => assets.filter((a) => a.userId === user.id), [assets, user.id]);
-  const portfolioValue = useMemo(() => myAssets.reduce((s, a) => s + a.currentValue, 0), [myAssets]);
-  const portfolioReturn = useMemo(
-    () =>
-      portfolioValue > 0
-        ? parseFloat(
-            myAssets
-              .reduce((s, a) => {
-                const p = products.find((pr) => pr.id === a.productId);
-                return s + (p ? (a.currentValue / portfolioValue) * p.annualReturn : 0);
-              }, 0)
-              .toFixed(2)
-          )
-        : null,
-    [myAssets, portfolioValue, products]
-  );
-
-  const priorityGoal = useMemo(() => goals.find((g) => g.isPriority), [goals]);
-  const otherGoals = useMemo(() => goals.filter((g) => !g.isPriority), [goals]);
-
-  const isAutoAlloc = useMemo(() => goals.length >= 2 && !!priorityGoal, [goals.length, priorityGoal]);
-  const primaryPct = useMemo(
-    () => (isAutoAlloc && surplus > 0 ? Math.round((priorityGoal!.monthlyContribution / surplus) * 100) : 50),
-    [isAutoAlloc, surplus, priorityGoal]
+  // Financial profile save handler
+  const handleSaveFinProfile = useCallback(
+    (data: any) => {
+      setFinProfile({
+        monthlyIncome: data.monthlyIncome,
+        expenses: {
+          housing: data.housing,
+          food: data.food,
+          transport: data.transport,
+          utilities: data.utilities,
+          healthcare: data.healthcare,
+          entertainment: data.entertainment,
+          insurance: data.insurance,
+          other: data.other,
+        },
+      });
+      fetchGoals();
+      fetchProjections();
+      toast.success("Financial profile updated successfully");
+    },
+    [setFinProfile, fetchGoals, fetchProjections, toast]
   );
 
-  const handleAutoAlloc = async (pct: number) => {
-    try {
-      await GoalApi.autoAllocate(pct);
+  // Goal form handlers
+  const handleAddGoal = async (data: Omit<Goal, "id">) => {
+    await operations.addGoal(data);
+    setShowAddGoal(false);
+
+    // Trigger auto-allocation if applicable (predict next state to avoid render lag)
+    const nextIsAutoAlloc = (goals.length + 1) >= 2 && !!autoAlloc.priorityGoal;
+    if (nextIsAutoAlloc && !data.isPriority && summary.surplus > 0 && autoAlloc.priorityGoal) {
+      const nextPrimaryPct = Math.round((autoAlloc.priorityGoal.monthlyContribution / summary.surplus) * 100);
+      await GoalApi.autoAllocate(nextPrimaryPct);
       await fetchGoals();
-    } catch (err: any) {
-      toast.error("Gagal mengalokasi surplus", { description: err.message });
     }
   };
 
-  const addGoal = async (data: Omit<Goal, "id">) => {
-    try {
-      await GoalApi.create({
-        name: data.name,
-        type: data.type,
-        targetAmount: data.targetAmount,
-        currentSaved: data.currentSaved,
-        monthlyContribution: data.monthlyContribution,
-        priority: data.isPriority ? "HIGH" : "MEDIUM",
-        isPriority: data.isPriority,
-        color: data.color,
-      });
-      toast.success("Goal berhasil ditambahkan", {
-        description: `"${data.name}" — target ${fmt(data.targetAmount)}`,
-      });
-      setShowAddGoal(false);
-      
-      // Fetch updated goals first
-      await fetchGoals();
-
-      // Calculate auto-allocation based on updated state
-      // After adding a goal, new goals.length = current + 1
-      const newIsAutoAlloc = (goals.length + 1) >= 2 && !!priorityGoal;
-      const newPrimaryPct = newIsAutoAlloc && priorityGoal && surplus > 0
-        ? Math.round((priorityGoal.monthlyContribution / surplus) * 100)
-        : 50;
-
-      // Trigger auto-allocation if active and this is a non-priority goal
-      if (newIsAutoAlloc && !data.isPriority && surplus > 0) {
-        await handleAutoAlloc(newPrimaryPct);
-      }
-    } catch (err: any) {
-      toast.error("Gagal menambah goal", { description: err.message });
-      throw err;
-    }
-  };
-
-  const saveEdit = async (data: Omit<Goal, "id">) => {
+  const handleEditGoal = async (data: Omit<Goal, "id">) => {
     if (!editGoal) return;
-    try {
-      const finalData =
-        isAutoAlloc && !editGoal.isPriority && surplus > 0
-          ? {
-              ...data,
-              monthlyContribution: Math.floor(
-                Math.max(0, surplus - Math.round((surplus * primaryPct) / 100)) / (otherGoals.length || 1)
-              ),
-            }
-          : data;
 
-      // Transform to proper DTO
-      await GoalApi.update(editGoal.id, {
-        name: finalData.name,
-        type: editGoal.type,
-        targetAmount: finalData.targetAmount,
-        currentSaved: finalData.currentSaved,
-        monthlyContribution: finalData.monthlyContribution,
-        isPriority: finalData.isPriority,
-        priority: finalData.isPriority ? "HIGH" : "MEDIUM",
-        color: finalData.color,
-      });
-      toast.success("Goal berhasil diperbarui", { description: `"${finalData.name}"` });
-      setEditGoal(null);
-      await fetchGoals();
-    } catch (err: any) {
-      toast.error("Gagal memperbarui goal", { description: err.message });
-      throw err;
-    }
+    // Apply auto-allocation calculation if needed
+    const finalData =
+      autoAlloc.isActive && !editGoal.isPriority && summary.surplus > 0
+        ? {
+            ...data,
+            monthlyContribution: autoAlloc.calculateOtherGoalAmount(autoAlloc.otherGoals.length),
+          }
+        : data;
+
+    await operations.updateGoal(editGoal.id, finalData);
+    setEditGoal(null);
   };
 
-  const setPriority = async (id: string) => {
-    try {
-      const g = goals.find((x) => x.id === id);
-      if (g) {
-         await GoalApi.update(g.id, {
-           name: g.name,
-           type: g.type,
-           targetAmount: g.targetAmount,
-           currentSaved: g.currentSaved,
-           monthlyContribution: g.monthlyContribution,
-           isPriority: true,
-           priority: "HIGH",
-           color: g.color,
-         });
-         toast.success("Priority goal diperbarui", { description: `"${g.name}" sekarang menjadi prioritas` });
-         await fetchGoals();
-      }
-    } catch (err: any) {
-      toast.error("Gagal mengubah prioritas", { description: err.message });
-    }
+  const handleSetPriority = async (id: string) => {
+    await operations.setPriority(id, goals);
   };
-
-  const deleteGoal = async (id: string) => {
-    try {
-      await GoalApi.delete(id);
-      await fetchGoals();
-      toast.success("Goal berhasil dihapus");
-    } catch (err: any) {
-      toast.error("Gagal menghapus goal", { description: err.message });
-    }
-  };
-
-
-  const handleSaveFinProfile = useCallback((data: any) => {
-    setFinProfile({
-      monthlyIncome: data.monthlyIncome,
-      expenses: {
-        housing: data.housing,
-        food: data.food,
-        transport: data.transport,
-        utilities: data.utilities,
-        healthcare: data.healthcare,
-        entertainment: data.entertainment,
-        insurance: data.insurance,
-        other: data.other,
-      },
-    });
-    fetchGoals();
-    fetchProjections();
-    toast.success("Financial profile updated successfully");
-  }, [setFinProfile, fetchGoals, fetchProjections, toast]);
-
-  const avgFunded = useMemo(
-    () =>
-      goals.length > 0
-        ? Math.round(
-            goals.reduce((s, g) => s + Math.min((g.currentSaved / g.targetAmount) * 100, 100), 0) / goals.length
-          )
-        : 0,
-    [goals]
-  );
 
   return (
     <div className="space-y-6">
+      {/* Header */}
       <PageHeader
         title="Financial Goals"
         action={
@@ -229,129 +147,78 @@ export function GoalsView({
         }
       />
 
-      {/* Summary Grid */}
-      <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
-        <StatCard label="Monthly Income" value={fmt(finProfile.monthlyIncome)} icon={<Wallet size={16} />} />
-        <StatCard label="Monthly Expenses" value={fmt(totalExpenses)} icon={<TrendingDown size={16} />} />
-        <StatCard
-          label="Investable Surplus"
-          value={fmt(Math.max(surplus, 0))}
-          sub={surplus < 0 ? "Deficit — review expenses" : `${fmt(unallocated)} unallocated`}
-          icon={<DollarSign size={16} />}
-          trend={surplus >= 0 ? (unallocated >= 0 ? "up" : "down") : "down"}
-        />
-        <StatCard label="Goals Progress" value={`${avgFunded}%`} sub="avg. funded" icon={<Target size={16} />} trend="up" />
-        <StatCard
-          label="Portfolio Return"
-          value={portfolioReturn !== null ? `${portfolioReturn}%` : "—"}
-          sub={portfolioReturn !== null ? "weighted avg. · live" : "No holdings yet"}
-          icon={<TrendingUp size={16} />}
-          trend={portfolioReturn !== null ? "up" : "neutral"}
-        />
-      </div>
+      {/* Summary Stats */}
+      <GoalsSummaryStats
+        finProfile={finProfile}
+        totalExpenses={summary.totalExpenses}
+        surplus={summary.surplus}
+        unallocated={summary.unallocated}
+        avgFunded={avgFunded}
+        portfolioReturn={portfolio.weightedReturn}
+      />
 
-
-
-      {/* No goals state */}
-      {goals.length === 0 && (
-        <div className="bg-card rounded-xl border border-border flex flex-col items-center justify-center py-20 text-center">
-          <Target size={40} className="text-muted-foreground mb-3" />
-          <p className="font-semibold text-lg text-foreground" style={{ fontFamily: "var(--font-serif)" }}>
-            No goals yet
-          </p>
-          <p className="text-sm text-muted-foreground mt-1 mb-5">
-            Set your first financial goal and let the calculator show you how to get there.
-          </p>
-          <Btn onClick={() => setShowAddGoal(true)}>
-            <Plus size={14} /> Create First Goal
-          </Btn>
-        </div>
-      )}
+      {/* Empty State */}
+      {goals.length === 0 && <EmptyGoalsState onCreateGoal={() => setShowAddGoal(true)} />}
 
       {/* Priority Goal */}
-      {priorityGoal && (
-        <div className="mb-5">
-          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
-            <Star size={12} className="text-amber-500" /> Priority Goal
-          </h3>
-          <GoalCard
-            goal={priorityGoal}
-            surplus={surplus}
-            assignedAssets={myAssets.filter((a) => a.goalId === priorityGoal.id)}
-            products={products}
-            onSetPriority={setPriority}
-            onEdit={setEditGoal}
-            onDelete={deleteGoal}
-          />
-        </div>
+      {autoAlloc.priorityGoal && (
+        <PriorityGoalSection
+          goal={autoAlloc.priorityGoal}
+          surplus={summary.surplus}
+          assignedAssets={portfolio.assets.filter((a) => a.goalId === autoAlloc.priorityGoal!.id)}
+          products={products}
+          onSetPriority={handleSetPriority}
+          onEdit={setEditGoal}
+          onDelete={operations.deleteGoal}
+        />
       )}
 
-      {/* Other goals */}
-      {otherGoals.length > 0 && (
-        <div>
-          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
-            <Target size={12} /> {priorityGoal ? "Other Goals" : "Your Goals"}
-          </h3>
-          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
-            {otherGoals.map((g) => (
-              <GoalCard
-                key={g.id}
-                goal={g}
-                surplus={surplus}
-                assignedAssets={myAssets.filter((a) => a.goalId === g.id)}
-                products={products}
-                onSetPriority={setPriority}
-                onEdit={setEditGoal}
-                onDelete={deleteGoal}
-              />
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Other Goals Grid */}
+      <OtherGoalsGrid
+        goals={autoAlloc.otherGoals}
+        hasPriorityGoal={!!autoAlloc.priorityGoal}
+        surplus={summary.surplus}
+        userAssets={portfolio.assets}
+        products={products}
+        onSetPriority={handleSetPriority}
+        onEdit={setEditGoal}
+        onDelete={operations.deleteGoal}
+      />
 
-      {/* Form Modals */}
+      {/* Modals */}
       {showAddGoal && (
         <GoalFormModal
-          onSave={addGoal}
+          onSave={handleAddGoal}
           onClose={() => setShowAddGoal(false)}
-          surplus={surplus}
+          surplus={summary.surplus}
           monthlyIncome={finProfile.monthlyIncome}
-          portfolioReturn={portfolioReturn}
-          isAutoAlloc={isAutoAlloc}
+          portfolioReturn={portfolio.weightedReturn}
+          isAutoAlloc={autoAlloc.isActive}
           autoMonthlyAmount={
-            isAutoAlloc && surplus > 0
-              ? (() => {
-                  const primaryAmt = Math.round((surplus * primaryPct) / 100);
-                  const remaining = Math.max(0, surplus - primaryAmt);
-                  // When adding a new other goal, the total other goals count will be otherGoals.length + 1
-                  return Math.floor(remaining / (otherGoals.length + 1));
-                })()
+            autoAlloc.isActive && summary.surplus > 0
+              ? autoAlloc.calculateOtherGoalAmount(autoAlloc.otherGoals.length + 1)
               : undefined
           }
         />
       )}
+
       {editGoal && (
         <GoalFormModal
           initial={editGoal}
-          onSave={saveEdit}
+          onSave={handleEditGoal}
           onClose={() => setEditGoal(null)}
-          surplus={surplus}
+          surplus={summary.surplus}
           monthlyIncome={finProfile.monthlyIncome}
-          portfolioReturn={portfolioReturn}
-          isAutoAlloc={isAutoAlloc}
+          portfolioReturn={portfolio.weightedReturn}
+          isAutoAlloc={autoAlloc.isActive}
           autoMonthlyAmount={
-            isAutoAlloc && !editGoal.isPriority && surplus > 0
-              ? (() => {
-                  const primaryAmt = Math.round((surplus * primaryPct) / 100);
-                  const remaining = Math.max(0, surplus - primaryAmt);
-                  return otherGoals.length > 0 ? Math.floor(remaining / otherGoals.length) : 0;
-                })()
+            autoAlloc.isActive && !editGoal.isPriority && summary.surplus > 0
+              ? autoAlloc.calculateOtherGoalAmount(autoAlloc.otherGoals.length)
               : undefined
           }
         />
       )}
 
-      {/* Financial Profile Modal */}
       <FinancialProfileModal
         open={showFinProfileModal}
         onClose={() => setShowFinProfileModal(false)}
