@@ -10,6 +10,9 @@ export interface Asset {
   notes?: string;
   goalId?: string;
   tenorMonths?: number;
+  name?: string;
+  issuer?: string;
+  type?: string;
 }
 
 export interface AssetsPnLResponse {

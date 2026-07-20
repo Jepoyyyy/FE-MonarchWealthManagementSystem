@@ -24,6 +24,7 @@ export interface GoalAnalysis {
 
 export interface GoalRegistrationDTO {
   name: string;
+  type: GoalType;
   targetAmount: number;
   currentSaved: number;
   monthlyContribution: number;

@@ -9,6 +9,7 @@ import { TrackModal } from '~/features/products/components/TrackModal';
 import { AssetDetailPage } from "./AssetDetailPage";
 import { AssetRow } from "./AssetRow";
 import { AssetApi } from '~/features/assets/api';
+import { ProductApi } from '~/features/products';
 import { usePortfolioStore } from '~/features/assets/portfolio.store';
 import { useGoalsStore } from '~/features/goals/goals.store';
 import { handleGlobalApiError } from '~/shared/api';
@@ -29,6 +30,8 @@ export function AssetsView({
 }: AssetsViewProps) {
   const [showAdd, setShowAdd] = useState(false);
   const [detailAssetId, setDetailAssetId] = useState<string | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [loadingProduct, setLoadingProduct] = useState(false);
   const assets = usePortfolioStore((s) => s.assets);
 
   const myAssets = (assets || []).filter((a) => a.userId === user.id);
@@ -58,7 +61,7 @@ export function AssetsView({
         // Derive productId from store assets (not stale closure myAssets)
         const storeAssets = usePortfolioStore.getState().assets;
         const asset = storeAssets.find(a => a.id === id);
-        const p = asset ? products.find((prod) => prod.id === asset.productId) : undefined;
+        const p = (asset ? products.find((prod) => prod.id === asset.productId) : undefined) || selectedProduct;
         const action = txType === "buy" ? "BUY" : "SELL";
         const ptype = p?.type;
         const payload: { action: string; units?: number; amount?: number } = { action };
@@ -119,18 +122,48 @@ export function AssetsView({
     }
   };
 
-  const detailAsset = detailAssetId ? myAssets.find((a) => a.id === detailAssetId) : null;
-  const detailProduct = detailAsset ? products.find((p) => p.id === detailAsset.productId) : null;
+  const handleSelectAsset = async (id: string) => {
+    setDetailAssetId(id);
+    const asset = myAssets.find((a) => a.id === id);
+    if (!asset) return;
 
-  if (detailAsset && detailProduct) {
+    setLoadingProduct(true);
+    try {
+      const res = await ProductApi.getById(asset.productId);
+      setSelectedProduct(res.data);
+    } catch (err: any) {
+      if (!handleGlobalApiError(err)) {
+        toast.error("Gagal memuat detail produk", { description: err.message || "Unknown error" });
+      }
+      setDetailAssetId(null);
+    } finally {
+      setLoadingProduct(false);
+    }
+  };
+
+  const detailAsset = detailAssetId ? myAssets.find((a) => a.id === detailAssetId) : null;
+
+  if (loadingProduct) {
+    return (
+      <div className="flex flex-col items-center justify-center py-32 text-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <p className="text-sm text-muted-foreground mt-4">Loading product details...</p>
+      </div>
+    );
+  }
+
+  if (detailAsset && selectedProduct) {
     return (
       <AssetDetailPage
         asset={detailAsset}
-        product={detailProduct}
+        product={selectedProduct}
         goals={goals}
         onSave={updateAsset}
         onDelete={removeAsset}
-        onBack={() => setDetailAssetId(null)}
+        onBack={() => {
+          setDetailAssetId(null);
+          setSelectedProduct(null);
+        }}
       />
     );
   }
@@ -192,7 +225,7 @@ export function AssetsView({
           <table className="w-full text-sm min-w-200">
             <thead>
               <tr style={{ background: "var(--muted)", borderBottom: "1px solid var(--border)" }}>
-                {["Product", "Risk", "Qty", "Platform", "Date", "Cost Basis", "Cur Value", "P/L", "Goals", ""].map(
+                {["Product", "Qty", "Platform", "Date", "Cost Basis", "Cur Value", "P/L", "Goals", ""].map(
                   (h) => (
                     <th
                       key={h}
@@ -209,9 +242,8 @@ export function AssetsView({
                 <AssetRow
                   key={a.id}
                   asset={a}
-                  products={products}
                   goals={goals}
-                  onSelect={setDetailAssetId}
+                  onSelect={handleSelectAsset}
                   onRemove={removeAsset}
                   onAssignGoal={assignGoal}
                 />
@@ -219,7 +251,7 @@ export function AssetsView({
             </tbody>
             <tfoot>
               <tr style={{ background: "var(--muted)", borderTop: "2px solid var(--border)" }}>
-                <td colSpan={5} className="px-4 py-3 text-xs font-semibold text-foreground">
+                <td colSpan={4} className="px-4 py-3 text-xs font-semibold text-foreground">
                   Total · {myAssets.length} position{myAssets.length !== 1 ? "s" : ""}
                 </td>
                 <td

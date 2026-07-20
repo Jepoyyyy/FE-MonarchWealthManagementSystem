@@ -1,37 +1,34 @@
 import { useState } from "react";
 import { Trash2, ArrowUpRight, ArrowDownRight } from "lucide-react";
-import type { Product, Asset, Goal, ProductType } from "~/types";
+import type { Asset, Goal, ProductType } from "~/types";
 import { GOAL_TYPE_CONFIG } from '~/features/goals/goals.config';
 import { fmt, fmtDate, fmtPct } from "~/utils";
 import { ProductTypeBadge } from '~/features/products/components/ProductTypeBadge';
-import { RiskLevelBadge } from '~/features/profile/components/RiskLevelBadge';
 import { ConfirmModal } from '~/shared/components/ConfirmModal';
 import { Btn } from '~/shared/components/Button';
 import { usePortfolioStore } from '~/features/assets/portfolio.store';
 
 interface AssetRowProps {
   asset: Asset;
-  products: Product[];
   goals: Goal[];
   onSelect: (id: string) => void;
   onRemove: (id: string) => void;
   onAssignGoal: (assetId: string, goalId: string | undefined) => void;
 }
 
-export function AssetRow({ asset, products, goals, onSelect, onRemove, onAssignGoal }: AssetRowProps) {
+export function AssetRow({ asset, goals, onSelect, onRemove, onAssignGoal }: AssetRowProps) {
   const [confirmRemoveId, setConfirmRemoveId] = useState<string | null>(null);
-  const p = products.find((pr) => pr.id === asset.productId) || { name: "Unknown", issuer: "Unknown", type: "stock" as const, riskLevel: 1 };
   const pnl = usePortfolioStore((s) => s.pnlData.find((x) => x.assetId === asset.id));
   const curVal = pnl?.currentValue ?? asset.currentValue;
   const qty = asset.quantity ?? asset.amount;
   const ret = ((curVal - asset.amount) / asset.amount) * 100;
-  const { type } = p;
+  const assetType = asset.type || "Stock";
 
-  const qtyLabel = type === "Stock"
+  const qtyLabel = assetType === "Stock"
     ? `${qty} Lot`
-    : type === "Mutual Fund" || type === "Money Market" || type === "Balanced Fund"
+    : assetType === "Mutual Fund" || assetType === "Money Market" || assetType === "Balanced Fund"
       ? `${qty.toFixed(4)}`
-      : type === "Deposit"
+      : assetType === "Deposit"
         ? "—"
         : fmt(Math.round(qty));
 
@@ -44,15 +41,12 @@ export function AssetRow({ asset, products, goals, onSelect, onRemove, onAssignG
       >
         <td className="px-4 py-3">
           <div className="flex items-center gap-2">
-            <ProductTypeBadge type={p.type as ProductType} />
+            <ProductTypeBadge type={assetType as ProductType} />
             <div>
-              <p className="text-xs font-semibold leading-tight text-foreground">{p.name}</p>
-              <p className="text-xs text-muted-foreground">{p.issuer}</p>
+              <p className="text-xs font-semibold leading-tight text-foreground">{asset.name || "Unknown"}</p>
+              <p className="text-xs text-muted-foreground">{asset.issuer || "Unknown"}</p>
             </div>
           </div>
-        </td>
-        <td className="px-4 py-3">
-          <RiskLevelBadge level={p.riskLevel} />
         </td>
         <td
           className="px-4 py-3 text-xs text-foreground"

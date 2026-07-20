@@ -47,6 +47,9 @@ function mapAsset(asset: any, products: any[]): Asset {
     notes: asset.notes,
     purchaseDate: (asset.purchase_date ?? "").split(" ")[0],
     updatedAt: asset.updated_at,
+    name: asset.name,
+    issuer: asset.issuer,
+    type: asset.type,
   };
   return {
     ...camel,
