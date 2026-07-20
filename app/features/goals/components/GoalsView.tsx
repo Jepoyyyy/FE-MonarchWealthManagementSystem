@@ -32,7 +32,7 @@ export function GoalsView({
   const [editGoal, setEditGoal] = useState<Goal | null>(null);
   const [showFinProfileModal, setShowFinProfileModal] = useState(false);
 
-  const { goals, loading, fetchGoals } = useGoalsStore();
+  const { goals, loading, fetchGoals, fetchProjections } = useGoalsStore();
 
   useEffect(() => {
     fetchGoals();
@@ -83,7 +83,16 @@ export function GoalsView({
 
   const addGoal = async (data: Omit<Goal, "id">) => {
     try {
-      await GoalApi.create(data as any);
+      await GoalApi.create({
+        name: data.name,
+        type: data.type,
+        targetAmount: data.targetAmount,
+        currentSaved: data.currentSaved,
+        monthlyContribution: data.monthlyContribution,
+        priority: data.isPriority ? "HIGH" : "MEDIUM",
+        isPriority: data.isPriority,
+        color: data.color,
+      });
       toast.success("Goal berhasil ditambahkan", {
         description: `"${data.name}" — target ${fmt(data.targetAmount)}`,
       });
@@ -91,13 +100,17 @@ export function GoalsView({
       
       // Fetch updated goals first
       await fetchGoals();
-      
-      // If auto-allocation is active and this is a non-priority goal, trigger recalculation
-      if (isAutoAlloc && !data.isPriority && surplus > 0) {
-        // Give a moment for state to update, then trigger auto-allocation
-        setTimeout(() => {
-          handleAutoAlloc(primaryPct);
-        }, 100);
+
+      // Calculate auto-allocation based on updated state
+      // After adding a goal, new goals.length = current + 1
+      const newIsAutoAlloc = (goals.length + 1) >= 2 && !!priorityGoal;
+      const newPrimaryPct = newIsAutoAlloc && priorityGoal && surplus > 0
+        ? Math.round((priorityGoal.monthlyContribution / surplus) * 100)
+        : 50;
+
+      // Trigger auto-allocation if active and this is a non-priority goal
+      if (newIsAutoAlloc && !data.isPriority && surplus > 0) {
+        await handleAutoAlloc(newPrimaryPct);
       }
     } catch (err: any) {
       toast.error("Gagal menambah goal", { description: err.message });
@@ -118,9 +131,10 @@ export function GoalsView({
             }
           : data;
 
-      // Transform to proper DTO (exclude type, color, etc.)
+      // Transform to proper DTO
       await GoalApi.update(editGoal.id, {
         name: finalData.name,
+        type: editGoal.type,
         targetAmount: finalData.targetAmount,
         currentSaved: finalData.currentSaved,
         monthlyContribution: finalData.monthlyContribution,
@@ -130,7 +144,7 @@ export function GoalsView({
       });
       toast.success("Goal berhasil diperbarui", { description: `"${finalData.name}"` });
       setEditGoal(null);
-      fetchGoals();
+      await fetchGoals();
     } catch (err: any) {
       toast.error("Gagal memperbarui goal", { description: err.message });
       throw err;
@@ -143,6 +157,7 @@ export function GoalsView({
       if (g) {
          await GoalApi.update(g.id, {
            name: g.name,
+           type: g.type,
            targetAmount: g.targetAmount,
            currentSaved: g.currentSaved,
            monthlyContribution: g.monthlyContribution,
@@ -151,7 +166,7 @@ export function GoalsView({
            color: g.color,
          });
          toast.success("Priority goal diperbarui", { description: `"${g.name}" sekarang menjadi prioritas` });
-         fetchGoals();
+         await fetchGoals();
       }
     } catch (err: any) {
       toast.error("Gagal mengubah prioritas", { description: err.message });
@@ -161,7 +176,7 @@ export function GoalsView({
   const deleteGoal = async (id: string) => {
     try {
       await GoalApi.delete(id);
-      fetchGoals();
+      await fetchGoals();
       toast.success("Goal berhasil dihapus");
     } catch (err: any) {
       toast.error("Gagal menghapus goal", { description: err.message });
@@ -183,8 +198,10 @@ export function GoalsView({
         other: data.other,
       },
     });
+    fetchGoals();
+    fetchProjections();
     toast.success("Financial profile updated successfully");
-  }, [setFinProfile, toast]);
+  }, [setFinProfile, fetchGoals, fetchProjections, toast]);
 
   const avgFunded = useMemo(
     () =>

@@ -34,15 +34,15 @@ export function AddTransactionModal({ asset, product, type, onClose, onSaveTrans
         </div>
 
         {product.type === "Stock" && (
-          <StockTransactionForm type={type} currentPrice={asset.currentValue} onClose={onClose} onSubmit={onSaveTransaction} />
+          <StockTransactionForm type={type} currentPrice={product.currentPrice} onClose={onClose} onSubmit={onSaveTransaction} />
         )}
 
         {(product.type === "Mutual Fund" || product.type === "Money Market" || product.type === "Balanced Fund") && (
-          <MutualFundTransactionForm type={type} currentPrice={asset.currentValue} onClose={onClose} onSubmit={onSaveTransaction} />
+          <MutualFundTransactionForm type={type} currentPrice={product.currentPrice} onClose={onClose} onSubmit={onSaveTransaction} />
         )}
 
         {(product.type === "Bond" || product.type === "Sukuk") && (
-          <BondTransactionForm type={type} currentPrice={asset.currentValue} onClose={onClose} onSubmit={onSaveTransaction} />
+          <BondTransactionForm type={type} currentPrice={product.currentPrice} onClose={onClose} onSubmit={onSaveTransaction} />
         )}
 
         {product.type === "Deposit" && (

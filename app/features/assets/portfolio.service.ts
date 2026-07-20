@@ -12,32 +12,6 @@ const BUY_MULT: Record<ProductType, number> = {
 };
 
 export const PortfolioService = {
-  calculateCurrentValue(asset: Asset, product: Product, quantityOverride?: number): number {
-    const qty = quantityOverride ?? asset.quantity ?? 1;
-    switch (product.type) {
-      case "Stock": return qty * 100 * asset.currentValue;
-      case "Mutual Fund":
-      case "Balanced Fund":
-      case "Money Market": return qty * asset.currentValue;
-      case "Bond":
-      case "Sukuk": return qty * (asset.currentValue / 100);
-      case "Deposit":
-      default: return asset.amount;
-    }
-  },
-
-  calculatePNL(amountInvested: number, currentAssetValue: number, averagePrice: number, currentPrice: number): {
-    pnlAmt: number;
-    pnlPct: number;
-  } {
-    const pnlAmt = currentAssetValue - amountInvested;
-    const pnlPct = averagePrice > 0 ? ((currentPrice - averagePrice) / averagePrice) * 100 : 0;
-    return { pnlAmt, pnlPct };
-  },
-
-  calculateAverageValue(asset: Asset): number {
-    return asset.quantity && asset.quantity > 0 ? asset.amount / asset.quantity : asset.amount;
-  },
 
   processTransaction(
     asset: Asset,

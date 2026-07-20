@@ -9,7 +9,6 @@ import { AddTransactionModal } from "./AddTransactionModal";
 import { TransactionHistoryTable } from "./TransactionHistoryTable";
 import { Btn } from '~/shared/components/Button';
 import { useAssetDetail } from '~/features/assets/hooks/useAssetDetail';
-import { usePortfolioStore } from '~/features/assets/portfolio.store';
 
 interface AssetDetailPageProps {
   asset: Asset;
@@ -52,12 +51,7 @@ export function AssetDetailPage({
     handleSave,
   } = useAssetDetail({ asset, product, onSave, onBack });
 
-  const { pnlData } = usePortfolioStore();
-  const pnl = pnlData.find(x => x.assetId === asset.id);
-  
-  const displayCurValNum = pnl ? pnl.currentValue : curValNum;
-  const displayPnlAmt = pnl ? pnl.potential_pnl : pnlAmt;
-  const displayPnlPct = pnl ? pnl.potential_pnl_percent : pnlPct;
+
 
   return (
     <div className="space-y-6">
@@ -180,7 +174,7 @@ export function AssetDetailPage({
               className="text-lg font-bold text-foreground"
               style={{ fontFamily: "var(--font-mono)" }}
             >
-              {isBond ? `${avgVal.toFixed(2)}%` : fmt(Math.round(avgVal))}
+              {isBond ? `${(avgVal * 100).toFixed(2)}%` : fmt(Math.round(avgVal))}
             </p>
             <p className="text-xs text-muted-foreground">
               {isBond ? "avg. purchase price" : "per unit"}
@@ -195,10 +189,10 @@ export function AssetDetailPage({
               className="text-lg font-bold"
               style={{
                 fontFamily: "var(--font-mono)",
-                color: displayCurValNum >= avgVal ? "var(--foreground)" : "#ef4444",
+                color: product.currentPrice >= (isBond ? avgVal * 100 : avgVal) ? "var(--foreground)" : "#ef4444",
               }}
             >
-              {isStock || isMF ? fmt(displayCurValNum) : `${displayCurValNum.toFixed(2)}%`}
+              {isStock || isMF ? fmt(product.currentPrice) : `${product.currentPrice.toFixed(2)}%`}
             </p>
             <p className="text-xs text-muted-foreground">
               {isStock ? "per share" : isMF ? "per unit / NAV" : isBond ? "of face value" : ""}
@@ -241,23 +235,23 @@ export function AssetDetailPage({
             <div className="flex items-center gap-2">
               <span
                 className={`flex items-center gap-0.5 text-xs font-bold px-2 py-1 rounded-full ${
-                  displayPnlAmt >= 0 ? "bg-emerald-500/10 text-emerald-600" : "bg-red-500/10 text-red-500"
+                  pnlAmt >= 0 ? "bg-emerald-500/10 text-emerald-600" : "bg-red-500/10 text-red-500"
                 }`}
               >
-                {displayPnlAmt >= 0 ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
-                {displayPnlAmt >= 0 ? "+" : ""}
-                {fmtPct(displayPnlPct)}
+                {pnlAmt >= 0 ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
+                {pnlAmt >= 0 ? "+" : ""}
+                {fmtPct(pnlPct)}
               </span>
             </div>
           </div>
           <div className="p-5 flex justify-between items-center bg-muted/30">
             <span className="text-xs text-muted-foreground">Est. Value Change</span>
             <span
-              className={`text-base font-bold ${displayPnlAmt >= 0 ? "text-emerald-600" : "text-red-500"}`}
+              className={`text-base font-bold ${pnlAmt >= 0 ? "text-emerald-600" : "text-red-500"}`}
               style={{ fontFamily: "var(--font-mono)" }}
             >
-              {displayPnlAmt >= 0 ? "+" : ""}
-              {fmt(displayPnlAmt)}
+              {pnlAmt >= 0 ? "+" : ""}
+              {fmt(pnlAmt)}
             </span>
           </div>
         </div>

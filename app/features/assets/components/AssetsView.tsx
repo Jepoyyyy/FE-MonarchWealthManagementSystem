@@ -66,14 +66,10 @@ export function AssetsView({
         if (ptype === "Stock") {
           payload.units = txQty * 100; // lots → units (shares)
         } else if (ptype === "Mutual Fund" || ptype === "Money Market" || ptype === "Balanced Fund") {
-          if (txType === "buy") {
-            if (txMethod === "amount") {
-              payload.amount = data.amount; // buy by rupiah amount
-            } else {
-              payload.units = txQty; // buy by units
-            }
+          if (txMethod === "amount") {
+            payload.amount = data.amount; // transaction by rupiah amount
           } else {
-            payload.amount = data.amount; // sell by rupiah amount
+            payload.units = txQty; // transaction by units
           }
         } else if (ptype === "Bond" || ptype === "Sukuk") {
           payload.units = txQty; // nominal pokok
