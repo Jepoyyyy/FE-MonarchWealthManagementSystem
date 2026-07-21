@@ -51,11 +51,14 @@ export function calculateAutoAllocation(
 /**
  * Calculate average funding percentage across all goals
  */
-export function calculateAverageFunded(goals: Goal[]): number {
+export function calculateAverageFunded(goals: Goal[], assets?: Asset[]): number {
   if (goals.length === 0) return 0;
 
   const totalFundedPct = goals.reduce((sum, goal) => {
-    const fundedPct = Math.min((goal.currentSaved / goal.targetAmount) * 100, 100);
+    const assignedAssets = assets ? assets.filter((a) => a.goalId === goal.id) : [];
+    const assetCurrentValue = assignedAssets.reduce((s, a) => s + a.currentValue, 0);
+    const effectiveSaved = assetCurrentValue + goal.currentSaved;
+    const fundedPct = Math.min((effectiveSaved / goal.targetAmount) * 100, 100);
     return sum + fundedPct;
   }, 0);
 

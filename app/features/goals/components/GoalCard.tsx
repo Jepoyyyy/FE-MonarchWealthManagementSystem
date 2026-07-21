@@ -45,7 +45,7 @@ export function GoalCard({
   // If assets are assigned, current value and cost come from them
   const assetCurrentValue = assignedAssets.reduce((s, a) => s + a.currentValue, 0);
   const assetCostBasis = assignedAssets.reduce((s, a) => s + a.amount, 0);
-  const effectiveSaved = hasAssets ? assetCurrentValue : goal.currentSaved;
+  const effectiveSaved = assetCurrentValue + goal.currentSaved;
   const assetGain = assetCurrentValue - assetCostBasis;
   const assetRetPct = assetCostBasis > 0 ? (assetGain / assetCostBasis) * 100 : 0;
 

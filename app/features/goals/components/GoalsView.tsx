@@ -76,7 +76,7 @@ export function GoalsView({
   }, [fetchGoals, fetchPortfolio]);
 
   // Calculated metrics
-  const avgFunded = calculateAverageFunded(goals);
+  const avgFunded = calculateAverageFunded(goals, portfolio.assets);
 
   // Financial profile save handler
   const handleSaveFinProfile = useCallback(
