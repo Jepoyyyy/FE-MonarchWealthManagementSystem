@@ -45,9 +45,8 @@ export function AssetsView({
     ? pnlData.reduce((s, p) => s + (p.currentValue || 0), 0)
     : myAssets.reduce((s, a) => s + (a.currentValue || 0), 0);
 
-  const totalCost = hasPnlData
-    ? pnlData.reduce((s, p) => s + ((p.units || 0) * (p.avg_price || 0)), 0)
-    : myAssets.reduce((s, a) => s + (a.amount || 0), 0);
+  // Always use original asset.amount for cost basis (not remaining units cost)
+  const totalCost = myAssets.reduce((s, a) => s + (a.amount || 0), 0);
 
   const totalGain = totalValue - totalCost;
   const totalRetPct = totalCost > 0 ? (totalGain / totalCost) * 100 : 0;
