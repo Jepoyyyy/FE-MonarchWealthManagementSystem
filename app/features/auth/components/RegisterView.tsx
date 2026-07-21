@@ -5,6 +5,7 @@ import { AuthShell } from '~/features/auth/components/AuthShell';
 import { InputField } from '~/shared/components/Input';
 import { Btn } from '~/shared/components/Button';
 import { AuthApi } from '~/features/auth/api';
+import { getBackendErrorMessage, extractValidationErrors } from '~/shared/api/errors';
 import { useAuthStore } from '~/features/auth/auth.store';
 
 interface RegisterViewProps {
@@ -49,12 +50,26 @@ export function RegisterView({ onRegister, onNavigate }: RegisterViewProps) {
         onRegister(mappedUser);
       }
     } catch (err: any) {
-      if (err?.error?.detail === "NOT_UNIQUE_EMAIL") {
-        setError("Email is already registered.");
-      } else if (err?.response?.status === 409) {
-        setError("An account with this email already exists.");
+      // Check if there are field validation errors
+      const validationErrors = extractValidationErrors(err);
+      
+      if (validationErrors) {
+        // Build error message from field validation errors
+        const fieldMessages = Object.entries(validationErrors)
+          .map(([field, reason]) => {
+            // Strip the "registerRequest" prefix for cleaner display
+            const cleanField = field.replace(/^registerRequest/, '').toLowerCase();
+            return `${cleanField}: ${reason}`;
+          })
+          .join(', ');
+        setError(fieldMessages);
       } else {
-        setError("An error occurred during registration. Please try again.");
+        // Display backend error message directly
+        const errorMessage = getBackendErrorMessage(
+          err,
+          "An error occurred during registration. Please try again."
+        );
+        setError(errorMessage);
       }
       setLoading(false);
     }

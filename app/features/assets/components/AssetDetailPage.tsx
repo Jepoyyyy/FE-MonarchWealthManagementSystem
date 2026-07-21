@@ -86,7 +86,7 @@ export function AssetDetailPage({
             variant="unstyled"
             onClick={() => setShowConfirmDelete(true)}
             className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-red-500 transition-colors"
-            title="Hapus aset"
+            title="Remove asset"
           >
             <Trash2 size={16} />
           </Btn>
@@ -274,9 +274,9 @@ export function AssetDetailPage({
       <ConfirmModal
         open={showConfirmDelete}
         onOpenChange={setShowConfirmDelete}
-        title="Hapus Aset ini?"
-        message="Aset ini beserta seluruh riwayat transaksinya akan dihapus permanen."
-        confirmLabel="Ya, Hapus"
+        title="Remove this Asset"
+        message="This asset and it's related history will be removed"
+        confirmLabel="Yes"
         onConfirm={() => {
           onDelete(asset.id);
           onBack();
@@ -286,9 +286,9 @@ export function AssetDetailPage({
       <ConfirmModal
         open={showConfirmCancel}
         onOpenChange={setShowConfirmCancel}
-        title="Batalkan perubahan?"
-        message="Perubahan link goal atau nominal jumlah lot yang belum disimpan akan hilang."
-        confirmLabel="Ya, batalkan"
+        title="Cancel the change you made ?"
+        message="Any change to link goals and lot/amount selled or purchased will be lost."
+        confirmLabel="Yes"
         onConfirm={onBack}
       />
     </div>

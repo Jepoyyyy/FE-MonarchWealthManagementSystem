@@ -6,6 +6,14 @@ export interface ValidationFieldError {
   type: string;
 }
 
+/**
+ * Backend error detail structure.
+ * - detail: Optional error code identifier (e.g., "NOT_UNIQUE_EMAIL")
+ * - fields: Validation field errors (present when code=400 and message="INVALID FIELD VALUES")
+ * - errorId: UUID for 500 Internal Server Error tracking
+ * - path: Request path (for 404 errors)
+ * - method: HTTP method (for 404 errors)
+ */
 export interface BackendErrorDetail {
   detail?: string;
   errorId?: string;
@@ -14,6 +22,10 @@ export interface BackendErrorDetail {
   method?: string;
 }
 
+/**
+ * Backend API error response structure (matches ApiResponse<T> when error occurs).
+ * The `message` field contains the human-readable English error message from backend.
+ */
 export interface BackendErrorResponse {
   code: number;
   result: null;
@@ -43,7 +55,7 @@ export function handleGlobalApiError(error: any): boolean {
   if (!isBackendError(error)) return false;
 
   const errorCode = error.error?.detail;
-  const backendMessage = error.message;
+  const backendMessage = error.message; // Backend's English error message
 
   // Skip validation errors - these should be handled by forms
   if (errorCode === "VALIDATION" && error.error?.fields) {
@@ -103,4 +115,37 @@ export function extractValidationErrors(
 export function getFieldError(error: any, fieldName: string): string | null {
   const validationErrors = extractValidationErrors(error);
   return validationErrors?.[fieldName] || null;
+}
+
+/**
+ * Extracts the human-readable error message from backend response.
+ * 
+ * Priority:
+ * 1. Backend's `message` field (always in English)
+ * 2. Generic fallback for unstructured errors
+ * 
+ * @param error - The error object from catch block
+ * @param fallback - Default message if backend message unavailable
+ * @returns English error message to display to user
+ */
+export function getBackendErrorMessage(
+  error: any,
+  fallback: string = "An error occurred. Please try again."
+): string {
+  // Structured backend error with message field
+  if (isBackendError(error) && error.message) {
+    return error.message;
+  }
+
+  // Axios error with response data
+  if (error?.response?.data?.message) {
+    return error.response.data.message;
+  }
+
+  // Network error or other
+  if (error?.message && typeof error.message === "string") {
+    return error.message;
+  }
+
+  return fallback;
 }

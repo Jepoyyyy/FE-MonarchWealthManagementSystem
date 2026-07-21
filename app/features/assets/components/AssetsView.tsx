@@ -58,10 +58,10 @@ export function AssetsView({
       await useGoalsStore.getState().fetchGoals();
       await useGoalsStore.getState().fetchProjections();
       setShowAdd(false);
-      toast.success("Aset berhasil ditambahkan");
+      toast.success("Asset Added Successfully");
     } catch (err: any) {
       if (!handleGlobalApiError(err)) {
-        toast.error("Gagal menambahkan aset", { description: err.message || "Unknown error" });
+        toast.error("Failed to add asset", { description: err.message || "Unknown error" });
       }
     }
   };
@@ -97,10 +97,10 @@ export function AssetsView({
       await usePortfolioStore.getState().fetchPortfolio();
       await useGoalsStore.getState().fetchGoals();
       await useGoalsStore.getState().fetchProjections();
-      toast.success("Aset berhasil diperbarui");
+      toast.success("Asset Updated Successfully");
     } catch (err: any) {
       if (!handleGlobalApiError(err)) {
-        toast.error("Gagal memperbarui aset", { description: err.message || "Unknown error" });
+        toast.error("Failed to Update asset", { description: err.message || "Unknown error" });
       }
     }
   };
@@ -111,10 +111,10 @@ export function AssetsView({
       await usePortfolioStore.getState().fetchPortfolio();
       await useGoalsStore.getState().fetchGoals();
       await useGoalsStore.getState().fetchProjections();
-      toast.success("Aset berhasil dihapus");
+      toast.success(" Deleted Successfully");
     } catch (err: any) {
       if (!handleGlobalApiError(err)) {
-        toast.error("Gagal menghapus aset", { description: err.message || "Unknown error" });
+        toast.error("Failed to Delete asset", { description: err.message || "Unknown error" });
       }
     }
   };
@@ -125,10 +125,10 @@ export function AssetsView({
       await usePortfolioStore.getState().fetchPortfolio();
       await useGoalsStore.getState().fetchGoals();
       await useGoalsStore.getState().fetchProjections();
-      toast.success("Tujuan investasi berhasil dihubungkan");
+      toast.success("Asset added to Goals");
     } catch (err: any) {
       if (!handleGlobalApiError(err)) {
-        toast.error("Gagal menghubungkan tujuan investasi", { description: err.message || "Unknown error" });
+        toast.error("Failed to add Asset to Goals", { description: err.message || "Unknown error" });
       }
     }
   };
@@ -144,7 +144,7 @@ export function AssetsView({
       setSelectedProduct(res.data);
     } catch (err: any) {
       if (!handleGlobalApiError(err)) {
-        toast.error("Gagal memuat detail produk", { description: err.message || "Unknown error" });
+        toast.error("Fail to fetch Product Details", { description: err.message || "Unknown error" });
       }
       setDetailAssetId(null);
     } finally {

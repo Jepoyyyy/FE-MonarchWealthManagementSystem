@@ -97,6 +97,7 @@ api.interceptors.response.use(
         delete api.defaults.headers.common["Authorization"];
       }
     }
+    // Preserve full backend error structure (ApiResponse with code/message/error)
     return Promise.reject(error.response?.data || error);
   }
 );

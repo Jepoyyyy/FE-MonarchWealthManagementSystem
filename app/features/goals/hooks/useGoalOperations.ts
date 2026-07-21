@@ -26,10 +26,10 @@ export function useGoalOperations(
 
       try {
         await GoalApi.create(mapGoalToDto(data));
-        onSuccess("Goal berhasil ditambahkan", `"${data.name}" — target ${data.targetAmount}`);
+        onSuccess("Goal added", `"${data.name}" — target ${data.targetAmount}`);
         await fetchGoals();
       } catch (err: any) {
-        onError("Gagal menambah goal", err.message);
+        onError("Failed to add goal", err.message);
         throw err;
       }
     },
@@ -46,10 +46,10 @@ export function useGoalOperations(
 
       try {
         await GoalApi.update(id, mapGoalToDto(data));
-        onSuccess("Goal berhasil diperbarui", `"${data.name}"`);
+        onSuccess("Goal Updated Successfully", `"${data.name}"`);
         await fetchGoals();
       } catch (err: any) {
-        onError("Gagal memperbarui goal", err.message);
+        onError("Fail to Update goal", err.message);
         throw err;
       }
     },
@@ -61,9 +61,9 @@ export function useGoalOperations(
       try {
         await GoalApi.delete(id);
         await fetchGoals();
-        onSuccess("Goal berhasil dihapus");
+        onSuccess("Goal Deleted Successfully");
       } catch (err: any) {
-        onError("Gagal menghapus goal", err.message);
+        onError("Fail to Delete goal", err.message);
       }
     },
     [fetchGoals, onSuccess, onError]
@@ -76,10 +76,10 @@ export function useGoalOperations(
 
       try {
         await GoalApi.update(id, mapGoalToDto({ ...goal, isPriority: true }));
-        onSuccess("Priority goal diperbarui", `"${goal.name}" sekarang menjadi prioritas`);
+        onSuccess("Priority goal Updated", `"${goal.name}" now become priority`);
         await fetchGoals();
       } catch (err: any) {
-        onError("Gagal mengubah prioritas", err.message);
+        onError("Fail to Update Priority", err.message);
       }
     },
     [fetchGoals, onSuccess, onError]

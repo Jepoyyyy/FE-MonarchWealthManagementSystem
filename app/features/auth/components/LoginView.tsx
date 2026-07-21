@@ -6,6 +6,7 @@ import { InputField } from '~/shared/components/Input';
 import { Btn } from '~/shared/components/Button';
 import { Shield } from "lucide-react";
 import { AuthApi } from '~/features/auth/api';
+import { getBackendErrorMessage, extractValidationErrors } from '~/shared/api/errors';
 import { useAuthStore } from '~/features/auth/auth.store';
 
 interface LoginViewProps {
@@ -38,12 +39,26 @@ export function LoginView({ onLogin, onNavigate }: LoginViewProps) {
         onLogin(mappedUser);
       }
     } catch (err: any) {
-      if (err?.response?.status === 401) {
-        setError("Invalid email or password.");
-      } else if (err?.response?.status === 403) {
-        setError("Your account has been suspended. Contact support.");
+      // Check if there are field validation errors
+      const validationErrors = extractValidationErrors(err);
+      
+      if (validationErrors) {
+        // Build error message from field validation errors
+        const fieldMessages = Object.entries(validationErrors)
+          .map(([field, reason]) => {
+            // Strip the "loginRequest" prefix for cleaner display
+            const cleanField = field.replace(/^loginRequest/, '').toLowerCase();
+            return `${cleanField}: ${reason}`;
+          })
+          .join(', ');
+        setError(fieldMessages);
       } else {
-        setError("An error occurred during login. Please try again.");
+        // Display backend error message directly
+        const errorMessage = getBackendErrorMessage(
+          err,
+          "An error occurred during login. Please try again."
+        );
+        setError(errorMessage);
       }
       setLoading(false);
     }

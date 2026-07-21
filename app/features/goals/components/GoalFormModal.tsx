@@ -3,6 +3,7 @@ import { X, DollarSign, Wallet, Lock, Calculator, AlertTriangle, ToggleLeft, Tog
 import type { Goal, GoalType, GoalStatus } from "~/types";
 import { GOAL_TYPE_CONFIG } from '~/features/goals/goals.config';
 import { monthsToGoal, fmt, fmtDuration, projectedDate } from "~/utils";
+import { getBackendErrorMessage } from '~/shared/api/errors';
 import { InputField } from '~/shared/components/Input';
 import { MonthlyContributionInput } from "./MonthlyContributionInput";
 import { ConfirmModal } from '~/shared/components/ConfirmModal';
@@ -87,13 +88,12 @@ export function GoalFormModal({
         notes: notes.trim() || undefined,
       });
     } catch (error: any) {
-      if (error && typeof error === "object" && error.error?.detail === "INSUFFICIENT_INCOME") {
-        setErr("Your income is insufficient for this goal target.");
-      } else if (error && typeof error === "object" && error.error?.detail === "DUPLICATE_PRIORITY_GOALS") {
-        setErr("Only one priority goal can be set.");
-      } else {
-        setErr(error?.message || "Failed to save goal.");
-      }
+      // Display backend error message directly
+      const errorMessage = getBackendErrorMessage(
+        error,
+        "Failed to save goal."
+      );
+      setErr(errorMessage);
     } finally {
       setLoading(false);
     }
