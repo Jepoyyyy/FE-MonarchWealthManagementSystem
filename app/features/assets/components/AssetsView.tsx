@@ -33,10 +33,22 @@ export function AssetsView({
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [loadingProduct, setLoadingProduct] = useState(false);
   const assets = usePortfolioStore((s) => s.assets);
+  const pnlData = usePortfolioStore((s) => s.pnlData);
+  const pnlLoading = usePortfolioStore((s) => s.loading);
 
   const myAssets = (assets || []).filter((a) => a.userId === user.id);
-  const totalValue = myAssets.reduce((s, a) => s + a.currentValue, 0);
-  const totalCost = myAssets.reduce((s, a) => s + a.amount, 0);
+
+  // Only use pnlData when fully loaded and available
+  const hasPnlData = pnlData.length > 0 && !pnlLoading;
+
+  const totalValue = hasPnlData
+    ? pnlData.reduce((s, p) => s + (p.currentValue || 0), 0)
+    : myAssets.reduce((s, a) => s + (a.currentValue || 0), 0);
+
+  const totalCost = hasPnlData
+    ? pnlData.reduce((s, p) => s + ((p.units || 0) * (p.avg_price || 0)), 0)
+    : myAssets.reduce((s, a) => s + (a.amount || 0), 0);
+
   const totalGain = totalValue - totalCost;
   const totalRetPct = totalCost > 0 ? (totalGain / totalCost) * 100 : 0;
 
