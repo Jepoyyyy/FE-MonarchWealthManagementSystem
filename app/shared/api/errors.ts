@@ -35,54 +35,72 @@ export function isBackendError(error: any): error is BackendErrorResponse {
 }
 
 /**
- * Processes custom backend error responses and shows corresponding global alerts
- * returns true if the error was handled globally (e.g. toast), false if it should bubble up.
+ * Processes backend error responses and shows toast notifications.
+ * Uses backend English messages directly - no frontend mapping.
+ * Returns true if the error was handled globally (toast shown), false if it should bubble up.
  */
 export function handleGlobalApiError(error: any): boolean {
   if (!isBackendError(error)) return false;
 
-  const detail = error.error?.detail;
-  if (!detail) return false;
+  const errorCode = error.error?.detail;
+  const backendMessage = error.message;
 
-  switch (detail) {
-    case API_ERROR_CODES.DELISTED_PRODUCT:
-      toast.error("Produk Delisted", {
-        description: "This product is delisted and cannot be added to portfolio.",
-      });
-      return true;
-
-    case API_ERROR_CODES.REQUIRED_RISK_PROFILER:
-      toast.warning("Profil Risiko Dibutuhkan", {
-        description: "Anda harus menyelesaikan kuesioner profil risiko terlebih dahulu.",
-      });
-      return true;
-
-    case API_ERROR_CODES.DUPLICATE_PRIORITY_GOALS:
-      toast.error("Duplikat Prioritas", {
-        description: "Anda hanya dapat memiliki satu goal prioritas.",
-      });
-      return true;
-
-    case API_ERROR_CODES.INSUFFICIENT_INCOME:
-      toast.error("Pendapatan Tidak Cukup", {
-        description: "Pendapatan Anda tidak mencukupi untuk goal ini.",
-      });
-      return true;
-
-    case API_ERROR_CODES.NOT_UNIQUE_EMAIL:
-      toast.error("Email Sudah Terdaftar", {
-        description: "Email ini sudah digunakan akun lain.",
-      });
-      return true;
-
-    case API_ERROR_CODES.USER_NOT_FOUND:
-    case API_ERROR_CODES.ITEM_NOT_FOUND:
-      toast.error("Tidak Ditemukan", {
-        description: "Data yang diminta tidak ditemukan.",
-      });
-      return true;
-
-    default:
-      return false;
+  // Skip validation errors - these should be handled by forms
+  if (errorCode === "VALIDATION" && error.error?.fields) {
+    return false;
   }
+
+  // Skip auth errors - handled by interceptor
+  if (
+    errorCode === "UNAUTHORIZED" ||
+    errorCode === "INVALID_TOKEN" ||
+    errorCode === "REQUIRED_REFRESH_TOKEN"
+  ) {
+    return false;
+  }
+
+  // Show toast with backend message
+  const title = backendMessage || "Error";
+  const description = errorCode ? `Error code: ${errorCode}` : undefined;
+
+  // Use warning toast for 403 Forbidden, error for others
+  if (error.code === 403) {
+    toast.warning(title, { description });
+  } else {
+    toast.error(title, { description });
+  }
+
+  return true;
+}
+
+/**
+ * Extracts validation field errors from backend response.
+ * Returns a map of field names to error messages (English from backend).
+ */
+export function extractValidationErrors(
+  error: any
+): Record<string, string> | null {
+  if (!isBackendError(error)) return null;
+  if (!error.error?.fields || error.error.fields.length === 0) return null;
+
+  const fieldErrors: Record<string, string> = {};
+
+  for (const fieldError of error.error.fields) {
+    // If multiple errors for same field, concatenate them
+    if (fieldErrors[fieldError.field]) {
+      fieldErrors[fieldError.field] += `, ${fieldError.reason}`;
+    } else {
+      fieldErrors[fieldError.field] = fieldError.reason;
+    }
+  }
+
+  return fieldErrors;
+}
+
+/**
+ * Gets error message for a specific field from validation errors.
+ */
+export function getFieldError(error: any, fieldName: string): string | null {
+  const validationErrors = extractValidationErrors(error);
+  return validationErrors?.[fieldName] || null;
 }
