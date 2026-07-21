@@ -10,6 +10,7 @@ import { StatCard } from '~/features/dashboard/components/StatCard';
 import { Btn } from '~/shared/components/Button';
 import { DashboardApi } from '~/features/dashboard/api';
 import { toast } from "sonner";
+import { ConfirmModal } from '~/shared/components/ConfirmModal';
 
 const DashboardPerfChart = React.lazy(() => import("~/components/charts/DashboardPerfChart"));
 const DashboardPieChart = React.lazy(() => import("~/components/charts/DashboardPieChart"));
@@ -32,6 +33,7 @@ export function DashboardView({ user, products, onNavigate }: DashboardViewProps
   const [dashData, setDashData] = useState<UserDashboardDTO | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -92,6 +94,17 @@ export function DashboardView({ user, products, onNavigate }: DashboardViewProps
           month: "long",
           year: "numeric",
         })}`}
+        action={
+          user.riskProfile && (
+            <Btn
+              variant="secondary"
+              size="sm"
+              onClick={() => setShowConfirmModal(true)}
+            >
+              Change Risk Profile
+            </Btn>
+          )
+        }
       />
 
       {loading && (
@@ -197,6 +210,16 @@ export function DashboardView({ user, products, onNavigate }: DashboardViewProps
         </div>
       </div>
       </>}
+
+      <ConfirmModal
+        open={showConfirmModal}
+        onOpenChange={setShowConfirmModal}
+        title="Change Risk Profile?"
+        message="You will need to retake the risk assessment questionnaire. Your current risk profile will be replaced with the new results."
+        confirmLabel="Retake Assessment"
+        confirmVariant="primary"
+        onConfirm={() => onNavigate("/questionnaire")}
+      />
     </div>
   );
 }

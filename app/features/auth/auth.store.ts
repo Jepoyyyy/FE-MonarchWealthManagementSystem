@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { AppUser } from '~/types';
+import type { AppUser, RiskProfile } from '~/types';
 
 interface AuthState {
   token: string | null;
@@ -8,6 +8,7 @@ interface AuthState {
   user: AppUser | null;
   setAuth: (token: string, refreshToken: string, user: any) => void;
   clearAuth: () => void;
+  updateUserRiskProfile: (profile: RiskProfile) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -44,6 +45,18 @@ export const useAuthStore = create<AuthState>()(
         set({ token, refreshToken, user: mappedUser });
       },
       clearAuth: () => set({ token: null, refreshToken: null, user: null }),
+      updateUserRiskProfile: (profile: RiskProfile) => {
+        set((state) => {
+          if (!state.user) return state;
+          return {
+            user: {
+              ...state.user,
+              riskProfile: profile,
+              questionnaireCompleted: true,
+            },
+          };
+        });
+      },
     }),
     { name: 'wms-auth' }
   )

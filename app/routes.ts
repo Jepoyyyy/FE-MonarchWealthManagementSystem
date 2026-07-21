@@ -9,11 +9,11 @@ export default [
     route("goals", "routes/user/goals.tsx"),
     route("recommendations", "routes/user/recommendations.tsx"),
     route("progress", "routes/user/progress.tsx"),
-
     // Admin Routes
     route("admin", "routes/admin/dashboard.tsx"),
     route("admin/products", "routes/admin/products.tsx"),
     route("admin/users", "routes/admin/users.tsx"),
     route("admin/audit", "routes/admin/audit.tsx"),
   ]),
+  route("questionnaire", "routes/user/questionnaire.tsx"),
 ] satisfies RouteConfig;
