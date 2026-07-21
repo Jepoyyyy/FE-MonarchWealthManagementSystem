@@ -7,8 +7,8 @@ const PROFILE_CONFIG = {
     label: "Risk Averse",
     color: "#10b981",
     bg: "#f0fdf4",
-    desc: "You prefer capital preservation. We'll recommend Money Market and Deposit products.",
-    products: "Money Market & Deposits",
+    desc: "You prefer capital preservation. We'll recommend Money Market and Bank Deposit products.",
+    products: "Money Market & Bank Deposits",
   },
   moderate: {
     label: "Moderate",

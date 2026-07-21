@@ -3,7 +3,7 @@ import type { Asset, Product, ProductType } from "~/types";
 /** Per-unit cost multiplier relative to face/NAV price. */
 const BUY_MULT: Record<ProductType, number> = {
   "Money Market": 1,
-  "Deposit": 1,
+  "Bank Deposit": 1,
   "Bond": 1 / 100,
   "Mutual Fund": 1,
   "Stock": 100,
@@ -26,8 +26,8 @@ export const PortfolioService = {
     const curQty = asset.quantity || 0;
     const ptype = product.type;
 
-    // Deposit — amount-based, no quantity concept
-    if (ptype === "Deposit") {
+    // Bank Deposit — amount-based, no quantity concept
+    if (ptype === "Bank Deposit") {
       const next = type === "buy"
         ? { amount: curAmt + txAmount, currentValue: curAmt + txAmount }
         : { amount: Math.max(0, curAmt - txAmount), currentValue: Math.max(0, curAmt - txAmount) };

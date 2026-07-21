@@ -45,7 +45,7 @@ export function AddTransactionModal({ asset, product, type, onClose, onSaveTrans
           <BondTransactionForm type={type} currentPrice={product.currentPrice} onClose={onClose} onSubmit={onSaveTransaction} />
         )}
 
-        {product.type === "Deposit" && (
+        {product.type === "Bank Deposit" && (
           <DepositTransactionForm type={type} rate={product.annualReturn ?? 0} onClose={onClose} onSubmit={onSaveTransaction} />
         )}
       </div>

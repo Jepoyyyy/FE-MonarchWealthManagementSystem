@@ -30,10 +30,10 @@ export const GOAL_FAST_MONTHS: Record<GoalType, number> = {
 };
 
 export const GOAL_PRODUCT_TYPES: Record<GoalType, ProductType[]> = {
-  savings:    ["Money Market", "Deposit"],
-  vacation:   ["Money Market", "Deposit"],
-  car:        ["Deposit", "Bond", "Sukuk"],
+  savings:    ["Money Market", "Bank Deposit"],
+  vacation:   ["Money Market", "Bank Deposit"],
+  car:        ["Bank Deposit", "Bond", "Sukuk"],
   property:   ["Bond", "Sukuk", "Mutual Fund", "Balanced Fund"],
   retirement: ["Mutual Fund", "Balanced Fund", "Stock"],
-  custom:     ["Deposit", "Bond", "Sukuk", "Mutual Fund", "Balanced Fund"],
+  custom:     ["Bank Deposit", "Bond", "Sukuk", "Mutual Fund", "Balanced Fund"],
 };

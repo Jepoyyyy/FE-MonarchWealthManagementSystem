@@ -77,7 +77,7 @@ export function AssetsView({
         } else if (ptype === "Bond" || ptype === "Sukuk") {
           payload.units = txQty; // nominal pokok
         } else {
-          payload.amount = data.amount; // Deposit
+          payload.amount = data.amount; // Bank Deposit
         }
         await AssetApi.addTransaction(id, payload);
       } else {

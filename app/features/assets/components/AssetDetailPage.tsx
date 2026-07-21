@@ -212,7 +212,7 @@ export function AssetDetailPage({
             {fmt(currentAssetValue)}
           </p>
           <p className="text-xs text-muted-foreground">
-            {isDeposit ? "Deposit pokok (bunga belum dihitung)" : "current valuation"}
+            {isDeposit ? "Deposito pokok (bunga belum dihitung)" : "current valuation"}
           </p>
         </div>
       </div>

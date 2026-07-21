@@ -35,6 +35,8 @@ function toAssetPayload(data: Omit<Asset, "id">, products: any[]) {
 }
 
 function mapAsset(asset: any, products: any[]): Asset {
+  const rawType = asset.type;
+  const normalizedType = (rawType === "deposit" || rawType === "Deposit") ? "Bank Deposit" : rawType;
   const camel = {
     id: asset.id,
     userId: asset.user_id,
@@ -49,7 +51,7 @@ function mapAsset(asset: any, products: any[]): Asset {
     updatedAt: asset.updated_at,
     name: asset.name,
     issuer: asset.issuer,
-    type: asset.type,
+    type: normalizedType,
   };
   return {
     ...camel,

@@ -9,7 +9,7 @@ interface ProductTypeBadgeProps {
 
 const typeIcons: Record<ProductType, string> = {
   "Money Market": "💰",
-  Deposit: "🏦",
+  "Bank Deposit": "🏦",
   Bond: "📜",
   "Mutual Fund": "📈",
   Stock: "📊",

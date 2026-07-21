@@ -2,7 +2,7 @@ import type { ProductType } from "~/types";
 
 export const PRODUCT_TYPE_LABELS: Record<ProductType, string> = {
   "Money Market": "Money Market",
-  "Deposit": "Deposit",
+  "Bank Deposit": "Bank Deposit",
   "Bond": "Bond",
   "Mutual Fund": "Mutual Fund",
   "Stock": "Stock",
@@ -13,7 +13,7 @@ export const PRODUCT_TYPE_LABELS: Record<ProductType, string> = {
 export const PRODUCT_TYPE_OPTIONS: Array<{ id: ProductType | "all"; label: string }> = [
   { id: "all", label: "All" },
   { id: "Money Market", label: PRODUCT_TYPE_LABELS["Money Market"] },
-  { id: "Deposit", label: PRODUCT_TYPE_LABELS.Deposit },
+  { id: "Bank Deposit", label: PRODUCT_TYPE_LABELS["Bank Deposit"] },
   { id: "Bond", label: PRODUCT_TYPE_LABELS.Bond },
   { id: "Mutual Fund", label: PRODUCT_TYPE_LABELS["Mutual Fund"] },
   { id: "Stock", label: PRODUCT_TYPE_LABELS.Stock },
@@ -23,7 +23,7 @@ export const PRODUCT_TYPE_OPTIONS: Array<{ id: ProductType | "all"; label: strin
 
 export const PRODUCT_TYPE_ICONS: Record<ProductType, string> = {
   "Money Market": "💰",
-  "Deposit": "🏦",
+  "Bank Deposit": "🏦",
   "Bond": "📜",
   "Mutual Fund": "📈",
   "Stock": "📊",

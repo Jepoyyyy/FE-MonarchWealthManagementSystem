@@ -37,7 +37,7 @@ export const riskLabel = (p: RiskProfile | null) =>
 export const typeLabel = (t: ProductType) =>
   ({
     "Money Market": "Money Market",
-    "Deposit": "Deposit",
+    "Bank Deposit": "Bank Deposit",
     "Bond": "Bond",
     "Mutual Fund": "Mutual Fund",
     "Stock": "Stock",

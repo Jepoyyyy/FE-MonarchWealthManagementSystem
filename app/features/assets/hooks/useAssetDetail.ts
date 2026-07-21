@@ -27,7 +27,7 @@ export function useAssetDetail({
   const isStock = product.type === "Stock";
   const isMF = product.type === "Mutual Fund" || product.type === "Money Market" || product.type === "Balanced Fund";
   const isBond = product.type === "Bond" || product.type === "Sukuk";
-  const isDeposit = product.type === "Deposit";
+  const isDeposit = product.type === "Bank Deposit";
 
   const lotSize = product.lotSize || 100;
   const lotNum = pnl ? (isStock ? pnl.units / lotSize : pnl.units) : (asset.quantity ?? 1);

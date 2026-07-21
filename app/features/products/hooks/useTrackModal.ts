@@ -44,7 +44,7 @@ export function useTrackModal({
 
   const userMaxRisk = maxRiskForProfile(user.riskProfile, false);
   const isStock = picked?.type === "Stock";
-  const isDeposit = picked?.type === "Deposit";
+  const isDeposit = picked?.type === "Bank Deposit";
   const isMF = picked?.type === "Money Market" || picked?.type === "Mutual Fund" || picked?.type === "Balanced Fund";
   const isBond = picked?.type === "Bond" || picked?.type === "Sukuk";
 
