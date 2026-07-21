@@ -1,41 +1,24 @@
 import { toast } from "sonner";
 
-export const API_ERROR_CODES = {
-  REQUIRED_RISK_PROFILER: "REQUIRED_RISK_PROFILER",
-  INSUFFICIENT_INCOME: "INSUFFICIENT_INCOME",
-  DUPLICATE_PRIORITY_GOALS: "DUPLICATE_PRIORITY_GOALS",
-  NOT_UNIQUE_EMAIL: "NOT_UNIQUE_EMAIL",
-  DELISTED_PRODUCT: "DELISTED_PRODUCT",
-  USER_NOT_FOUND: "USER_NOT_FOUND",
-  ITEM_NOT_FOUND: "ITEM_NOT_FOUND",
-  BAD_REQUEST: "BAD_REQUEST",
-  VALIDATION: "VALIDATION",
-  INVALID_REQUEST_BODY: "INVALID_REQUEST_BODY",
-  REQUIRED_REFRESH_TOKEN: "REQUIRED_REFRESH_TOKEN",
-  UNAUTHORIZED: "UNAUTHORIZED",
-  INVALID_TOKEN: "INVALID_TOKEN",
-  NOT_FOUND: "NOT_FOUND",
-  FORBIDDEN: "FORBIDDEN",
-  CONFLICT: "CONFLICT",
-} as const;
+export interface ValidationFieldError {
+  field: string;
+  reason: string;
+  type: string;
+}
 
-export type ApiErrorCode = keyof typeof API_ERROR_CODES;
+export interface BackendErrorDetail {
+  detail?: string;
+  errorId?: string;
+  fields?: ValidationFieldError[];
+  path?: string;
+  method?: string;
+}
 
 export interface BackendErrorResponse {
   code: number;
   result: null;
   message: string | null;
-  error: {
-    errorId?: string;
-    fields?: Array<{
-      field: string;
-      reason: string;
-      type: string;
-    }>;
-    detail?: string;
-    path?: string;
-    method?: string;
-  } | null;
+  error: BackendErrorDetail | null;
 }
 
 /**

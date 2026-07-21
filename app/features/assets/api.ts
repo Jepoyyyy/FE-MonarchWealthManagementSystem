@@ -28,7 +28,7 @@ function toAssetPayload(data: Omit<Asset, "id">, products: any[]) {
     // Remove current_value - backend calculates this (units × current_price)
     units: units,
     goal_id: data.goalId,
-    tenor_months: data.tenorMonths,
+    tenor: data.tenorMonths,
     platform: data.platform,
     notes: data.notes,
   };
