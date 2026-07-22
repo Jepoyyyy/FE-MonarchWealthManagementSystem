@@ -51,7 +51,7 @@ export function StatCard({ title, label, value, unit, icon, sub, trend }: StatCa
   };
 
   return (
-    <div className="bg-card rounded-xl border border-border shadow-sm p-5 flex flex-col gap-3">
+    <div className="bg-card rounded-xl border border-border shadow-sm p-5 flex flex-col gap-3" data-testid="stat-card">
       <div className="flex items-center justify-between">
         <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
           {displayTitle}

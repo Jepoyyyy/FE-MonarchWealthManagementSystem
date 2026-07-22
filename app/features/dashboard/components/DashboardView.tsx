@@ -108,14 +108,14 @@ export function DashboardView({ user, products, onNavigate }: DashboardViewProps
       />
 
       {loading && (
-        <div className="flex items-center justify-center p-12">
+        <div className="flex items-center justify-center p-12" data-testid="dashboard-loading">
           <div className="animate-pulse flex gap-2 items-center text-muted-foreground">
              Loading dashboard...
           </div>
         </div>
       )}
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl p-4 text-sm">
+        <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl p-4 text-sm" data-testid="dashboard-error">
           {error}
           <button
             onClick={() => window.location.reload()}
@@ -171,7 +171,7 @@ export function DashboardView({ user, products, onNavigate }: DashboardViewProps
       </div>
 
             {/* Recommendations widget */}
-      <div className="bg-card rounded-xl p-4 md:p-6 border border-border">
+      <div className="bg-card rounded-xl p-4 md:p-6 border border-border" data-testid="recommended-section">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="font-semibold text-foreground">Recommended for You</h3>

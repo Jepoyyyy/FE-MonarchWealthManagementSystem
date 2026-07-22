@@ -75,7 +75,7 @@ export function AdminDashboardView({ users, products, assets }: AdminDashboardVi
       <PageHeader title="Admin Overview" subtitle="Platform-wide metrics and activity" />
 
       {loading && (
-        <div className="flex items-center justify-center p-12">
+        <div className="flex items-center justify-center p-12" data-testid="dashboard-loading">
           <div className="animate-pulse flex gap-2 items-center text-muted-foreground">
              Loading dashboard...
           </div>

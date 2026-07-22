@@ -42,4 +42,22 @@ export class AuthApiClient {
     const duration = Date.now() - startTime;
     return { response, duration };
   }
+
+  async completeRiskProfile(accessToken: string) {
+    const startTime = Date.now();
+    const response = await this.request.put(`${API_BASE_URL}/me/profiler`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      data: {
+        answers: [
+          { questionnaireAnswer: "Protect my capital — I cannot afford to lose money", score: 0 },
+          { questionnaireAnswer: "Less than 1 year — I need liquidity soon", score: 0 },
+          { questionnaireAnswer: "Sell everything to stop further losses", score: 0 },
+          { questionnaireAnswer: "Less than 10% — only comfortable surplus", score: 0 },
+          { questionnaireAnswer: "No experience — this is my first time investing", score: 0 }
+        ]
+      }
+    });
+    const duration = Date.now() - startTime;
+    return { response, duration };
+  }
 }
