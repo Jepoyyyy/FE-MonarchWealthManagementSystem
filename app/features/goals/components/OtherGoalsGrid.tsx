@@ -1,5 +1,5 @@
 import { Target } from "lucide-react";
-import type { Goal, Asset, Product } from "~/types";
+import type { Goal, Asset } from "~/types";
 import { GoalCard } from "~/features/goals/components/GoalCard";
 
 interface OtherGoalsGridProps {
@@ -7,7 +7,6 @@ interface OtherGoalsGridProps {
   hasPriorityGoal: boolean;
   surplus: number;
   userAssets: Asset[];
-  products: Product[];
   onSetPriority: (id: string) => Promise<void>;
   onEdit: (goal: Goal) => void;
   onDelete: (id: string) => Promise<void>;
@@ -18,7 +17,6 @@ export function OtherGoalsGrid({
   hasPriorityGoal,
   surplus,
   userAssets,
-  products,
   onSetPriority,
   onEdit,
   onDelete,
@@ -37,7 +35,6 @@ export function OtherGoalsGrid({
             goal={goal}
             surplus={surplus}
             assignedAssets={userAssets.filter((a) => a.goalId === goal.id)}
-            products={products}
             onSetPriority={onSetPriority}
             onEdit={onEdit}
             onDelete={onDelete}

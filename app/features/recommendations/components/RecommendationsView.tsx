@@ -32,7 +32,7 @@ export function RecommendationsView({
 }: RecommendationsViewProps) {
   const myAssets = assets.filter((a) => a.userId === user.id);
   const [trackingProduct, setTrackingProduct] = useState<Product | null>(null);
-  const { recommendations, loading, fetchRecommendations } = useRecommendationsStore();
+  const { recommendations, loading } = useRecommendationsStore();
 
   useEffect(() => {
     useRecommendationsStore.getState().fetchRecommendations();

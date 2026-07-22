@@ -212,7 +212,6 @@ export function GoalsView({
               goal={autoAlloc.priorityGoal}
               surplus={summary.surplus}
               assignedAssets={portfolio.assets.filter((a) => a.goalId === autoAlloc.priorityGoal!.id)}
-              products={products}
               onSetPriority={handleSetPriority}
               onEdit={setEditGoal}
               onDelete={operations.deleteGoal}
@@ -225,7 +224,6 @@ export function GoalsView({
             hasPriorityGoal={!!autoAlloc.priorityGoal}
             surplus={summary.surplus}
             userAssets={portfolio.assets}
-            products={products}
             onSetPriority={handleSetPriority}
             onEdit={setEditGoal}
             onDelete={operations.deleteGoal}

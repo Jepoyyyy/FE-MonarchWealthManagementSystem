@@ -11,7 +11,7 @@ import {
   Briefcase,
   Info,
 } from "lucide-react";
-import type { Goal, Asset, Product, GoalStatus } from "~/types";
+import type { Goal, Asset, GoalStatus, ProductType } from "~/types";
 import { GOAL_TYPE_CONFIG } from '~/features/goals/goals.config';
 import { Btn } from '~/shared/components/Button';
 import { analyzeGoal } from '~/lib/recommendation-engine/engine';
@@ -23,7 +23,6 @@ interface GoalCardProps {
   goal: Goal;
   surplus: number;
   assignedAssets: Asset[];
-  products: Product[];
   onSetPriority: (id: string) => void;
   onEdit: (g: Goal) => void;
   onDelete: (id: string) => void;
@@ -33,7 +32,6 @@ export function GoalCard({
   goal,
   surplus,
   assignedAssets,
-  products,
   onSetPriority,
   onEdit,
   onDelete,
@@ -47,7 +45,6 @@ export function GoalCard({
   const assetCostBasis = assignedAssets.reduce((s, a) => s + a.amount, 0);
   const effectiveSaved = assetCurrentValue + goal.currentSaved;
   const assetGain = assetCurrentValue - assetCostBasis;
-  const assetRetPct = assetCostBasis > 0 ? (assetGain / assetCostBasis) * 100 : 0;
 
   const analysis = analyzeGoal(goal, effectiveSaved);
   const progress = Math.min((effectiveSaved / goal.targetAmount) * 100, 100);
@@ -171,7 +168,6 @@ export function GoalCard({
               </span>
             </div>
             {assignedAssets.map((a) => {
-              const p = products.find((pr) => pr.id === a.productId);
               const ret = ((a.currentValue - a.amount) / a.amount) * 100;
               return (
                 <div
@@ -179,9 +175,9 @@ export function GoalCard({
                   className="flex items-center justify-between px-3 py-2 border-b border-border last:border-0"
                 >
                   <div className="flex items-center gap-1.5 min-w-0">
-                    <ProductTypeBadge type={p?.type ?? "Bank Deposit"} />
+                    <ProductTypeBadge type={(a.type as ProductType) ?? "Bank Deposit"} />
                     <span className="text-xs truncate text-foreground">
-                      {p?.name ?? "Unknown"}
+                      {a.name ?? "Unknown"}
                     </span>
                   </div>
                   <div className="flex items-center gap-3 shrink-0 ml-2">
