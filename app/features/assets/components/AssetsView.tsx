@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Plus, Wallet, DollarSign, Percent, Briefcase, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import type { AppUser, Product, Asset, Goal, AuditLog } from "~/types";
 import { fmt, fmtPct } from "~/utils";
@@ -38,6 +38,15 @@ export function AssetsView({
 
   const myAssets = (assets || []).filter((a) => a.userId === user.id);
 
+  // Shared parallelized data refresh helper
+  const refreshAllData = useCallback(async () => {
+    await Promise.all([
+      usePortfolioStore.getState().fetchPortfolio(),
+      useGoalsStore.getState().fetchGoals(),
+      useGoalsStore.getState().fetchProjections()
+    ]);
+  }, []);
+
   // Only use pnlData when fully loaded and available
   const hasPnlData = pnlData.length > 0 && !pnlLoading;
 
@@ -54,9 +63,7 @@ export function AssetsView({
   const saveAsset = async (data: Omit<Asset, "id">) => {
     try {
       await AssetApi.create(data, products);
-      await usePortfolioStore.getState().fetchPortfolio();
-      await useGoalsStore.getState().fetchGoals();
-      await useGoalsStore.getState().fetchProjections();
+      await refreshAllData();
       setShowAdd(false);
       toast.success("Asset Added Successfully");
     } catch (err: any) {
@@ -94,9 +101,7 @@ export function AssetsView({
       } else {
         await AssetApi.update(id, data, products);
       }
-      await usePortfolioStore.getState().fetchPortfolio();
-      await useGoalsStore.getState().fetchGoals();
-      await useGoalsStore.getState().fetchProjections();
+      await refreshAllData();
       toast.success("Asset Updated Successfully");
     } catch (err: any) {
       if (!handleGlobalApiError(err)) {
@@ -108,9 +113,7 @@ export function AssetsView({
   const removeAsset = async (id: string) => {
     try {
       await AssetApi.delete(id);
-      await usePortfolioStore.getState().fetchPortfolio();
-      await useGoalsStore.getState().fetchGoals();
-      await useGoalsStore.getState().fetchProjections();
+      await refreshAllData();
       toast.success(" Deleted Successfully");
     } catch (err: any) {
       if (!handleGlobalApiError(err)) {
@@ -122,9 +125,7 @@ export function AssetsView({
   const assignGoal = async (assetId: string, goalId: string | undefined) => {
     try {
       await AssetApi.update(assetId, { goalId }, products);
-      await usePortfolioStore.getState().fetchPortfolio();
-      await useGoalsStore.getState().fetchGoals();
-      await useGoalsStore.getState().fetchProjections();
+      await refreshAllData();
       toast.success("Asset added to Goals");
     } catch (err: any) {
       if (!handleGlobalApiError(err)) {

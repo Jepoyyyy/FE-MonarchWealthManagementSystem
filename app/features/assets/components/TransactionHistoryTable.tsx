@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 import type { TransactionHistory } from "~/types";
 import { AssetApi } from "../api";
@@ -29,6 +29,21 @@ export function TransactionHistoryTable({ assetId }: TransactionHistoryTableProp
 
     fetchTransactions();
   }, [assetId]);
+
+  const formattedTransactions = useMemo(() => {
+    return transactions.map((tx) => {
+      const date = new Date(tx.transactionDate);
+      const formattedDate = date.toLocaleDateString("id-ID", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+      return {
+        ...tx,
+        formattedDate,
+      };
+    });
+  }, [transactions]);
 
   if (loading) {
     return (
@@ -75,18 +90,12 @@ export function TransactionHistoryTable({ assetId }: TransactionHistoryTableProp
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {transactions.map((tx) => {
+            {formattedTransactions.map((tx) => {
               const isBuy = tx.action === "BUY";
-              const date = new Date(tx.transactionDate);
-              const formattedDate = date.toLocaleDateString("id-ID", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              });
 
               return (
                 <tr key={tx.id} className="hover:bg-muted/20 transition-colors">
-                  <td className="px-5 py-3 text-sm text-foreground">{formattedDate}</td>
+                  <td className="px-5 py-3 text-sm text-foreground">{tx.formattedDate}</td>
                   <td className="px-5 py-3">
                     <span
                       className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full ${

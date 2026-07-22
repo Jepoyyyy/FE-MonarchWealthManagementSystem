@@ -34,16 +34,25 @@ export function AdminDashboardView({ users, products, assets }: AdminDashboardVi
     load();
   }, []);
 
-  const totalAUM = dashData ? Number(dashData.aum) : assets.reduce((s, a) => s + a.currentValue, 0);
-  const activeUsers = dashData ? dashData.active_user_count : users.filter((u) => u.role === "user" && u.status === "active").length;
-  const visibleProducts = dashData ? dashData.active_product_count : products.filter((p) => p.visible).length;
+  const totalAUM = useMemo(() => {
+    return dashData ? Number(dashData.aum) : assets.reduce((s, a) => s + (a.currentValue || 0), 0);
+  }, [dashData, assets]);
+
+  const activeUsers = useMemo(() => {
+    return dashData ? dashData.active_user_count : users.filter((u) => u.role === "user" && u.status === "active").length;
+  }, [dashData, users]);
+
+  const visibleProducts = useMemo(() => {
+    return dashData ? dashData.active_product_count : products.filter((p) => p.visible).length;
+  }, [dashData, products]);
+
   const recentLogs: any[] = [];
 
-  const profileDist = [
+  const profileDist = useMemo(() => [
     { name: "Risk Averse", value: dashData?.risk_profiles?.risk_averse ?? users.filter((u) => u.riskProfile === "risk_averse").length, color: "#10b981" },
     { name: "Moderate", value: dashData?.risk_profiles?.moderate ?? users.filter((u) => u.riskProfile === "moderate").length, color: "#f59e0b" },
     { name: "Risk Taker", value: dashData?.risk_profiles?.risk_taker ?? users.filter((u) => u.riskProfile === "risk_taker").length, color: "#ef4444" },
-  ];
+  ], [dashData, users]);
 
   const aumHistory = useMemo(() => genHistory(totalAUM || 200000000), [totalAUM]);
 

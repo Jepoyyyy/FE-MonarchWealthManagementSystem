@@ -43,14 +43,14 @@ export function ProductsView({ user, addLog, toast }: ProductsViewProps) {
 
   // fetch whenever filters or page change
   useEffect(() => {
-    fetchProducts({
+    useProductsStore.getState().fetchProducts({
       searchQuery: search || undefined,
       type: typeFilter !== "all" ? typeFilter : undefined,
       showAll: showHighRisk,
       page,
       size: PAGE_SIZE,
     });
-  }, [search, typeFilter, showHighRisk, page, fetchProducts]);
+  }, [search, typeFilter, showHighRisk, page]);
 
   const saveTracked = async (data: Omit<Asset, "id">) => {
     const p = products.find((pr) => pr.id === data.productId);

@@ -30,12 +30,10 @@ export default function Layout() {
   const goals = useGoalsStore((s) => s.goals);
   const [finProfile, setFinProfile] = useState<FinancialProfile | null>(null);
 
-  const fetchPortfolio = usePortfolioStore((s) => s.fetchPortfolio);
-  const fetchGoals = useGoalsStore((s) => s.fetchGoals);
-  const fetchProjections = useGoalsStore((s) => s.fetchProjections);
-
-  const { products, fetchProducts } = useProductsStore();
-  useEffect(() => { fetchProducts(); }, [fetchProducts]);
+  const products = useProductsStore((s) => s.products);
+  useEffect(() => {
+    useProductsStore.getState().fetchProducts();
+  }, []);
 
   const addLog = useCallback((l: Omit<AuditLog, "id">) => {
     
@@ -58,9 +56,9 @@ export default function Layout() {
 
   useEffect(() => {
     if (currentUser && currentUser.role !== "admin") {
-      fetchPortfolio();
-      fetchGoals();
-      fetchProjections();
+      usePortfolioStore.getState().fetchPortfolio();
+      useGoalsStore.getState().fetchGoals();
+      useGoalsStore.getState().fetchProjections();
       
       // Fetch financial profile
       import('~/features/finances').then(({ FinancesApi }) => {
@@ -99,7 +97,7 @@ export default function Layout() {
           });
       });
     }
-  }, [currentUser, fetchPortfolio, fetchGoals, fetchProjections]);
+  }, [currentUser]);
 
   // Sync user total assets - local fallback
   const syncedUser = useMemo(() => {

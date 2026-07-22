@@ -71,9 +71,9 @@ export function GoalsView({
 
   // Initial data fetch
   useEffect(() => {
-    fetchGoals();
-    fetchPortfolio();
-  }, [fetchGoals, fetchPortfolio]);
+    useGoalsStore.getState().fetchGoals();
+    usePortfolioStore.getState().fetchPortfolio();
+  }, []);
 
   // Calculated metrics
   const avgFunded = calculateAverageFunded(goals, portfolio.assets);

@@ -35,8 +35,8 @@ export function RecommendationsView({
   const { recommendations, loading, fetchRecommendations } = useRecommendationsStore();
 
   useEffect(() => {
-    fetchRecommendations();
-  }, [fetchRecommendations]);
+    useRecommendationsStore.getState().fetchRecommendations();
+  }, []);
 
   const { health, loading: healthLoading } = useHealthScore();
   const recs = recommendations;

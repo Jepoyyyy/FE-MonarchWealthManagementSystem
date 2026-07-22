@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { useOutletContext, useNavigate } from "react-router";
 import type { LayoutContextType } from "~/routes/layout";
-import { AdminDashboardView } from '~/features/admin';
+
+const AdminDashboardView = lazy(() => import("~/features/admin/components/AdminDashboardView").then(m => ({ default: m.AdminDashboardView })));
 
 export default function AdminDashboardRoute() {
   const context = useOutletContext<LayoutContextType>();
@@ -18,10 +19,12 @@ export default function AdminDashboardRoute() {
   }
 
   return (
-    <AdminDashboardView
-      users={context.users}
-      products={context.products}
-      assets={context.assets}
-    />
+    <Suspense fallback={<div className="flex items-center justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>}>
+      <AdminDashboardView
+        users={context.users}
+        products={context.products}
+        assets={context.assets}
+      />
+    </Suspense>
   );
 }
