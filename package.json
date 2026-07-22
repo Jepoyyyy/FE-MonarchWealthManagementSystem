@@ -7,7 +7,11 @@
     "build": "react-router build",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "npx react-router typegen && tsc",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:report": "playwright show-report",
+    "test:e2e:perf": "playwright test tests/auth/performance.spec.ts --reporter=html"
   },
   "dependencies": {
     "@react-router/node": "8.0.0",
@@ -23,6 +27,7 @@
     "zustand": "^5.0.14"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "@react-router/dev": "^8.0.0",
     "@tailwindcss/vite": "^4.2.2",
     "@testing-library/react": "^16.3.2",
