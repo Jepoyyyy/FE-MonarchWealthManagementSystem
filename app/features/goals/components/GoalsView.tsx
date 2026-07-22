@@ -3,7 +3,7 @@ import { Plus, Edit3 } from "lucide-react";
 import type { AppUser, Goal, FinancialProfile, Asset, Product } from "~/types";
 import { PageHeader } from "~/shared/components/PageHeader";
 import { Btn } from "~/shared/components/Button";
-import { FinancialProfileModal } from "~/features/finances";
+import { FinancialProfileModal, FinancesApi } from "~/features/finances";
 import { useGoalsStore } from "~/features/goals/goals.store";
 import { usePortfolioStore } from "~/features/assets/portfolio.store";
 import { GoalApi } from "~/features/goals/api";
@@ -47,7 +47,7 @@ export function GoalsView({
   const [showFinProfileModal, setShowFinProfileModal] = useState(false);
 
   // Data layer
-  const { goals, fetchGoals, fetchProjections } = useGoalsStore();
+  const { goals, fetchGoals } = useGoalsStore();
   const fetchPortfolio = usePortfolioStore((s) => s.fetchPortfolio);
   const portfolioLoading = usePortfolioStore((s) => s.loading);
   const isLoading = portfolioLoading;
@@ -73,7 +73,41 @@ export function GoalsView({
   useEffect(() => {
     useGoalsStore.getState().fetchGoals();
     usePortfolioStore.getState().fetchPortfolio();
-  }, []);
+
+    FinancesApi.get()
+      .then((response) => {
+        const data = response.data;
+        setFinProfile({
+          monthlyIncome: data.monthlyIncome || 0,
+          expenses: {
+            housing: data.housing || 0,
+            food: data.food || 0,
+            transport: data.transport || 0,
+            utilities: data.utilities || 0,
+            healthcare: data.healthcare || 0,
+            entertainment: data.entertainment || 0,
+            insurance: data.insurance || 0,
+            other: data.other || 0,
+          },
+        });
+      })
+      .catch(() => {
+        // If profile doesn't exist yet, use empty defaults
+        setFinProfile({
+          monthlyIncome: 0,
+          expenses: {
+            housing: 0,
+            food: 0,
+            transport: 0,
+            utilities: 0,
+            healthcare: 0,
+            entertainment: 0,
+            insurance: 0,
+            other: 0,
+          },
+        });
+      });
+  }, [setFinProfile]);
 
   // Calculated metrics
   const avgFunded = calculateAverageFunded(goals, portfolio.assets);
@@ -95,10 +129,9 @@ export function GoalsView({
         },
       });
       fetchGoals();
-      fetchProjections();
       toast.success("Financial profile updated successfully");
     },
-    [setFinProfile, fetchGoals, fetchProjections, toast]
+    [setFinProfile, fetchGoals, toast]
   );
 
   // Goal form handlers

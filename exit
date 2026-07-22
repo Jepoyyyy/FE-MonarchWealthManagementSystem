@@ -1,0 +1,345 @@
+[33mcommit 21925e17e58151436b4a1729fe1bc953935fa3ed[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mDEVELOPMENT[m[33m)[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Tue Jul 21 15:15:44 2026 +0700
+
+    language change
+
+[33mcommit 154cd71cbb1b401c695900e5ce9d09f6f6015629[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Tue Jul 21 14:13:16 2026 +0700
+
+    refactor: simplify error handling to use backend English messages directly
+    
+    - Remove hardcoded API_ERROR_CODES enum mapping
+    - Update error interfaces with proper types
+    - Use backend message field directly in toasts
+    - Add extractValidationErrors() for form field errors
+    - Add getFieldError() helper for single field lookup
+    - No frontend message mapping - backend provides English
+
+[33mcommit 37970b832809e489a3c1cd51a3d9c5851ad9ced3[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Tue Jul 21 14:12:32 2026 +0700
+
+    change tenor_month to tenor
+
+[33mcommit db0f3c31bbcf91955abbeb48cc133e8dcda01a88[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Tue Jul 21 11:55:31 2026 +0700
+
+    fix: frontend goal progress calculation including manual and asset saved amounts
+
+[33mcommit e6e4884e12ef32897bc522de0da530eb70ae4612[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Tue Jul 21 11:15:48 2026 +0700
+
+    fix(assets): use original asset.amount for cost basis
+    
+    Cost basis should always reflect total original investment (asset.amount),
+    not remaining units cost (units × avg_price). This ensures correct P/L
+    calculation even after partial sales.
+
+[33mcommit 29a1460c870ad103a664f44ccc7b5c8a1261e72c[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Tue Jul 21 10:54:57 2026 +0700
+
+    fix(assets): use pnlData for accurate total P/L calculation
+
+[33mcommit 6f01ff807884ebaf2d35bde96c9b335f249e6983[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Tue Jul 21 10:25:26 2026 +0700
+
+    feat: re-take questionare
+
+[33mcommit a74aa07ec5fa845df5292337490052dc3c70344e[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Tue Jul 21 09:35:55 2026 +0700
+
+    fix Bank Deposit
+
+[33mcommit ada46d7492a4e3027e797bf43aec94c49b0745df[m[33m ([m[1;31morigin/DEVELOPMENT[m[33m)[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Mon Jul 20 16:13:24 2026 +0700
+
+    assets fix
+
+[33mcommit 65b749770a074439ee034ce4f13e3a6006de9960[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Mon Jul 20 15:59:06 2026 +0700
+
+    chore: add vitest testing dependencies
+
+[33mcommit 1df8c6adda9c65768d97551e39b5a9fbeada00a7[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Mon Jul 20 15:58:58 2026 +0700
+
+    feat: fetch portfolio data and add loading state on goals page mount
+
+[33mcommit 52deb638e2b13e767f302de24df0f0c10248cc50[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Mon Jul 20 15:47:37 2026 +0700
+
+    recomendation fix
+
+[33mcommit ff61ba43d074e31929e5cdfb3160e149bdc96d66[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Mon Jul 20 11:47:16 2026 +0700
+
+    Assets fix
+
+[33mcommit a53a8a687cbb70e3da3d84d957590f629b833f8a[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Mon Jul 20 11:22:02 2026 +0700
+
+    fix: map backend snake_case properties to camelCase in assets api using a DRY mapAsset helper
+
+[33mcommit 3ba6e104ee6b332dae707ce0c5e5f629f8860108[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Mon Jul 20 11:05:42 2026 +0700
+
+    fix: integrate backend PnL data, resolve redundant frontend calculations, and sync goals on profile update
+
+[33mcommit f3fa9193ad97ad3640fc1502514ebcb6d03dc085[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Mon Jul 20 09:37:40 2026 +0700
+
+    fix: redirect admin users to /admin when landing on base route
+
+[33mcommit dce1ec8caa86fd0b346f5f7266ab3051f928a09b[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Mon Jul 20 08:53:23 2026 +0700
+
+    fix: resolve request method GET not supported on asset update by using PUT response directly
+
+[33mcommit 1229889cb572c5853f1a574b953438d9eee360e8[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Sun Jul 19 18:25:49 2026 +0700
+
+    remove redundant calculator
+
+[33mcommit 88f84e131f7ea62d0de27265696bbc5e52471847[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Sun Jul 19 17:55:51 2026 +0700
+
+    feat: implement server-side search, category filter, and diff drawer in AdminAuditView
+
+[33mcommit 56a1f2cba0171ceeeb83bb70072bf96c0f131a7b[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Sun Jul 19 17:39:17 2026 +0700
+
+    feat: implement admin product management view with filters, pagination and creation modal
+
+[33mcommit c0bf95c47151cb7aa53250e765f85049fb56ef76[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Sun Jul 19 17:16:57 2026 +0700
+
+    feat: implement admin dashboard and user management views with filter and pagination
+
+[33mcommit 8efbe33b4dc86b65a540f0be89266d000aee30d1[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Sun Jul 19 14:00:45 2026 +0700
+
+    fix: move chartData useMemo above early return to satisfy Rules of Hooks
+
+[33mcommit d3a2b72a9fdebb5226b6dd8bcfd81f3abe7c3760[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Sun Jul 19 13:58:25 2026 +0700
+
+    feat: refactor frontend ProgressView to use backend goal progress
+
+[33mcommit d9eaedf235c2dd5eb54d8473e0ec072ba3581ed1[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Sun Jul 19 13:19:30 2026 +0700
+
+    recomendation integration
+
+[33mcommit 98ffad323b53d1d37ac8996102452a534fddd5c1[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Sun Jul 19 10:31:14 2026 +0700
+
+    goals current amount fix
+
+[33mcommit d4dcc9a5eab9668df91fb87ee5664419b9cb711c[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Sun Jul 19 10:06:36 2026 +0700
+
+    assets buy/sell bug fix
+
+[33mcommit 9452e0560ebba2efdc43cabedf945b198a0da157[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Sat Jul 18 22:21:52 2026 +0700
+
+    full integration
+
+[33mcommit 2cd423d7844918462b2e89c3e190ef75ea80e690[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Sat Jul 18 18:32:50 2026 +0700
+
+    code review fix
+
+[33mcommit 61d8433d2b5ba110d1d3d50260ea40a1157572e5[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Sat Jul 18 16:39:14 2026 +0700
+
+    add goals to assets
+
+[33mcommit a7b7955ee46504c970212e0166c79378e9d2a327[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Sat Jul 18 11:44:39 2026 +0700
+
+    product tracking fix
+
+[33mcommit 45ec3a6b34794862805ce1d2f56a84fa2b8790ff[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Sat Jul 18 11:06:16 2026 +0700
+
+    introduce products
+
+[33mcommit 396d02cb70ad91220977fc2265648a87f04da95c[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Fri Jul 17 15:44:24 2026 +0700
+
+    product adjustment (still broken)
+
+[33mcommit 6968732c0e0801290d79a9305c455df3c6857423[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Fri Jul 17 13:19:20 2026 +0700
+
+    health api implementation
+
+[33mcommit 5a376329c67607794dc31f0e01b15bf27cee5c14[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Fri Jul 17 10:34:13 2026 +0700
+
+    add user risk_profile
+
+[33mcommit a9d588575e60b62e21517339d3e6dbb256ee46ee[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Fri Jul 17 10:19:44 2026 +0700
+
+    remove comments
+
+[33mcommit 956b732532e46b3d7b7848edc72adaf585b9ea13[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Thu Jul 16 17:53:03 2026 +0700
+
+    refactor: complete api integration architecture and backend alignment
+
+[33mcommit 8b3ff90b08b342ab9491b45ff3ab7151475bf037[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Thu Jul 16 17:34:41 2026 +0700
+
+    refactor: complete phase 5 route optimization and import updates
+
+[33mcommit 945d8521b2a6ea30b50a4126dae2697c59ef6e3f[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Thu Jul 16 17:26:16 2026 +0700
+
+    refactor: complete phase 3 and 4 feature and logic migration
+
+[33mcommit ab1c7a6505353a40cc6e90a0e20fca1aa37509f5[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Thu Jul 16 17:18:30 2026 +0700
+
+    refactor: complete phase 2 restructuring (shared, layout, and utilities)
+
+[33mcommit 70541a54c9a03557f00eb98efe7c5759720984d7[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Thu Jul 16 16:23:23 2026 +0700
+
+    rework class suggestion
+
+[33mcommit 91a06f09a111577c88348ee2c3a2c90e88007fdd[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Thu Jul 16 16:16:13 2026 +0700
+
+    intg: product, assets api hook
+
+[33mcommit 219d4b77003cc8daa24eda36339601a6598c06d3[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Wed Jul 15 20:46:02 2026 +0700
+
+    intg: dashboard to api
+
+[33mcommit 3aede720135c5ffd1a994ff51b3d3bc2d7571dd4[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Wed Jul 15 13:58:02 2026 +0700
+
+    intg: api integration
+
+[33mcommit 3dbe41a5bad88ae84e59f01fd5cdb7966a6b1b4f[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Wed Jul 15 08:23:14 2026 +0700
+
+    feat: Implement Phase 2 Backend-to-Frontend API Integration
+    
+    - Update app/types.ts with missing interfaces (AssetRegistrationDTO, GoalSettingDTO, AssetsPnLResponse, etc.)
+    - Create/Update domain API modules (assets, goals, dashboard, products, recommendations)
+    - Create domain Zustand stores (portofolioStore, goalsStore, productsStore, recommendationsStore)
+
+[33mcommit c6c28b5dc88ad22b051728f149c9186c954edea7[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Tue Jul 14 14:54:00 2026 +0700
+
+    feat: add RoleShield component for route protection
+
+[33mcommit ce784712c7b8342117f15cb7d593eb01c87f6625[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Tue Jul 14 14:17:14 2026 +0700
+
+    feat: add assets api wrapper
+
+[33mcommit 0677077acffe89cc70793d707e54c5aa7d4e9b0c[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Tue Jul 14 14:14:57 2026 +0700
+
+    feat: add auth api wrapper
+
+[33mcommit 460b0500972f75e76050bd6bfe7fe371e07bf6e2[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Tue Jul 14 14:13:58 2026 +0700
+
+    feat: add axios client with jwt interceptor
+
+[33mcommit 8edf0d326a2c7f9b9d5fe7dc8a3dc2e1c60ca46e[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Tue Jul 14 14:12:09 2026 +0700
+
+    feat: add zustand auth store
+
+[33mcommit da3a2fe865210ebad563ec3450c755e6a04ce724[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Tue Jul 14 11:51:11 2026 +0700
+
+    feat: add memoization and performance improvement
+
+[33mcommit 794860af2e18b0e13b2533f3b94ab8e4c617a53d[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Tue Jul 14 11:11:25 2026 +0700
+
+    feat: goals add buy and sell
+
+[33mcommit 1cca40ba5a67ee8c80f73e213b9bf13f1c0ef66f[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Tue Jul 14 10:47:27 2026 +0700
+
+    feat(assets): modular transaction forms with per-asset-class UI + wire PortfolioService
+    - Add isolated StockTransactionForm, MutualFundTransactionForm (bidirectional toggle),
+      BondTransactionForm (×1M validation), DepositTransactionForm (rate header)
+    - Refactor AddTransactionModal to shell delegating by product.type
+    - Add Buy/Top Up & Sell/Redeem buttons to AssetDetailPage
+    - Wire updateAsset in AssetsView to use PortfolioService.processTransaction
+    - Add mock BBCA stock asset (10 lots @ 5200) for testing
+    - Update useAssetDetail hook signature to accept transaction params
+
+[33mcommit 47be26adc4c5702cb1007e8b47b4153651032823[m
+Author: rifqi edrial <tobbyanggel@gmail.com>
+Date:   Fri Jul 10 13:38:03 2026 +0700
+
+    feat(ui): add StatCard, Badge, and Btn primitivecomponents
+
+[33mcommit 6fe3c24c12d4c01841bfe11d284e724183da559e[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: Manuel <manuelzefanyaaa@gmail.com>
+Date:   Thu Jul 9 10:48:22 2026 +0700
+
+    Initial commit from create-react-router

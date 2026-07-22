@@ -42,8 +42,7 @@ export function AssetsView({
   const refreshAllData = useCallback(async () => {
     await Promise.all([
       usePortfolioStore.getState().fetchPortfolio(),
-      useGoalsStore.getState().fetchGoals(),
-      useGoalsStore.getState().fetchProjections()
+      useGoalsStore.getState().fetchGoals()
     ]);
   }, []);
 

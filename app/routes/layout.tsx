@@ -57,45 +57,6 @@ export default function Layout() {
   useEffect(() => {
     if (currentUser && currentUser.role !== "admin") {
       usePortfolioStore.getState().fetchPortfolio();
-      useGoalsStore.getState().fetchGoals();
-      useGoalsStore.getState().fetchProjections();
-      
-      // Fetch financial profile
-      import('~/features/finances').then(({ FinancesApi }) => {
-        FinancesApi.get()
-          .then((response) => {
-            const data = response.data;
-            setFinProfile({
-              monthlyIncome: data.monthlyIncome || 0,
-              expenses: {
-                housing: data.housing || 0,
-                food: data.food || 0,
-                transport: data.transport || 0,
-                utilities: data.utilities || 0,
-                healthcare: data.healthcare || 0,
-                entertainment: data.entertainment || 0,
-                insurance: data.insurance || 0,
-                other: data.other || 0,
-              },
-            });
-          })
-          .catch(() => {
-            // If profile doesn't exist yet, use empty defaults
-            setFinProfile({
-              monthlyIncome: 0,
-              expenses: {
-                housing: 0,
-                food: 0,
-                transport: 0,
-                utilities: 0,
-                healthcare: 0,
-                entertainment: 0,
-                insurance: 0,
-                other: 0,
-              },
-            });
-          });
-      });
     }
   }, [currentUser]);
 

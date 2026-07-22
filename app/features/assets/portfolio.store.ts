@@ -8,7 +8,6 @@ interface PortfolioState {
   assets: Asset[];
   pnlData: AssetsPnLResponse[];
   goalProgress: GoalProgressResponse[];
-  logs: TransactionHistory[];
   loading: boolean;
   error: string | null;
   fetchPortfolio: () => Promise<void>;
@@ -18,23 +17,20 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
   assets: [],
   pnlData: [],
   goalProgress: [],
-  logs: [],
   loading: false,
   error: null,
   fetchPortfolio: async () => {
     set({ loading: true, error: null });
     try {
       const products = useProductsStore.getState().products;
-      const [assetsRes, pnlRes, logsRes, progressRes] = await Promise.all([
+      const [assetsRes, pnlRes, progressRes] = await Promise.all([
         AssetApi.list(products),
         AssetApi.fetchPnL(),
-        AssetApi.fetchLogs(),
         GoalApi.fetchProgress(),
       ]);
       set({
         assets: assetsRes.data,
         pnlData: pnlRes.data,
-        logs: logsRes.data,
         goalProgress: progressRes.data,
         loading: false,
       });
