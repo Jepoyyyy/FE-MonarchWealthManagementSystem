@@ -41,12 +41,10 @@ export async function clearAuthStorage(page: Page) {
  * Verify user is logged out in UI and storage
  */
 export async function verifyLoggedOut(page: Page) {
+  await expect(page).toHaveURL("/login");
+
   const auth = await getAuthFromStorage(page);
   expect(auth).toBeNull();
-  await expect(
-    page.getByRole('button', { name: /sign in/i })
-      .or(page.getByRole('button', { name: /create account/i }))
-  ).toBeVisible();
 }
 
 /**

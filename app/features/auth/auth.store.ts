@@ -44,7 +44,10 @@ export const useAuthStore = create<AuthState>()(
 
         set({ token, refreshToken, user: mappedUser });
       },
-      clearAuth: () => set({ token: null, refreshToken: null, user: null }),
+      clearAuth: () => {
+        set({ token: null, refreshToken: null, user: null });
+        useAuthStore.persist.clearStorage();
+      },
       updateUserRiskProfile: (profile: RiskProfile) => {
         set((state) => {
           if (!state.user) return state;

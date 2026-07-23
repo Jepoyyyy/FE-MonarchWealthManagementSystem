@@ -27,6 +27,8 @@ test.describe('Logout Flow - UI (LO01 - LO07)', () => {
 
     await page.getByRole('button', { name: /sign out|logout/i }).click();
 
+    await expect(page).toHaveURL('/login');
+
     const authAfter = await getAuthFromStorage(page);
     expect(authAfter).toBeNull();
   });
@@ -37,8 +39,10 @@ test.describe('Logout Flow - UI (LO01 - LO07)', () => {
     await page.goto(ROUTES.DASHBOARD);
     await page.getByRole('button', { name: /sign out|logout/i }).click();
 
+    await expect(page).toHaveURL('/login');
+
     await page.goto(ROUTES.GOALS);
-    await expect(page.getByRole('button', { name: /sign in/i })).toBeVisible();
+    await expect(page).toHaveURL("/login");
   });
 
   test('LO05: Double logout or cleared storage gracefully handled', async ({ page, authenticatedUser }) => {
@@ -48,21 +52,20 @@ test.describe('Logout Flow - UI (LO01 - LO07)', () => {
     await clearAuthStorage(page);
     await page.reload();
 
-    await expect(page.getByRole('button', { name: /sign in/i })).toBeVisible();
+    await expect(page).toHaveURL("/login");
   });
 
   test('LO07: Back button after logout cannot access protected dashboard', async ({ page, authenticatedUser }) => {
     test.info().annotations.push({ type: 'test-id', description: 'LO07' });
 
+    await page.goto(ROUTES.GOALS);
     await page.goto(ROUTES.DASHBOARD);
+
     await page.getByRole('button', { name: /sign out|logout/i }).click();
+    await expect(page).toHaveURL('/login');
 
     await page.goBack();
-    // Re-verify user is either redirected to login or cannot perform actions
-    await expect(
-      page.getByRole('button', { name: /sign in/i })
-        .or(page.getByText(/create your account/i))
-        .or(page.locator('text=Welcome back'))
-    ).toBeVisible();
+    // Re-verify user is redirected to login when trying to access protected route via back button
+    await expect(page).toHaveURL("/login");
   });
 });

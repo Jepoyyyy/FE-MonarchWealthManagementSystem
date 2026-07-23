@@ -85,7 +85,8 @@ export async function setAuthInPage(page: Page, token: string, refreshToken?: st
     },
     version: 0
   };
-  await page.addInitScript((data) => {
+  await page.goto('/login');
+  await page.evaluate((data) => {
     window.localStorage.setItem('wms-auth', JSON.stringify(data));
   }, payload);
 }
