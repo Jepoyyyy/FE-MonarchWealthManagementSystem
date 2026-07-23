@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { api } from '~/shared/api/client';
 import { ProfilerApi } from '~/features/profiler';
 import { riskLabel } from "~/utils";
 import { useAuthStore } from '~/features/auth/auth.store';

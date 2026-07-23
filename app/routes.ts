@@ -1,6 +1,12 @@
 import { type RouteConfig, index, layout, route } from "@react-router/dev/routes";
 
 export default [
+  // Unauthenticated routes
+  route("login", "routes/auth/login.tsx"),
+  route("register", "routes/auth/register.tsx"),
+  route("questionnaire", "routes/auth/questionnaire.tsx"),
+
+  // Authenticated routes under layout
   layout("routes/layout.tsx", [
     // User Routes
     index("routes/user/dashboard.tsx"),
@@ -15,5 +21,4 @@ export default [
     route("admin/users", "routes/admin/users.tsx"),
     route("admin/audit", "routes/admin/audit.tsx"),
   ]),
-  route("questionnaire", "routes/user/questionnaire.tsx"),
 ] satisfies RouteConfig;

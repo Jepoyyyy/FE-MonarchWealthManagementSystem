@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router";
 import { Mail, Lock, Eye, EyeOff, AlertTriangle, UserIcon, Shield } from "lucide-react";
 import type { AppUser, View } from "~/types";
 import { AuthShell } from '~/features/auth/components/AuthShell';
@@ -6,14 +7,15 @@ import { InputField } from '~/shared/components/Input';
 import { Btn } from '~/shared/components/Button';
 import { AuthApi } from '~/features/auth/api';
 import { getBackendErrorMessage, extractValidationErrors } from '~/shared/api/errors';
-import { useAuthStore } from '~/features/auth/auth.store';
+import { toast } from "sonner";
 
 interface RegisterViewProps {
   onRegister: (user: AppUser) => void;
-  onNavigate: (v: View) => void;
+  onNavigate?: (v: View | string) => void;
 }
 
 export function RegisterView({ onRegister, onNavigate }: RegisterViewProps) {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
@@ -38,39 +40,34 @@ export function RegisterView({ onRegister, onNavigate }: RegisterViewProps) {
     setLoading(true);
 
     try {
-      const res = await AuthApi.register({ name, email, password: pass });
-      const { accessToken, refreshToken, user: authUser } = res.data;
+      await AuthApi.register({ name, email, password: pass });
+      sessionStorage.setItem("justRegistered", "1");
+      console.log("Flag set:", sessionStorage.getItem("justRegistered"));
 
-      // Save to Zustand store
-      useAuthStore.getState().setAuth(accessToken, refreshToken, authUser);
-
-      // Trigger root App state update using the mapped user from store
-      const mappedUser = useAuthStore.getState().user;
-      if (mappedUser) {
-        onRegister(mappedUser);
+      if (onNavigate) {
+        onNavigate("login");
+      } else {
+        navigate("/login");
       }
     } catch (err: any) {
-      // Check if there are field validation errors
       const validationErrors = extractValidationErrors(err);
-      
+
       if (validationErrors) {
-        // Build error message from field validation errors
         const fieldMessages = Object.entries(validationErrors)
           .map(([field, reason]) => {
-            // Strip the "registerRequest" prefix for cleaner display
             const cleanField = field.replace(/^registerRequest/, '').toLowerCase();
             return `${cleanField}: ${reason}`;
           })
           .join(', ');
         setError(fieldMessages);
       } else {
-        // Display backend error message directly
         const errorMessage = getBackendErrorMessage(
           err,
           "An error occurred during registration. Please try again."
         );
         setError(errorMessage);
       }
+    } finally {
       setLoading(false);
     }
   };
@@ -159,7 +156,7 @@ export function RegisterView({ onRegister, onNavigate }: RegisterViewProps) {
         Already have an account?{" "}
         <Btn
           variant="unstyled"
-          onClick={() => onNavigate("login")}
+          onClick={() => (onNavigate ? onNavigate("login") : navigate("/login"))}
           className="font-medium hover:underline text-primary"
         >
           Sign in

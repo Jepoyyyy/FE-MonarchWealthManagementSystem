@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import { Mail, Lock, Eye, EyeOff, AlertTriangle } from "lucide-react";
 import type { AppUser, View } from "~/types";
 import { AuthShell } from '~/features/auth/components/AuthShell';
@@ -8,18 +9,30 @@ import { Shield } from "lucide-react";
 import { AuthApi } from '~/features/auth/api';
 import { getBackendErrorMessage, extractValidationErrors } from '~/shared/api/errors';
 import { useAuthStore } from '~/features/auth/auth.store';
+import { toast } from "sonner";
 
 interface LoginViewProps {
   onLogin: (u: AppUser) => void;
-  onNavigate: (v: View) => void;
+  onNavigate?: (v: View | string) => void;
 }
 
 export function LoginView({ onLogin, onNavigate }: LoginViewProps) {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (sessionStorage.getItem("justRegistered")) {
+      console.log("Firing toast");
+      toast.success("Registration successful", {
+        description: "Please sign in with your new account.",
+      });
+      sessionStorage.removeItem("justRegistered");
+    }
+  }, []);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -132,7 +145,7 @@ export function LoginView({ onLogin, onNavigate }: LoginViewProps) {
           Don't have an account?{" "}
           <Btn
             variant="unstyled"
-            onClick={() => onNavigate("register")}
+            onClick={() => (onNavigate ? onNavigate("register") : navigate("/register"))}
             className="font-medium hover:underline text-primary"
           >
             Create one

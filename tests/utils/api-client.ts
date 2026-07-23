@@ -1,4 +1,4 @@
-import { APIRequestContext } from '@playwright/test';
+import type { APIRequestContext } from '@playwright/test';
 
 export const API_BASE_URL = 'http://localhost:8080/api/v1';
 
@@ -24,7 +24,9 @@ export class AuthApiClient {
   }
 
   async logout(accessToken?: string) {
-    const headers = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
+    const headers: Record<string, string> = {
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+    };
     const startTime = Date.now();
     const response = await this.request.post(`${API_BASE_URL}/auth/logout`, {
       headers,

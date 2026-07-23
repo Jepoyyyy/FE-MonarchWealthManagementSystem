@@ -1,10 +1,20 @@
-import { useNavigate } from "react-router";
+import { useNavigate, redirect } from "react-router";
 import { useEffect, useState } from "react";
 import { QuestionnaireView, ProfileResultView } from "~/features/auth";
 import { useAuthStore } from "~/features/auth/auth.store";
 import { ProfilerApi } from "~/features/profiler";
 import { Toaster, toast } from "sonner";
 import type { RiskProfile } from "~/types";
+import type { Route } from "./+types/questionnaire";
+
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
+  const user = useAuthStore.getState().user;
+  if (!user) {
+    throw redirect("/login");
+  }
+  return null;
+}
+clientLoader.hydrate = true as const;
 
 export default function QuestionnairePage() {
   const navigate = useNavigate();
@@ -14,7 +24,7 @@ export default function QuestionnairePage() {
 
   useEffect(() => {
     if (!user) {
-      navigate("/", { replace: true });
+      navigate("/login", { replace: true });
     }
   }, [user, navigate]);
 
@@ -62,7 +72,6 @@ export default function QuestionnairePage() {
   return (
     <div className="w-full min-h-screen">
       <QuestionnaireView user={user} onComplete={handleComplete} />
-      <Toaster richColors position="top-right" duration={3000} />
     </div>
   );
 }

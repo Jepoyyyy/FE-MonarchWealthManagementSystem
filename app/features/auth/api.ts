@@ -3,7 +3,9 @@ import type { AppUser } from '~/types';
 
 interface LoginPayload { email: string; password: string; }
 interface RegisterPayload { name: string; email: string; password: string; }
-interface AuthSuccessResponse { accessToken: string; refreshToken: string; user: AppUser; }
+interface AuthSuccessResponse {
+  result: { accessToken: any; refreshToken: any; user: any; }; accessToken: string; refreshToken: string; user: AppUser; 
+}
 
 export const AuthApi = {
   login: (data: LoginPayload) => 

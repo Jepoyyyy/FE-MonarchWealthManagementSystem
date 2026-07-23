@@ -1,12 +1,13 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
-import { Outlet } from "react-router";
+import { Outlet, redirect, useNavigate } from "react-router";
 import { Toaster, toast } from "sonner";
 import { AppLayout } from '~/shared/layouts';
-import { LoginView, RegisterView, QuestionnaireView, ProfileResultView, useAuthManager } from '~/features/auth';
 import type { AppUser, Product, Asset, Goal, FinancialProfile, AuditLog } from "~/types";
 import { useProductsStore } from '~/features/products';
 import { usePortfolioStore } from '~/features/assets/portfolio.store';
 import { useGoalsStore } from '~/features/goals/goals.store';
+import { useAuthStore } from '~/features/auth/auth.store';
+import type { Route } from "./+types/layout";
 
 export interface LayoutContextType {
   currentUser: AppUser | null;
@@ -23,7 +24,22 @@ export interface LayoutContextType {
   toast: any;
 }
 
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
+  const user = useAuthStore.getState().user;
+  if (!user) {
+    throw redirect('/login');
+  }
+  // Admin users are not redirected to questionnaire even if incomplete
+  if (user.role !== "admin" && !user.questionnaireCompleted) {
+    throw redirect('/questionnaire');
+  }
+  return { user };
+}
+clientLoader.hydrate = true as const;
+
 export default function Layout() {
+  const navigate = useNavigate();
+  const currentUser = useAuthStore((s) => s.user);
   const [users, setUsers] = useState<AppUser[]>([]);
   const assets = usePortfolioStore((s) => s.assets);
   const [logs, setLogs] = useState<AuditLog[]>([]);
@@ -36,23 +52,8 @@ export default function Layout() {
   }, []);
 
   const addLog = useCallback((l: Omit<AuditLog, "id">) => {
-    
     setLogs((prev) => [{ ...l, id: `l${Date.now()}` }, ...prev]);
   }, []);
-
-  const {
-    currentUser,
-    setCurrentUser,
-    authView,
-    setAuthView,
-    showResult,
-    setShowResult,
-    resultProfile,
-    handleLogin,
-    handleRegister,
-    handleQuestionnaire,
-    handleLogout,
-  } = useAuthManager(users, setUsers, addLog);
 
   useEffect(() => {
     if (currentUser && currentUser.role !== "admin") {
@@ -68,56 +69,51 @@ export default function Layout() {
     return { ...currentUser, totalAssets: total };
   }, [currentUser, assets]);
 
-  if (!currentUser) {
-    if (authView === "register") {
-      return (
-        <div className="w-full min-h-screen">
-          <RegisterView onRegister={handleRegister} onNavigate={setAuthView} />
-          <Toaster richColors position="top-right" duration={3000} />
-        </div>
-      );
+  const handleLogout = async () => {
+    try {
+      const { AuthApi } = await import("~/features/auth/api");
+      await AuthApi.logout();
+    } catch (err) {
+      // Ignore network errors on logout
+    } finally {
+      useAuthStore.getState().clearAuth();
+      if (currentUser) {
+        addLog({
+          userId: currentUser.id,
+          userName: currentUser.name,
+          action: "LOGOUT",
+          details: "User signed out",
+          timestamp: new Date().toISOString(),
+          category: "auth",
+        });
+      }
+      navigate("/login", { replace: true });
     }
-    return (
-      <div className="w-full min-h-screen">
-        <LoginView onLogin={handleLogin} onNavigate={setAuthView} />
-        <Toaster richColors position="top-right" duration={3000} />
-      </div>
-    );
-  }
+  };
 
-  if (authView === "questionnaire" && !currentUser.questionnaireCompleted) {
-    return (
-      <div className="w-full min-h-screen">
-        <QuestionnaireView user={currentUser} onComplete={handleQuestionnaire} />
-        <Toaster richColors position="top-right" duration={3000} />
-      </div>
-    );
-  }
+  const setCurrentUser: React.Dispatch<React.SetStateAction<AppUser | null>> = useCallback((action) => {
+    const prevUser = useAuthStore.getState().user;
+    const nextUser = typeof action === "function" ? action(prevUser) : action;
+    if (nextUser) {
+      const { token, refreshToken } = useAuthStore.getState();
+      if (token && refreshToken) {
+        useAuthStore.getState().setAuth(token, refreshToken, nextUser);
+      }
+    } else {
+      useAuthStore.getState().clearAuth();
+    }
+  }, []);
 
-  if (showResult && resultProfile) {
-    return (
-      <div className="w-full min-h-screen">
-        <ProfileResultView
-          profile={resultProfile.profile}
-          score={resultProfile.score}
-          onContinue={() => {
-            setShowResult(false);
-            setAuthView("dashboard");
-          }}
-        />
-        <Toaster richColors position="top-right" duration={3000} />
-      </div>
-    );
+  if (!syncedUser) {
+    return null;
   }
-
-  const user = syncedUser!;
 
   return (
-    <AppLayout user={user} onLogout={handleLogout}>
+    <AppLayout user={syncedUser} onLogout={handleLogout}>
       <Outlet
         context={
           {
-            currentUser: user,
+            currentUser: syncedUser,
             setCurrentUser,
             users,
             setUsers,

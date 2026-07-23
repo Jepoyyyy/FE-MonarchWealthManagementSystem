@@ -1,0 +1,47 @@
+name: Playwright Auth Tests
+
+on:
+  push:
+    branches: [main, DEVELOPMENT]
+  pull_request:
+    branches: [main, DEVELOPMENT]
+
+jobs:
+  test-auth:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run auth tests
+        run: npx playwright test tests/auth/ --reporter=html,json
+
+      - name: Check performance regression
+        if: always()
+        run: node scripts/check-performance-regression.js
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-auth-report
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-auth-results
+          path: test-results/
+          retention-days: 30

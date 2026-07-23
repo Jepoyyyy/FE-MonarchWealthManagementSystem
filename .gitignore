@@ -13,6 +13,8 @@ CLAUDE.md
 /test-result/
 /test/
 *.md
+/tests/
+playwright.config.ts
 
 # React Router
 /.react-router/
