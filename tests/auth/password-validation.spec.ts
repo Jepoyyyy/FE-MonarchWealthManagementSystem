@@ -18,7 +18,7 @@ test.describe('Password Validation Rules (PV01 - PV05)', () => {
     await expect(registerPage.errorMessage).toContainText(/at least 8 characters/i);
   });
 
-  test('PV04: Allow complex passwords with special characters', async ({ page, registerPage }) => {
+  test('PV04: Allow complex passwords with special characters', async ({ page, registerPage, loginPage }) => {
     test.info().annotations.push({ type: 'test-id', description: 'PV04' });
 
     const complexPass = 'P@ssw0rd_!#$%^&*()_+~';
@@ -27,14 +27,16 @@ test.describe('Password Validation Rules (PV01 - PV05)', () => {
     await registerPage.goto();
     await registerPage.register('Complex User', email, complexPass, complexPass);
 
-    await expect(
-      page.getByText(/risk profile assessment/i)
-        .or(page.getByRole('button', { name: /next question/i }))
-        .or(page.getByRole('button', { name: /sign out|logout/i }))
-    ).toBeVisible({ timeout: 15000 });
+    // Wait for redirect to login
+    await expect(page).toHaveURL(/login/, { timeout: 10000 });
+    
+    // Login with registered credentials
+    await loginPage.login(email, complexPass);
+
+    await expect(page.getByText(/risk profile assessment/i).first()).toBeVisible({ timeout: 15000 });
   });
 
-  test('PV05: Allow international & unicode characters in passwords', async ({ page, registerPage }) => {
+  test('PV05: Allow international & unicode characters in passwords', async ({ page, registerPage, loginPage }) => {
     test.info().annotations.push({ type: 'test-id', description: 'PV05' });
 
     const unicodePass = 'Pässwörd123🔑🛡️';
@@ -43,10 +45,12 @@ test.describe('Password Validation Rules (PV01 - PV05)', () => {
     await registerPage.goto();
     await registerPage.register('Unicode User', email, unicodePass, unicodePass);
 
-    await expect(
-      page.getByText(/risk profile assessment/i)
-        .or(page.getByRole('button', { name: /next question/i }))
-        .or(page.getByRole('button', { name: /sign out|logout/i }))
-    ).toBeVisible({ timeout: 15000 });
+    // Wait for redirect to login
+    await expect(page).toHaveURL(/login/, { timeout: 10000 });
+    
+    // Login with registered credentials
+    await loginPage.login(email, unicodePass);
+
+    await expect(page.getByText(/risk profile assessment/i).first()).toBeVisible({ timeout: 15000 });
   });
 });

@@ -75,9 +75,22 @@ export function AdminDashboardView({ users, products, assets }: AdminDashboardVi
       <PageHeader title="Admin Overview" subtitle="Platform-wide metrics and activity" />
 
       {loading && (
-        <div className="flex items-center justify-center p-12" data-testid="dashboard-loading">
-          <div className="animate-pulse flex gap-2 items-center text-muted-foreground">
-             Loading dashboard...
+        <div className="space-y-6" data-testid="admin-dashboard-loading">
+          {/* Skeleton stat cards */}
+          <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="bg-card rounded-xl border border-border p-4 animate-pulse">
+                <div className="h-4 bg-muted rounded w-24 mb-3"></div>
+                <div className="h-8 bg-muted rounded w-32 mb-2"></div>
+                <div className="h-3 bg-muted rounded w-20"></div>
+              </div>
+            ))}
+          </div>
+          {/* Skeleton activity log */}
+          <div className="bg-card rounded-xl border border-border p-6 space-y-3 animate-pulse">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="h-12 bg-muted rounded"></div>
+            ))}
           </div>
         </div>
       )}

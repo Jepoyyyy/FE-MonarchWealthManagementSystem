@@ -191,6 +191,27 @@ export function AssetsView({
         }
       />
 
+      {pnlLoading ? (
+        <div className="space-y-6" data-testid="assets-loading">
+          {/* Skeleton stat cards */}
+          <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="bg-card rounded-xl border border-border p-4 animate-pulse">
+                <div className="h-4 bg-muted rounded w-24 mb-3"></div>
+                <div className="h-8 bg-muted rounded w-32 mb-2"></div>
+                <div className="h-3 bg-muted rounded w-20"></div>
+              </div>
+            ))}
+          </div>
+          {/* Skeleton table */}
+          <div className="bg-card rounded-xl border border-border p-6 space-y-3 animate-pulse">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-16 bg-muted rounded"></div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <>
       <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
         <StatCard
           label="Portfolio Value"
@@ -292,6 +313,8 @@ export function AssetsView({
             </tfoot>
           </table>
         </div>
+      )}
+      </>
       )}
     </div>
   );

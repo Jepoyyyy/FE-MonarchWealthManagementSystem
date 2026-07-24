@@ -162,8 +162,17 @@ export function ProductsView({ user, addLog, toast }: ProductsViewProps) {
       )}
 
       {loading ? (
-        <div className="flex justify-center p-12 text-muted-foreground animate-pulse">
-          Loading products...
+        <div className="space-y-4" data-testid="products-loading">
+          {/* Skeleton product cards */}
+          <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))" }}>
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className="bg-card rounded-xl border border-border p-4 animate-pulse">
+                <div className="h-5 bg-muted rounded w-32 mb-3"></div>
+                <div className="h-4 bg-muted rounded w-full mb-2"></div>
+                <div className="h-4 bg-muted rounded w-20"></div>
+              </div>
+            ))}
+          </div>
         </div>
       ) : (
         <>

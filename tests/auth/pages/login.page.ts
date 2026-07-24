@@ -30,6 +30,8 @@ export class LoginPage {
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
     await this.signInButton.click();
+    // Wait for navigation away from login page
+    await this.page.waitForURL((url) => !url.pathname.includes('/login'), { timeout: 10000 });
   }
 
   async navigateToRegister() {

@@ -186,8 +186,15 @@ export function RecommendationsView({
 
       {/* Rec list */}
       {loading && recs.length === 0 ? (
-        <div className="bg-card rounded-xl border border-border p-12 flex flex-col items-center justify-center text-center animate-pulse text-muted-foreground">
-          Analyzing portfolio...
+        <div className="space-y-4" data-testid="recommendations-loading">
+          {/* Skeleton recommendation cards */}
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="bg-card rounded-xl border border-border p-6 animate-pulse">
+              <div className="h-5 bg-muted rounded w-48 mb-3"></div>
+              <div className="h-4 bg-muted rounded w-full mb-2"></div>
+              <div className="h-4 bg-muted rounded w-3/4"></div>
+            </div>
+          ))}
         </div>
       ) : recs.length === 0 ? (
         <div className="bg-card rounded-xl border border-border flex flex-col items-center justify-center py-20 text-center">

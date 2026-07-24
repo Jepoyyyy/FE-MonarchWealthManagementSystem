@@ -4,10 +4,9 @@ import { AuthApiClient } from '../utils/api-client';
 
 test.describe('Questionnaire Onboarding Flow (Q01 - Q06)', () => {
 
-  test('Q01: New user with pending questionnaire is prompted for assessment', async ({ page, registerPage, questionnairePage }) => {
+  test('Q01: New user with pending questionnaire is prompted for assessment', async ({ page, registerPage, loginPage, questionnairePage }) => {
     test.info().annotations.push({ type: 'test-id', description: 'Q01' });
     test.info().annotations.push({ type: 'priority', description: 'P1-high' });
-
     const userData = generateTestUser();
     await registerPage.goto();
     await registerPage.register(
@@ -16,15 +15,17 @@ test.describe('Questionnaire Onboarding Flow (Q01 - Q06)', () => {
       userData.password,
       userData.password
     );
+    // Wait for redirect to login page
+    await expect(page).toHaveURL(/login/, { timeout: 10000 });
 
-    // Verify questionnaire or risk assessment is presented
-    await expect(
-      page.getByText(/risk profile assessment/i)
-        .or(page.getByRole('button', { name: /next question/i }))
-    ).toBeVisible({ timeout: 15000 });
+    // Now login with the newly registered credentials
+    await loginPage.login(userData.email, userData.password);
+    
+    // After login, questionnaire should be served
+    await expect(page.getByText(/risk profile assessment/i).first()).toBeVisible({ timeout: 15000 });
   });
 
-  test('Q02 & Q03: Complete questionnaire steps → Calculate risk profile & enter application', async ({ page, registerPage, questionnairePage }) => {
+  test('Q02 & Q03: Complete questionnaire steps → Calculate risk profile & enter application', async ({ page, registerPage, loginPage, questionnairePage }) => {
     test.info().annotations.push({ type: 'test-id', description: 'Q02-Q03' });
 
     const userData = generateTestUser();
@@ -36,15 +37,22 @@ test.describe('Questionnaire Onboarding Flow (Q01 - Q06)', () => {
       userData.password
     );
 
-    await expect(
-      page.getByText(/risk profile assessment/i)
-        .or(page.getByRole('button', { name: /next question/i }))
-    ).toBeVisible({ timeout: 15000 });
+    // Wait for redirect to login page
+    await expect(page).toHaveURL(/login/, { timeout: 10000 });
+
+    // Login with the newly registered credentials
+    await loginPage.login(userData.email, userData.password);
+
+    // Verify questionnaire is shown
+    await expect(page.getByText(/risk profile assessment/i).first()).toBeVisible({ timeout: 15000 });
 
     // Answer all questions
     await questionnairePage.completeWithDefaultAnswers(5);
 
-    // Verify user profile is saved and dashboard loaded
+    // Click "Go to Dashboard" button after risk profile calculation
+    await page.getByRole('button', { name: /go to dashboard/i }).click();
+
+    // Verify dashboard loaded
     await expect(
       page.getByRole('button', { name: /sign out|logout/i })
         .or(page.locator('text=Overview'))

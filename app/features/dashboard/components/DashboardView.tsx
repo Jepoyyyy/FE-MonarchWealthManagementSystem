@@ -108,9 +108,21 @@ export function DashboardView({ user, products, onNavigate }: DashboardViewProps
       />
 
       {loading && (
-        <div className="flex items-center justify-center p-12" data-testid="dashboard-loading">
-          <div className="animate-pulse flex gap-2 items-center text-muted-foreground">
-             Loading dashboard...
+        <div className="space-y-6" data-testid="dashboard-loading">
+          {/* Skeleton stat cards */}
+          <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="bg-card rounded-xl border border-border p-4 animate-pulse">
+                <div className="h-4 bg-muted rounded w-24 mb-3"></div>
+                <div className="h-8 bg-muted rounded w-32 mb-2"></div>
+                <div className="h-3 bg-muted rounded w-20"></div>
+              </div>
+            ))}
+          </div>
+          {/* Skeleton charts */}
+          <div className="grid lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 h-64 bg-card border border-border rounded-xl animate-pulse"></div>
+            <div className="h-64 bg-card border border-border rounded-xl animate-pulse"></div>
           </div>
         </div>
       )}

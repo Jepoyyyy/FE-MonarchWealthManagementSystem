@@ -1,5 +1,5 @@
 import { test, expect } from './fixtures/ui-auth-fixtures';
-import { generateTestUser } from '../utils/test-data';
+import { generateTestUser, highTestUser } from '../utils/test-data';
 import { AuthApiClient } from '../utils/api-client';
 import { PerformanceCollector } from '../utils/performance-collector';
 
@@ -14,9 +14,7 @@ test.describe('UI Performance Benchmarks (PERF-L01 to PERF-Q01)', () => {
   test('PERF-L01: Full UI login flow completes within 5000ms', async ({ page, loginPage }) => {
     test.info().annotations.push({ type: 'test-id', description: 'PERF-L01' });
 
-    const userData = generateTestUser();
-    const authApi = new AuthApiClient(page.request);
-    await authApi.register(userData);
+    const userData = highTestUser();
 
     await loginPage.goto();
 

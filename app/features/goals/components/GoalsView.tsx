@@ -186,8 +186,26 @@ export function GoalsView({
       />
 
       {isLoading && (
-        <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <div className="space-y-6" data-testid="goals-loading">
+          {/* Skeleton summary stats */}
+          <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className="bg-card rounded-xl border border-border p-4 animate-pulse">
+                <div className="h-4 bg-muted rounded w-24 mb-3"></div>
+                <div className="h-8 bg-muted rounded w-32"></div>
+              </div>
+            ))}
+          </div>
+          {/* Skeleton goal cards */}
+          <div className="space-y-4">
+            {[1, 2].map((i) => (
+              <div key={i} className="bg-card rounded-xl border border-border p-6 animate-pulse">
+                <div className="h-6 bg-muted rounded w-48 mb-4"></div>
+                <div className="h-4 bg-muted rounded w-full mb-2"></div>
+                <div className="h-4 bg-muted rounded w-3/4"></div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 

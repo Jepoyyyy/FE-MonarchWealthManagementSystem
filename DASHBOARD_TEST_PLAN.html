@@ -1,0 +1,1013 @@
+1|1|<!DOCTYPE html>
+2|2|<html lang="en">
+3|3|<head>
+4|4|    <meta charset="UTF-8">
+5|5|    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+6|6|    <title>Dashboard Feature - Comprehensive Test Plan</title>
+7|7|    <style>
+8|8|        * { margin: 0; padding: 0; box-sizing: border-box; }
+9|9|        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; background: #f5f5f5; padding: 2rem; }
+10|10|        .container { max-width: 1400px; margin: 0 auto; background: white; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+11|11|        h1 { color: #1a3a5c; border-bottom: 3px solid #b8860b; padding-bottom: 0.5rem; margin-bottom: 1.5rem; font-size: 2rem; }
+12|12|        h2 { color: #1a3a5c; margin-top: 2.5rem; margin-bottom: 1rem; padding-left: 0.5rem; border-left: 4px solid #b8860b; font-size: 1.5rem; }
+13|13|        h3 { color: #2c5282; margin-top: 1.5rem; margin-bottom: 0.75rem; font-size: 1.2rem; }
+14|14|        .meta { background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; }
+15|15|        .meta-item { display: flex; justify-content: space-between; margin-bottom: 0.5rem; padding: 0.25rem 0; }
+16|16|        .meta-label { font-weight: 600; color: #495057; }
+17|17|        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.875rem; }
+18|18|        th, td { padding: 0.75rem; text-align: left; border: 1px solid #dee2e6; vertical-align: top; }
+19|19|        th { background: #1a3a5c; color: white; font-weight: 600; }
+20|20|        tr:nth-child(even) { background: #f8f9fa; }
+21|21|        .test-type-positive { background-color: #d4edda; }
+22|22|        .test-type-negative { background-color: #f8d7da; }
+23|23|        .test-type-performance { background-color: #fff3cd; }
+24|24|        .test-type-security { background-color: #e2e3e5; }
+25|25|        .test-type-accessibility { background-color: #d1ecf1; }
+26|26|        .priority-high { color: #dc3545; font-weight: 700; }
+27|27|        .priority-medium { color: #fd7e14; font-weight: 600; }
+28|28|        .priority-low { color: #28a745; font-weight: 600; }
+29|29|        .summary { background: #e7f3ff; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid #0066cc; }
+30|30|        .summary ul { margin-left: 1.5rem; margin-top: 0.5rem; }
+31|31|        .summary li { margin: 0.25rem 0; }
+32|32|        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', monospace; font-size: 0.85em; }
+33|33|        .section { margin-bottom: 3rem; }
+34|34|    </style>
+35|35|</head>
+36|36|<body>
+37|37|    <div class="container">
+38|38|        <h1>🎯 Dashboard Feature - Comprehensive Test Plan</h1>
+39|39|        
+40|40|        <div class="meta">
+41|41|            <div class="meta-item">
+42|42|                <span class="meta-label">Project:</span>
+43|43|                <span>Monarch Wealth Management System (Frontend)</span>
+44|44|            </div>
+45|45|            <div class="meta-item">
+46|46|                <span class="meta-label">Feature:</span>
+47|47|                <span>User & Admin Dashboard</span>
+48|48|            </div>
+49|49|            <div class="meta-item">
+50|50|                <span class="meta-label">Framework:</span>
+51|51|                <span>React Router v8 (SSR) + Playwright</span>
+52|52|            </div>
+53|53|            <div class="meta-item">
+54|54|                <span class="meta-label">Test Framework:</span>
+55|55|                <span>Playwright Pro</span>
+56|56|            </div>
+57|57|            <div class="meta-item">
+58|58|                <span class="meta-label">Created:</span>
+59|59|                <span>July 23, 2026</span>
+60|60|            </div>
+61|61|            <div class="meta-item">
+62|62|                <span class="meta-label">API Endpoints:</span>
+63|63|                <span><code>/api/v1/me/dashboard</code>, <code>/api/v1/admin/dashboard</code></span>
+64|64|            </div>
+65|65|        </div>
+66|66|
+67|67|        <div class="summary">
+68|68|            <h3>📊 Test Coverage Summary</h3>
+69|69|            <ul>
+70|70|                <li><strong>Total Test Scenarios:</strong> 58</li>
+71|71|                <li><strong>User Dashboard Tests:</strong> 35 scenarios</li>
+72|72|                <li><strong>Admin Dashboard Tests:</strong> 23 scenarios</li>
+73|73|                <li><strong>Positive Tests:</strong> 28 (48%)</li>
+74|74|                <li><strong>Negative Tests:</strong> 18 (31%)</li>
+75|75|                <li><strong>Performance Tests:</strong> 12 (21%)</li>
+76|76|            </ul>
+77|77|        </div>
+78|78|
+79|        <div class="section">
+80|            <h2>1. User Dashboard - Positive Test Scenarios</h2>
+81|            
+82|            <h3>1.1 Authentication & Route Protection</h3>
+83|            <table>
+84|                <thead>
+85|                    <tr>
+86|                        <th style="width: 5%;">ID</th>
+87|                        <th style="width: 25%;">Test Scenario</th>
+88|                        <th style="width: 30%;">Steps</th>
+89|                        <th style="width: 25%;">Expected Result</th>
+90|                        <th style="width: 10%;">Priority</th>
+91|                        <th style="width: 5%;">Type</th>
+92|                    </tr>
+93|                </thead>
+94|                <tbody>
+95|                    <tr>
+96|                        <td>UD-P-01</td>
+97|                        <td>User can access dashboard after login</td>
+98|                        <td>1. Login as regular user<br>2. Navigate to <code>/</code></td>
+99|                        <td>Dashboard loads successfully with user data, greeting shows user's first name</td>
+100|                        <td class="priority-high">High</td>
+101|                        <td class="test-type-positive">✓</td>
+102|                    </tr>
+103|                    <tr>
+104|                        <td>UD-P-02</td>
+105|                        <td>Admin redirected to admin dashboard</td>
+106|                        <td>1. Login as admin<br>2. Navigate to <code>/</code></td>
+107|                        <td>User redirected to <code>/admin</code> dashboard via <code>useEffect</code> hook</td>
+108|                        <td class="priority-high">High</td>
+109|                        <td class="test-type-positive">✓</td>
+110|                    </tr>
+111|                    <tr>
+112|                        <td>UD-P-03</td>
+113|                        <td>Greeting displays correct name and date</td>
+114|                        <td>1. Login as user "John Doe"<br>2. View dashboard</td>
+115|                        <td>PageHeader shows "Good morning, John." and current date in GB format</td>
+116|                        <td class="priority-medium">Medium</td>
+117|                        <td class="test-type-positive">✓</td>
+118|                    </tr>
+119|                </tbody>
+120|            </table>
+121|
+122|            <h3>1.2 Data Loading & Display</h3>
+123|            <table>
+124|                <thead>
+125|                    <tr>
+126|                        <th style="width: 5%;">ID</th>
+127|                        <th style="width: 25%;">Test Scenario</th>
+128|                        <th style="width: 30%;">Steps</th>
+129|                        <th style="width: 25%;">Expected Result</th>
+130|                        <th style="width: 10%;">Priority</th>
+131|                        <th style="width: 5%;">Type</th>
+132|                    </tr>
+133|                </thead>
+134|                <tbody>
+135|                    <tr>
+136|                        <td>UD-P-04</td>
+137|                        <td>Loading state displays during API fetch</td>
+138|                        <td>1. Navigate to dashboard<br>2. Observe initial load</td>
+139|                        <td><code>data-testid="dashboard-loading"</code> visible with "Loading dashboard..." text</td>
+140|                        <td class="priority-high">High</td>
+141|                        <td class="test-type-positive">✓</td>
+142|                    </tr>
+143|                    <tr>
+144|                        <td>UD-P-05</td>
+145|                        <td>Loading state disappears after data loads</td>
+146|                        <td>1. Wait for API response</td>
+147|                        <td>Loading spinner hidden, dashboard content visible</td>
+148|                        <td class="priority-high">High</td>
+149|                        <td class="test-type-positive">✓</td>
+150|                    </tr>
+151|                    <tr>
+152|                        <td>UD-P-06</td>
+153|                        <td>API called once on mount</td>
+154|                        <td>1. Navigate to dashboard<br>2. Monitor network</td>
+155|                        <td>Single GET request to <code>/api/v1/me/dashboard</code>, no duplicate calls</td>
+156|                        <td class="priority-medium">Medium</td>
+157|                        <td class="test-type-positive">✓</td>
+158|                    </tr>
+159|                </tbody>
+160|            </table>
+161|
+162|            <h3>1.3 Stat Cards Display</h3>
+163|            <table>
+164|                <thead>
+165|                    <tr>
+166|                        <th style="width: 5%;">ID</th>
+167|                        <th style="width: 25%;">Test Scenario</th>
+168|                        <th style="width: 30%;">Steps</th>
+169|                        <th style="width: 25%;">Expected Result</th>
+170|                        <th style="width: 10%;">Priority</th>
+171|                        <th style="width: 5%;">Type</th>
+172|                    </tr>
+173|                </thead>
+174|                <tbody>
+175|                    <tr>
+176|                        <td>UD-P-07</td>
+177|                        <td>Four stat cards rendered</td>
+178|                        <td>1. Dashboard loaded</td>
+179|                        <td>4 StatCard components visible: Portfolio Value, Total Invested, Unrealized P&L, Holdings</td>
+180|                        <td class="priority-high">High</td>
+181|                        <td class="test-type-positive">✓</td>
+182|                    </tr>
+183|                    <tr>
+184|                        <td>UD-P-08</td>
+185|                        <td>Portfolio Value shows correct format</td>
+186|                        <td>1. View Portfolio Value card</td>
+187|                        <td>Value formatted as IDR currency, P&L percentage shown, trend icon (up/down) displayed</td>
+188|                        <td class="priority-high">High</td>
+189|                        <td class="test-type-positive">✓</td>
+190|                    </tr>
+191|                    <tr>
+192|                        <td>UD-P-09</td>
+193|                        <td>Unrealized P&L shows profit/loss correctly</td>
+194|                        <td>1. View P&L card with positive value</td>
+195|                        <td>Green arrow up icon, "Profit" subtitle, positive value formatted</td>
+196|                        <td class="priority-high">High</td>
+197|                        <td class="test-type-positive">✓</td>
+198|                    </tr>
+199|                    <tr>
+200|                        <td>UD-P-10</td>
+201|                        <td>Holdings card shows active positions</td>
+202|                        <td>1. View Holdings card</td>
+203|                        <td>Number of holdings displayed with "active positions" subtitle</td>
+204|                        <td class="priority-medium">Medium</td>
+205|                        <td class="test-type-positive">✓</td>
+206|                    </tr>
+207|                </tbody>
+208|            </table>
+209|
+            <h3>1.4 Chart Rendering - Performance Chart</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">ID</th>
+                        <th style="width: 25%;">Test Scenario</th>
+                        <th style="width: 30%;">Steps</th>
+                        <th style="width: 25%;">Expected Result</th>
+                        <th style="width: 10%;">Priority</th>
+                        <th style="width: 5%;">Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>UD-P-11</td>
+                        <td>Performance chart renders with data</td>
+                        <td>1. Dashboard with performance data<br>2. Check chart container</td>
+                        <td>DashboardPerfChart visible, area chart shows monthly values, gradient fill applied</td>
+                        <td class="priority-high">High</td>
+                        <td class="test-type-positive">✓</td>
+                    </tr>
+                    <tr>
+                        <td>UD-P-12</td>
+                        <td>Chart displays correct P&L badge</td>
+                        <td>1. View performance chart header</td>
+                        <td>Badge shows P&L percentage with "+" prefix for positive, green background for profit</td>
+                        <td class="priority-medium">Medium</td>
+                        <td class="test-type-positive">✓</td>
+                    </tr>
+                    <tr>
+                        <td>UD-P-13</td>
+                        <td>Chart tooltip shows on hover</td>
+                        <td>1. Hover over chart data point</td>
+                        <td>Recharts tooltip appears with formatted value and month label</td>
+                        <td class="priority-medium">Medium</td>
+                        <td class="test-type-positive">✓</td>
+                    </tr>
+                    <tr>
+                        <td>UD-P-14</td>
+                        <td>Chart handles zero-padded months correctly</td>
+                        <td>1. Backend returns 12 months with trailing zeros<br>2. View chart</td>
+                        <td>Only non-zero tail displayed, labels show Jan-Dec correctly</td>
+                        <td class="priority-high">High</td>
+                        <td class="test-type-positive">✓</td>
+                    </tr>
+                    <tr>
+                        <td>UD-P-15</td>
+                        <td>Empty portfolio shows placeholder message</td>
+                        <td>1. User with no investments<br>2. View performance section</td>
+                        <td>Message: "Start investing to see your portfolio performance."</td>
+                        <td class="priority-medium">Medium</td>
+                        <td class="test-type-positive">✓</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>1.5 Chart Rendering - Pie Chart (Allocation)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">ID</th>
+                        <th style="width: 25%;">Test Scenario</th>
+                        <th style="width: 30%;">Steps</th>
+                        <th style="width: 25%;">Expected Result</th>
+                        <th style="width: 10%;">Priority</th>
+                        <th style="width: 5%;">Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>UD-P-16</td>
+                        <td>Pie chart renders portfolio composition</td>
+                        <td>1. Dashboard with assets<br>2. View pie chart</td>
+                        <td>DashboardPieChart displays donut chart with color-coded slices</td>
+                        <td class="priority-high">High</td>
+                        <td class="test-type-positive">✓</td>
+                    </tr>
+                    <tr>
+                        <td>UD-P-17</td>
+                        <td>Pie chart legend shows all assets</td>
+                        <td>1. View pie chart legend</td>
+                        <td>Each asset listed with color indicator and percentage allocation</td>
+                        <td class="priority-high">High</td>
+                        <td class="test-type-positive">✓</td>
+                    </tr>
+                    <tr>
+                        <td>UD-P-18</td>
+                        <td>Percentages sum to 100%</td>
+                        <td>1. Calculate sum of all percentages</td>
+                        <td>Total allocation equals 100% (within rounding tolerance)</td>
+                        <td class="priority-medium">Medium</td>
+                        <td class="test-type-positive">✓</td>
+                    </tr>
+                    <tr>
+                        <td>UD-P-19</td>
+                        <td>Empty portfolio shows no-assets message</td>
+                        <td>1. User with no assets<br>2. View allocation section</td>
+                        <td>Message: "No assets yet."</td>
+                        <td class="priority-medium">Medium</td>
+                        <td class="test-type-positive">✓</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>1.6 Recommendations Section</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">ID</th>
+                        <th style="width: 25%;">Test Scenario</th>
+                        <th style="width: 30%;">Steps</th>
+                        <th style="width: 25%;">Expected Result</th>
+                        <th style="width: 10%;">Priority</th>
+                        <th style="width: 5%;">Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>UD-P-20</td>
+                        <td>Recommendations section visible</td>
+                        <td>1. View dashboard</td>
+                        <td><code>data-testid="recommended-section"</code> visible with title "Recommended for You"</td>
+                        <td class="priority-high">High</td>
+                        <td class="test-type-positive">✓</td>
+                    </tr>
+                    <tr>
+                        <td>UD-P-21</td>
+                        <td>Products filtered by risk profile</td>
+                        <td>1. User with "moderate" profile<br>2. View recommendations</td>
+                        <td>Only products with riskLevel ≤ user's max risk shown, subtitle shows "Based on your Moderate profile"</td>
+                        <td class="priority-high">High</td>
+                        <td class="test-type-positive">✓</td>
+                    </tr>
+                    <tr>
+                        <td>UD-P-22</td>
+                        <td>Maximum 4 products displayed</td>
+                        <td>1. View recommendations grid</td>
+                        <td>Up to 4 product cards shown (2 cols mobile, 4 cols desktop)</td>
+                        <td class="priority-medium">Medium</td>
+                        <td class="test-type-positive">✓</td>
+                    </tr>
+                    <tr>
+                        <td>UD-P-23</td>
+                        <td>Product card shows all required info</td>
+                        <td>1. View product card</td>
+                        <td>ProductTypeBadge, RiskLevelBadge, name, issuer, annual return, "annual return" label all visible</td>
+                        <td class="priority-high">High</td>
+                        <td class="test-type-positive">✓</td>
+                    </tr>
+                    <tr>
+                        <td>UD-P-24</td>
+                        <td>Clicking product navigates to products page</td>
+                        <td>1. Click any product card</td>
+                        <td>Navigate to <code>/products</code> route</td>
+                        <td class="priority-medium">Medium</td>
+                        <td class="test-type-positive">✓</td>
+                    </tr>
+                    <tr>
+                        <td>UD-P-25</td>
+                        <td>"View All" button navigates correctly</td>
+                        <td>1. Click "View All" button</td>
+                        <td>Navigate to <code>/products</code> route</td>
+                        <td class="priority-medium">Medium</td>
+                        <td class="test-type-positive">✓</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>1.7 Risk Profile Change</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">ID</th>
+                        <th style="width: 25%;">Test Scenario</th>
+                        <th style="width: 30%;">Steps</th>
+                        <th style="width: 25%;">Expected Result</th>
+                        <th style="width: 10%;">Priority</th>
+                        <th style="width: 5%;">Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>UD-P-26</td>
+                        <td>Change Risk Profile button visible</td>
+                        <td>1. User has risk profile set<br>2. View page header</td>
+                        <td>"Change Risk Profile" button visible in header action area</td>
+                        <td class="priority-medium">Medium</td>
+                        <td class="test-type-positive">✓</td>
+                    </tr>
+                    <tr>
+                        <td>UD-P-27</td>
+                        <td>Confirmation modal opens on click</td>
+                        <td>1. Click "Change Risk Profile"</td>
+                        <td>ConfirmModal opens with title "Change Risk Profile?" and warning message</td>
+                        <td class="priority-medium">Medium</td>
+                        <td class="test-type-positive">✓</td>
+                    </tr>
+                    <tr>
+                        <td>UD-P-28</td>
+                        <td>Confirming navigates to questionnaire</td>
+                        <td>1. Open modal<br>2. Click "Retake Assessment"</td>
+                        <td>Navigate to <code>/questionnaire</code> route</td>
+                        <td class="priority-medium">Medium</td>
+                        <td class="test-type-positive">✓</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>4. Admin Dashboard - Negative Test Scenarios</h2>
+            
+            <h3>4.1 API Failures & Access Control</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">ID</th>
+                        <th style="width: 25%;">Test Scenario</th>
+                        <th style="width: 30%;">Steps</th>
+                        <th style="width: 25%;">Expected Result</th>
+                        <th style="width: 10%;">Priority</th>
+                        <th style="width: 5%;">Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>AD-N-01</td>
+                        <td>API returns 500 error</td>
+                        <td>1. Mock API to return 500<br>2. Navigate to admin dashboard</td>
+                        <td>Loading state disappears, error logged to console, fallback to context data</td>
+                        <td class="priority-high">High</td>
+                        <td class="test-type-negative">✗</td>
+                    </tr>
+                    <tr>
+                        <td>AD-N-02</td>
+                        <td>Regular user attempts admin access</td>
+                        <td>1. Login as user<br>2. Navigate to <code>/admin</code></td>
+                        <td>Redirected to <code>/</code> via useEffect hook</td>
+                        <td class="priority-high">High</td>
+                        <td class="test-type-negative">✗</td>
+                    </tr>
+                    <tr>
+                        <td>AD-N-03</td>
+                        <td>Zero active users edge case</td>
+                        <td>1. Platform with no active users<br>2. View dashboard</td>
+                        <td>Active Users shows "0", no calculation errors</td>
+                        <td class="priority-medium">Medium</td>
+                        <td class="test-type-negative">✗</td>
+                    </tr>
+                    <tr>
+                        <td>AD-N-04</td>
+                        <td>Missing audit events data</td>
+                        <td>1. Backend returns no audit event count<br>2. View dashboard</td>
+                        <td>Audit Events shows "0"</td>
+                        <td class="priority-low">Low</td>
+                        <td class="test-type-negative">✗</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>5. Performance Test Scenarios</h2>
+            
+            <h3>5.1 Page Load Performance</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">ID</th>
+                        <th style="width: 25%;">Test Scenario</th>
+                        <th style="width: 30%;">Steps</th>
+                        <th style="width: 25%;">Expected Result</th>
+                        <th style="width: 10%;">Priority</th>
+                        <th style="width: 5%;">Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>PERF-01</td>
+                        <td>User dashboard loads within 3 seconds</td>
+                        <td>1. Navigate to <code>/</code><br>2. Measure time to interactive</td>
+                        <td>Dashboard visible and interactive within 3s on 4G connection</td>
+                        <td class="priority-high">High</td>
+                        <td class="test-type-performance">⚡</td>
+                    </tr>
+                    <tr>
+                        <td>PERF-02</td>
+                        <td>Admin dashboard loads within 3 seconds</td>
+                        <td>1. Navigate to <code>/admin</code><br>2. Measure time to interactive</td>
+                        <td>Dashboard visible and interactive within 3s</td>
+                        <td class="priority-high">High</td>
+                        <td class="test-type-performance">⚡</td>
+                    </tr>
+                    <tr>
+                        <td>PERF-03</td>
+                        <td>Lazy-loaded components load efficiently</td>
+                        <td>1. Monitor network<br>2. Load dashboard</td>
+                        <td>DashboardView, charts loaded via Suspense, chunk files < 100KB each</td>
+                        <td class="priority-medium">Medium</td>
+                        <td class="test-type-performance">⚡</td>
+                    </tr>
+                    <tr>
+                        <td>PERF-04</td>
+                        <td>API response time under 1 second</td>
+                        <td>1. Load dashboard<br>2. Measure API response time</td>
+                        <td><code>/api/v1/me/dashboard</code> responds in < 1s</td>
+                        <td class="priority-high">High</td>
+                        <td class="test-type-performance">⚡</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>5.2 Rendering Performance</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">ID</th>
+                        <th style="width: 25%;">Test Scenario</th>
+                        <th style="width: 30%;">Steps</th>
+                        <th style="width: 25%;">Expected Result</th>
+                        <th style="width: 10%;">Priority</th>
+                        <th style="width: 5%;">Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>PERF-05</td>
+                        <td>Charts render without blocking main thread</td>
+                        <td>1. Load dashboard with charts<br>2. Monitor main thread blocking</td>
+                        <td>No long tasks > 50ms during chart rendering</td>
+                        <td class="priority-medium">Medium</td>
+                        <td class="test-type-performance">⚡</td>
+                    </tr>
+                    <tr>
+                        <td>PERF-06</td>
+                        <td>Skeleton placeholder shows immediately</td>
+                        <td>1. Navigate to dashboard<br>2. Measure FCP (First Contentful Paint)</td>
+                        <td>Loading skeleton visible within 1s</td>
+                        <td class="priority-medium">Medium</td>
+                        <td class="test-type-performance">⚡</td>
+                    </tr>
+                    <tr>
+                        <td>PERF-07</td>
+                        <td>Stat cards render without layout shift</td>
+                        <td>1. Load dashboard<br>2. Measure CLS (Cumulative Layout Shift)</td>
+                        <td>CLS < 0.1 (good), no visible reflow when data loads</td>
+                        <td class="priority-medium">Medium</td>
+                        <td class="test-type-performance">⚡</td>
+                    </tr>
+                    <tr>
+                        <td>PERF-08</td>
+                        <td>Re-renders minimized via useMemo</td>
+                        <td>1. Monitor React DevTools Profiler<br>2. Load dashboard</td>
+                        <td>Charts, recommendations, pieData wrapped in useMemo, no unnecessary recalculations</td>
+                        <td class="priority-low">Low</td>
+                        <td class="test-type-performance">⚡</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>5.3 Memory & Resource Usage</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">ID</th>
+                        <th style="width: 25%;">Test Scenario</th>
+                        <th style="width: 30%;">Steps</th>
+                        <th style="width: 25%;">Expected Result</th>
+                        <th style="width: 10%;">Priority</th>
+                        <th style="width: 5%;">Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>PERF-09</td>
+                        <td>No memory leaks on navigation</td>
+                        <td>1. Navigate to/from dashboard 10 times<br>2. Monitor heap size</td>
+                        <td>Memory returns to baseline after GC, no continuous growth</td>
+                        <td class="priority-medium">Medium</td>
+                        <td class="test-type-performance">⚡</td>
+                    </tr>
+                    <tr>
+                        <td>PERF-10</td>
+                        <td>Bundle size under threshold</td>
+                        <td>1. Analyze production build<br>2. Check dashboard chunk size</td>
+                        <td>Dashboard route chunk < 200KB gzipped</td>
+                        <td class="priority-medium">Medium</td>
+                        <td class="test-type-performance">⚡</td>
+                    </tr>
+                    <tr>
+                        <td>PERF-11</td>
+                        <td>Images and assets optimized</td>
+                        <td>1. Audit network tab<br>2. Check asset sizes</td>
+                        <td>No uncompressed images, icons use SVG, fonts subset</td>
+                        <td class="priority-low">Low</td>
+                        <td class="test-type-performance">⚡</td>
+                    </tr>
+                    <tr>
+                        <td>PERF-12</td>
+                        <td>Graceful degradation on slow network</td>
+                        <td>1. Throttle to Slow 3G<br>2. Load dashboard</td>
+                        <td>Loading skeleton shown, dashboard eventually loads, no timeout errors</td>
+                        <td class="priority-high">High</td>
+                        <td class="test-type-performance">⚡</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>6. Accessibility Test Scenarios</h2>
+            
+            <h3>6.1 Keyboard Navigation & Focus</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">ID</th>
+                        <th style="width: 25%;">Test Scenario</th>
+                        <th style="width: 30%;">Steps</th>
+                        <th style="width: 25%;">Expected Result</th>
+                        <th style="width: 10%;">Priority</th>
+                        <th style="width: 5%;">Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>A11Y-01</td>
+                        <td>All interactive elements keyboard accessible</td>
+                        <td>1. Tab through dashboard<br>2. Test all buttons and links</td>
+                        <td>Can access "Change Risk Profile", "View All", product cards, retry button via Tab</td>
+                        <td class="priority-high">High</td>
+                        <td class="test-type-accessibility">♿</td>
+                    </tr>
+                    <tr>
+                        <td>A11Y-02</td>
+                        <td>Focus indicators visible</td>
+                        <td>1. Tab through page<br>2. Observe focus ring</td>
+                        <td>Clear focus outline on all interactive elements (no outline: none)</td>
+                        <td class="priority-high">High</td>
+                        <td class="test-type-accessibility">♿</td>
+                    </tr>
+                    <tr>
+                        <td>A11Y-03</td>
+                        <td>Tab order logical</td>
+                        <td>1. Tab through dashboard from top to bottom</td>
+                        <td>Focus order matches visual layout: header → stats → charts → recommendations</td>
+                        <td class="priority-medium">Medium</td>
+                        <td class="test-type-accessibility">♿</td>
+                    </tr>
+                    <tr>
+                        <td>A11Y-04</td>
+                        <td>Modal accessible via keyboard</td>
+                        <td>1. Tab to "Change Risk Profile"<br>2. Press Enter<br>3. Tab within modal</td>
+                        <td>Modal opens, focus trapped inside, Esc closes, focus returns to trigger</td>
+                        <td class="priority-high">High</td>
+                        <td class="test-type-accessibility">♿</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>6.2 Screen Reader Support</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">ID</th>
+                        <th style="width: 25%;">Test Scenario</th>
+                        <th style="width: 30%;">Steps</th>
+                        <th style="width: 25%;">Expected Result</th>
+                        <th style="width: 10%;">Priority</th>
+                        <th style="width: 5%;">Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>A11Y-05</td>
+                        <td>Stat cards have accessible labels</td>
+                        <td>1. Use screen reader<br>2. Navigate stat cards</td>
+                        <td>Each StatCard announces label, value, and trend (e.g., "Portfolio Value: Rp 10,000,000, up 5.2% all time")</td>
+                        <td class="priority-high">High</td>
+                        <td class="test-type-accessibility">♿</td>
+                    </tr>
+                    <tr>
+                        <td>A11Y-06</td>
+                        <td>Loading state announced</td>
+                        <td>1. Screen reader active<br>2. Navigate to dashboard</td>
+                        <td>Loading spinner has aria-live or role="status", announces "Loading dashboard..."</td>
+                        <td class="priority-high">High</td>
+                        <td class="test-type-accessibility">♿</td>
+                    </tr>
+                    <tr>
+                        <td>A11Y-07</td>
+                        <td>Error messages announced</td>
+                        <td>1. Trigger error state<br>2. Screen reader active</td>
+                        <td>Error alert has role="alert", automatically announced to screen reader</td>
+                        <td class="priority-high">High</td>
+                        <td class="test-type-accessibility">♿</td>
+                    </tr>
+                    <tr>
+                        <td>A11Y-08</td>
+                        <td>Charts have text alternatives</td>
+                        <td>1. Screen reader active<br>2. Navigate to charts</td>
+                        <td>Charts have aria-label describing content (e.g., "Portfolio Performance chart showing growth from Jan to Dec")</td>
+                        <td class="priority-medium">Medium</td>
+                        <td class="test-type-accessibility">♿</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>7. Test Execution Strategy</h2>
+            
+            <h3>7.1 Test Environment Setup</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 30%;">Component</th>
+                        <th style="width: 70%;">Configuration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Framework</strong></td>
+                        <td>Playwright v1.40+ with TypeScript</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Test Location</strong></td>
+                        <td><code>tests/dashboard/</code> directory</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Base URL</strong></td>
+                        <td><code>http://localhost:5173</code> (dev) or production URL</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Auth Storage</strong></td>
+                        <td><code>tests/fixtures/user-auth.json</code>, <code>tests/fixtures/admin-auth.json</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Browsers</strong></td>
+                        <td>Chromium, Firefox, WebKit (cross-browser)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Viewport</strong></td>
+                        <td>Desktop: 1920x1080, Tablet: 768x1024, Mobile: 375x667</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Test Data</strong></td>
+                        <td>Seeded test database with known users, products, assets</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>7.2 Test Data Requirements</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 30%;">Data Type</th>
+                        <th style="width: 70%;">Requirements</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Test Users</strong></td>
+                        <td>
+                            • Regular user with <code>risk_averse</code> profile<br>
+                            • Regular user with <code>moderate</code> profile<br>
+                            • Regular user with <code>risk_taker</code> profile<br>
+                            • User with no risk profile<br>
+                            • Admin user<br>
+                            • User with empty portfolio<br>
+                            • User with positive P&L<br>
+                            • User with negative P&L
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Products</strong></td>
+                        <td>
+                            • At least 8 visible products with varying risk levels (1-5)<br>
+                            • Products with different types (ETF, BONDS, STOCKS, MUTUAL_FUNDS)<br>
+                            • Products with annual returns ranging 3%-15%
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Assets</strong></td>
+                        <td>
+                            • 3-5 assets per test user portfolio<br>
+                            • Assets with varying current values<br>
+                            • Mix of profit and loss positions
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Performance Data</strong></td>
+                        <td>
+                            • Monthly performance data for 6-12 months<br>
+                            • Mix of zero and non-zero values for edge testing
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>7.3 Execution Priority</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 15%;">Priority</th>
+                        <th style="width: 15%;">Test Count</th>
+                        <th style="width: 70%;">Scope</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="priority-high">P0 - Critical</td>
+                        <td>32 tests</td>
+                        <td>Authentication, data loading, API errors, stat cards, charts rendering, access control, core performance (< 3s load)</td>
+                    </tr>
+                    <tr>
+                        <td class="priority-medium">P1 - Important</td>
+                        <td>20 tests</td>
+                        <td>Recommendations filtering, tooltips, chart interactions, error recovery, memory leaks, keyboard navigation</td>
+                    </tr>
+                    <tr>
+                        <td class="priority-low">P2 - Nice-to-have</td>
+                        <td>6 tests</td>
+                        <td>Edge cases, bundle size optimization, asset optimization, useMemo validation</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>8. CI/CD Integration</h2>
+            
+            <h3>8.1 Automated Test Runs</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Trigger</th>
+                        <th style="width: 35%;">Test Scope</th>
+                        <th style="width: 40%;">Command</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Pull Request</strong></td>
+                        <td>P0 tests only (critical path)</td>
+                        <td><code>npx playwright test tests/dashboard --grep @critical</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Merge to Main</strong></td>
+                        <td>Full test suite (all priorities)</td>
+                        <td><code>npx playwright test tests/dashboard</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Nightly Build</strong></td>
+                        <td>Full suite + cross-browser + performance</td>
+                        <td><code>npx playwright test --project=chromium --project=firefox --project=webkit</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pre-Production</strong></td>
+                        <td>Smoke tests + accessibility audit</td>
+                        <td><code>npx playwright test tests/dashboard/smoke.spec.ts</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>8.2 Test Reporting</h3>
+            <ul style="margin-left: 2rem; margin-top: 1rem;">
+                <li><strong>HTML Report:</strong> <code>npx playwright show-report</code> after test run</li>
+                <li><strong>GitHub Actions:</strong> Upload test-results artifact for failed tests</li>
+                <li><strong>Slack Notification:</strong> Post summary to #engineering-alerts on failures</li>
+                <li><strong>Test Trends:</strong> Track pass rate, flakiness, and execution time over 30 days</li>
+            </ul>
+
+            <h3>8.3 Failure Handling</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 30%;">Failure Type</th>
+                        <th style="width: 70%;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>P0 Test Failure</strong></td>
+                        <td>❌ Block PR merge, notify @channel, requires immediate fix</td>
+                    </tr>
+                    <tr>
+                        <td><strong>P1 Test Failure</strong></td>
+                        <td>⚠️ Allow merge with approval, create bug ticket, fix within 2 sprints</td>
+                    </tr>
+                    <tr>
+                        <td><strong>P2 Test Failure</strong></td>
+                        <td>📝 Log issue, fix in next maintenance cycle</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Flaky Test (>10% fail rate)</strong></td>
+                        <td>🔧 Quarantine test, investigate root cause, add retry logic or fix race condition</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>9. Recommendations & Best Practices</h2>
+            
+            <div class="summary">
+                <h3>🎯 Key Testing Priorities</h3>
+                <ol style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li><strong>Start with smoke tests:</strong> Authentication, data loading, and stat cards display (5 critical tests)</li>
+                    <li><strong>Cover error states early:</strong> API failures are high-risk, test all 500/401/timeout scenarios</li>
+                    <li><strong>Test role-based access thoroughly:</strong> User/admin redirects are security-critical</li>
+                    <li><strong>Validate chart data transformations:</strong> Zero-padding logic and percentage calculations are error-prone</li>
+                    <li><strong>Performance baseline in CI:</strong> Set 3s load time budget, fail builds that exceed it</li>
+                </ol>
+            </div>
+
+            <h3>9.1 Test Implementation Guidelines</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 30%;">Guideline</th>
+                        <th style="width: 70%;">Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Use Playwright Pro templates</strong></td>
+                        <td>Leverage <code>/pw:generate</code> with dashboard templates: data-loading.md, chart-rendering.md, realtime-updates.md</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mock API responses</strong></td>
+                        <td>Use <code>page.route()</code> to intercept <code>/api/v1/me/dashboard</code> and test error states without backend dependency</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Isolate tests with fixtures</strong></td>
+                        <td>Use <code>test.use({ storageState: 'user-auth.json' })</code> for authentication, reset DB state before each test</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Use data-testid strategically</strong></td>
+                        <td>Already present: <code>dashboard-loading</code>, <code>dashboard-error</code>, <code>recommended-section</code>, <code>stat-card</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Web-first assertions</strong></td>
+                        <td>Always use <code>expect(locator).toBeVisible()</code>, never <code>await locator.textContent()</code> without expect wrapper</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Avoid waitForTimeout</strong></td>
+                        <td>Use <code>expect(locator).toBeHidden()</code> instead of <code>await page.waitForTimeout(2000)</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>9.2 Known Risks & Mitigation</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 30%;">Risk</th>
+                        <th style="width: 70%;">Mitigation Strategy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Flaky chart rendering tests</strong></td>
+                        <td>Recharts lazy-loads. Always wait for chart container with <code>expect(chart).toBeVisible()</code> before hovering</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Race condition in useEffect redirect</strong></td>
+                        <td>Admin→user redirect via useEffect can cause flash. Test with <code>{ replace: true }</code> navigation and assert final URL</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Toast notifications timing</strong></td>
+                        <td>Sonner toasts auto-dismiss. Capture with <code>await expect(page.getByRole('status')).toBeVisible()</code> immediately after error trigger</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Date formatting locale issues</strong></td>
+                        <td>Dashboard uses 'en-GB' format. Mock <code>Date</code> in tests or use regex patterns instead of exact date strings</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Zero-value edge cases</strong></td>
+                        <td>Division by zero in P&L calculation. Test explicitly with <code>totalCost: 0</code> mock data</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>9.3 Next Steps</h3>
+            <ol style="margin-left: 2rem; margin-top: 1rem; line-height: 2;">
+                <li>Run <code>/pw:init</code> to scaffold Playwright config and CI pipeline</li>
+                <li>Generate auth fixtures: <code>npx playwright codegen --save-storage=user-auth.json</code></li>
+                <li>Implement P0 tests first (32 critical tests, ~2 days)</li>
+                <li>Set up GitHub Actions workflow with test artifact upload</li>
+                <li>Run baseline performance audit and set budgets</li>
+                <li>Document test maintenance procedures in team wiki</li>
+            </ol>
+        </div>
+
+        <div style="margin-top: 3rem; padding: 2rem; background: #f8f9fa; border-radius: 8px; text-align: center;">
+            <p style="color: #6c757d; margin-bottom: 0.5rem;">Generated by Playwright Pro</p>
+            <p style="color: #6c757d; font-size: 0.875rem;">Monarch Wealth Management System • Dashboard Test Plan</p>
+            <p style="color: #6c757d; font-size: 0.875rem;">July 23, 2026</p>
+        </div>
+
+    </div>
+</body>
+</html>

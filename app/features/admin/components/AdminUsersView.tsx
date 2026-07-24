@@ -154,8 +154,12 @@ export function AdminUsersView({
       </div>
 
       {loading && (
-        <div className="flex items-center justify-center p-12 text-muted-foreground animate-pulse">
-           Loading users...
+        <div className="space-y-4" data-testid="admin-users-loading">
+          <div className="bg-card rounded-xl border border-border p-6 space-y-3 animate-pulse">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="h-16 bg-muted rounded"></div>
+            ))}
+          </div>
         </div>
       )}
 

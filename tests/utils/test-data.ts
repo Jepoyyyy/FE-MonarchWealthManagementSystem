@@ -12,6 +12,11 @@ export const highTestUser = () => ({
   password: `User123!`
 })
 
+export const adminTest = () => ({
+  email: `admin@mail.com`,
+  password: `Admin123!`
+})
+
 export const VALID_TEST_USER = {
   name: 'John Doe',
   email: 'john.doe.test@example.com',

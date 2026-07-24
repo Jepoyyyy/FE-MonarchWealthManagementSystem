@@ -144,11 +144,15 @@ export function AdminAuditView({ logs: propLogs }: AdminAuditViewProps = {}) {
           </thead>
           <tbody>
             {loading ? (
-              <tr>
-                <td colSpan={6} className="px-4 py-10 text-center text-sm text-muted-foreground animate-pulse">
-                  Loading logs...
-                </td>
-              </tr>
+              <>
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <tr key={i} className="animate-pulse">
+                    <td colSpan={6} className="px-4 py-4">
+                      <div className="h-12 bg-muted rounded"></div>
+                    </td>
+                  </tr>
+                ))}
+              </>
             ) : displayLogs.length === 0 ? (
               <tr>
                 <td colSpan={6} className="px-4 py-10 text-center text-sm text-muted-foreground">

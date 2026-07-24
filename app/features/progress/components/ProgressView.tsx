@@ -76,7 +76,19 @@ export function ProgressView({ user, products, goals, finProfile }: ProgressView
           title="Portfolio Progress"
           subtitle="Loading goal progress data..."
         />
-        <div className="h-96 bg-muted animate-pulse rounded-xl" />
+        <div className="space-y-6" data-testid="progress-loading">
+          {/* Skeleton stat cards */}
+          <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="bg-card rounded-xl border border-border p-4 animate-pulse">
+                <div className="h-4 bg-muted rounded w-24 mb-3"></div>
+                <div className="h-8 bg-muted rounded w-32"></div>
+              </div>
+            ))}
+          </div>
+          {/* Skeleton chart */}
+          <div className="h-96 bg-card border border-border animate-pulse rounded-xl" />
+        </div>
       </div>
     );
   }
