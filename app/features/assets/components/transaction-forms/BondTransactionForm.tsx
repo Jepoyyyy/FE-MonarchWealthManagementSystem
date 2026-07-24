@@ -13,28 +13,42 @@ interface BondFormProps {
 
 export function BondTransactionForm({ type, currentPrice, onClose, onSubmit }: BondFormProps) {
   const [qty, setQty] = useState("");
+  const [priceInput, setPriceInput] = useState(currentPrice ? currentPrice.toString() : "");
   const [err, setErr] = useState("");
 
   const parsedQty = parseFloat(qty) || 0;
-  const totalAmt = parsedQty * (currentPrice / 100);
+  const parsedPrice = parseFloat(priceInput) ?? currentPrice;
+  const totalAmt = parsedQty * ((isNaN(parsedPrice) ? currentPrice : parsedPrice) / 100);
   const isValid = parsedQty > 0 && parsedQty % 1000000 === 0;
 
   const handleSubmit = () => {
-    if (!qty || parsedQty <= 0) {
-      setErr("Masukkan nominal pokok yang valid.");
+    if (!qty || qty.trim() === "") {
+      setErr("Required field cannot be empty. Please enter principal amount.");
+      return;
+    }
+    if (parsedQty <= 0) {
+      setErr("Invalid quantity. Principal amount must be positive.");
+      return;
+    }
+    if (parsedQty > 1e15) {
+      setErr("Quantity is too large. Please enter a valid principal amount.");
       return;
     }
     if (!isValid) {
-      setErr("Nominal pokok harus kelipatan IDR 1,000,000.");
+      setErr("Principal amount must be in multiples of IDR 1,000,000.");
       return;
     }
-    onSubmit({ amount: totalAmt, currentValue: currentPrice, quantity: parsedQty });
+    if (priceInput !== "" && (isNaN(parsedPrice) || parsedPrice <= 0)) {
+      setErr("Invalid price. Price must be greater than zero.");
+      return;
+    }
+    onSubmit({ amount: totalAmt, currentValue: parsedPrice || currentPrice, quantity: parsedQty });
   };
 
   return (
     <div className="flex flex-col gap-4">
       <InputField
-        label="Nominal Pokok (IDR)"
+        label="Nominal Pokok / Quantity (IDR)"
         type="number"
         value={qty}
         onChange={(e) => setQty(e.target.value)}
@@ -45,23 +59,24 @@ export function BondTransactionForm({ type, currentPrice, onClose, onSubmit }: B
       <InputField
         label="Price (% of Face Value)"
         type="number"
-        value={currentPrice.toString()}
-        disabled
+        value={priceInput}
+        onChange={(e) => setPriceInput(e.target.value)}
+        placeholder="e.g. 100"
         icon={<TrendingUp size={14} />}
       />
 
-      {parsedQty > 0 && (
+      {parsedQty > 0 && isFinite(totalAmt) && (
         <>
           <p className="text-sm text-foreground">
             Total: <span className="font-bold font-mono">{fmt(Math.round(totalAmt))}</span>
           </p>
           {isValid ? (
             <p className="text-xs text-emerald-600 flex items-center gap-1">
-              <Check size={12} /> Valid — kelipatan IDR 1,000,000
+              <Check size={12} /> Valid — multiple of IDR 1,000,000
             </p>
           ) : (
             <p className="text-xs text-yellow-600">
-              * Nominal pokok harus kelipatan IDR 1,000,000
+              * Principal amount must be in multiples of IDR 1,000,000
             </p>
           )}
         </>
@@ -75,7 +90,7 @@ export function BondTransactionForm({ type, currentPrice, onClose, onSubmit }: B
 
       <div className="flex gap-3 mt-2">
         <Btn variant="secondary" className="flex-1" onClick={onClose}>Cancel</Btn>
-        <Btn className="flex-1" onClick={handleSubmit}>{type === "buy" ? "Buy Bond" : "Sell Bond"}</Btn>
+        <Btn className="flex-1" onClick={handleSubmit}>Submit</Btn>
       </div>
     </div>
   );

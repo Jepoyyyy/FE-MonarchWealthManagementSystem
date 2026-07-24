@@ -14,19 +14,34 @@ interface MutualFundFormProps {
 export function MutualFundTransactionForm({ type, currentPrice, onClose, onSubmit }: MutualFundFormProps) {
   const [method, setMethod] = useState<"amount" | "units">("units");
   const [val, setVal] = useState("");
+  const [priceInput, setPriceInput] = useState(currentPrice ? currentPrice.toString() : "");
   const [err, setErr] = useState("");
 
   const parsedVal = parseFloat(val) || 0;
+  const parsedPrice = parseFloat(priceInput) ?? currentPrice;
+  const activePrice = isNaN(parsedPrice) || parsedPrice <= 0 ? currentPrice : parsedPrice;
 
-  const totalAmt = method === "amount" ? parsedVal : parsedVal * currentPrice;
-  const units = method === "units" ? parsedVal : parsedVal / currentPrice;
+  const totalAmt = method === "amount" ? parsedVal : parsedVal * activePrice;
+  const units = method === "units" ? parsedVal : activePrice > 0 ? parsedVal / activePrice : 0;
 
   const handleSubmit = () => {
-    if (!val || parsedVal <= 0) {
-      setErr("Masukkan nilai yang valid.");
+    if (!val || val.trim() === "") {
+      setErr("Required field cannot be empty. Please enter value.");
       return;
     }
-    onSubmit({ amount: totalAmt, currentValue: currentPrice, quantity: units, method });
+    if (parsedVal <= 0) {
+      setErr("Invalid quantity. Quantity or amount must be positive.");
+      return;
+    }
+    if (parsedVal > 1e15) {
+      setErr("Quantity is too large. Please enter a valid value.");
+      return;
+    }
+    if (priceInput !== "" && (isNaN(parsedPrice) || parsedPrice <= 0)) {
+      setErr("Invalid price. Price must be greater than zero.");
+      return;
+    }
+    onSubmit({ amount: totalAmt, currentValue: activePrice, quantity: units, method });
   };
 
   return (
@@ -48,7 +63,7 @@ export function MutualFundTransactionForm({ type, currentPrice, onClose, onSubmi
       </div>
 
       <InputField
-        label={method === "amount" ? "Total Amount (IDR)" : "Jumlah Units"}
+        label={method === "amount" ? "Total Amount (IDR)" : "Quantity (Units)"}
         type="number"
         value={val}
         onChange={(e) => setVal(e.target.value)}
@@ -59,12 +74,13 @@ export function MutualFundTransactionForm({ type, currentPrice, onClose, onSubmi
       <InputField
         label="NAV / Unit Price"
         type="number"
-        value={currentPrice.toString()}
-        disabled
+        value={priceInput}
+        onChange={(e) => setPriceInput(e.target.value)}
+        placeholder="e.g. 1500"
         icon={<TrendingUp size={14} />}
       />
 
-      {parsedVal > 0 && (
+      {parsedVal > 0 && isFinite(totalAmt) && (
         <p className="text-sm text-foreground">
           Total: <span className="font-bold font-mono">{fmt(Math.round(totalAmt))}</span>
         </p>
@@ -78,7 +94,7 @@ export function MutualFundTransactionForm({ type, currentPrice, onClose, onSubmi
 
       <div className="flex gap-3 mt-2">
         <Btn variant="secondary" className="flex-1" onClick={onClose}>Cancel</Btn>
-        <Btn className="flex-1" onClick={handleSubmit}>{type === "buy" ? "Buy Units" : "Sell Units"}</Btn>
+        <Btn className="flex-1" onClick={handleSubmit}>Submit</Btn>
       </div>
     </div>
   );

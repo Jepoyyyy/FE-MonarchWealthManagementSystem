@@ -64,7 +64,7 @@ export function TransactionHistoryTable({ assetId }: TransactionHistoryTableProp
   if (transactions.length === 0) {
     return (
       <div className="bg-card rounded-xl border border-border p-8 text-center">
-        <p className="text-sm text-muted-foreground">No transaction history yet</p>
+        <p className="text-sm text-muted-foreground">No transactions found</p>
       </div>
     );
   }

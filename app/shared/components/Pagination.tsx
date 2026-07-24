@@ -16,7 +16,7 @@ export function Pagination({
   if (totalPages <= 1) return null;
 
   return (
-    <div className={`flex items-center justify-center gap-1 ${className}`}>
+    <nav aria-label="pagination" className={`flex items-center justify-center gap-1 ${className}`}>
       <button
         disabled={currentPage === 0}
         onClick={() => onPageChange(currentPage - 1)}
@@ -50,6 +50,6 @@ export function Pagination({
       >
         <ChevronRight size={18} />
       </button>
-    </div>
+    </nav>
   );
 }

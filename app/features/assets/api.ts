@@ -37,21 +37,22 @@ function toAssetPayload(data: Omit<Asset, "id">, products: any[]) {
 function mapAsset(asset: any, products: any[]): Asset {
   const rawType = asset.type;
   const normalizedType = (rawType === "deposit" || rawType === "Deposit") ? "Bank Deposit" : rawType;
+  const p = products.find(prod => prod.id === (asset.product_id ?? asset.productId));
   const camel = {
     id: asset.id,
-    userId: asset.user_id,
-    productId: asset.product_id,
-    goalId: asset.goal_id,
+    userId: asset.user_id ?? asset.userId,
+    productId: asset.product_id ?? asset.productId,
+    goalId: asset.goal_id ?? asset.goalId,
     amount: asset.amount,
-    units: asset.units,
-    currentValue: asset.current_value,
+    units: asset.units ?? asset.quantity ?? 0,
+    currentValue: asset.current_value ?? asset.currentValue,
     platform: asset.platform,
     notes: asset.notes,
-    purchaseDate: (asset.purchase_date ?? "").split(" ")[0],
-    updatedAt: asset.updated_at,
-    name: asset.name,
-    issuer: asset.issuer,
-    type: normalizedType,
+    purchaseDate: (asset.purchase_date ?? asset.purchaseDate ?? "").split(" ")[0],
+    updatedAt: asset.updated_at ?? asset.updatedAt,
+    name: asset.name || p?.name,
+    issuer: asset.issuer || p?.issuer,
+    type: normalizedType || p?.type,
   };
   return {
     ...camel,
@@ -61,8 +62,34 @@ function mapAsset(asset: any, products: any[]): Asset {
 
 export const AssetApi = {
   list: async (products: any[]) => {
-    const res = await api.get<any[]>("/api/v1/me/assets");
-    const mapped = (res.data ?? []).map((asset) => mapAsset(asset, products));
+    const res = await api.get<any>("/api/v1/me/assets", { timeout: 4000 });
+    if (typeof res.data === "string") {
+      throw new Error("Invalid server response: Invalid JSON or string response received");
+    }
+    let rawData: any[] = [];
+    if (Array.isArray(res.data)) {
+      rawData = res.data;
+    } else if (res.data && typeof res.data === "object") {
+      if (Array.isArray(res.data.result)) {
+        rawData = res.data.result;
+      } else if (res.data.result === null || res.data.result === undefined) {
+        rawData = [];
+      } else {
+        throw new Error("Invalid server response: Expected array of assets");
+      }
+    } else if (res.data === null || res.data === undefined) {
+      rawData = [];
+    } else {
+      throw new Error("Invalid server response: Expected array of assets");
+    }
+
+    const mapped = rawData.map((asset: any) => mapAsset(asset, products));
+    return { ...res, data: mapped };
+  },
+
+  getById: async (id: string, products: any[] = []) => {
+    const res = await api.get<any>(`/api/v1/me/assets/${id}`);
+    const mapped = res.data ? mapAsset(res.data, products) : res.data;
     return { ...res, data: mapped };
   },
 
@@ -85,5 +112,16 @@ export const AssetApi = {
   addTransaction: (id: string, data: { action: string, units?: number, amount?: number }) => api.post(`/api/v1/me/assets/${id}/transactions`, data),
   fetchPnL: () => api.get<AssetsPnLResponse[]>("/api/v1/me/assets/pnl"),
   fetchLogs: () => api.get<TransactionHistory[]>("/api/v1/me/assets/transaction-logs"),
-  fetchAssetTransactions: (assetId: string) => api.get<TransactionHistory[]>(`/api/v1/me/assets/${assetId}/transactions`),
+  fetchAssetTransactions: async (assetId: string) => {
+    const res = await api.get<any>(`/api/v1/me/assets/${assetId}/transactions`);
+    let list: TransactionHistory[] = [];
+    if (Array.isArray(res.data)) {
+      list = res.data;
+    } else if (res.data?.result && Array.isArray(res.data.result)) {
+      list = res.data.result;
+    } else if (res.data?.data && Array.isArray(res.data.data)) {
+      list = res.data.data;
+    }
+    return { ...res, data: list };
+  },
 };

@@ -20,6 +20,8 @@ interface AddTransactionModalProps {
 export function AddTransactionModal({ asset, product, type, onClose, onSaveTransaction }: AddTransactionModalProps) {
   return (
     <div
+      role="dialog"
+      aria-modal="true"
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{ background: "rgba(13,33,55,0.75)", backdropFilter: "blur(4px)" }}
     >

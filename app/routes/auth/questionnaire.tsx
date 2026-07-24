@@ -64,7 +64,6 @@ export default function QuestionnairePage() {
             navigate("/", { replace: true });
           }}
         />
-        <Toaster richColors position="top-right" duration={3000} />
       </div>
     );
   }

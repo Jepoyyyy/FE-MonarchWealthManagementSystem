@@ -29,7 +29,7 @@ export function AssetRow({ asset, goals, onSelect, onRemove, onAssignGoal }: Ass
   const qty = pnl
     ? (isStock ? pnl.units / lotSize : pnl.units)
     : (asset.quantity ?? asset.amount);
-  const ret = ((curVal - asset.amount) / asset.amount) * 100;
+  const ret = asset.amount > 0 ? ((curVal - asset.amount) / asset.amount) * 100 : 0;
 
   const qtyLabel = assetType === "Stock"
     ? `${qty} Lot`
@@ -78,7 +78,7 @@ export function AssetRow({ asset, goals, onSelect, onRemove, onAssignGoal }: Ass
           className="px-4 py-3 text-xs font-semibold text-foreground"
           style={{ fontFamily: "var(--font-mono)" }}
         >
-          {fmt(curVal)}
+          {curVal !== undefined && curVal !== null && curVal < 0 ? `IDR ${curVal.toLocaleString()}` : fmt(curVal)}
         </td>
         <td className="px-4 py-3">
           <span

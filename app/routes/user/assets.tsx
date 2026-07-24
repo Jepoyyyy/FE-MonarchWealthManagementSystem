@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from "react";
 import { useOutletContext, useNavigate } from "react-router";
 import type { LayoutContextType } from "~/routes/layout";
 import { usePortfolioStore } from '~/features/assets/portfolio.store';
+import { useGoalsStore } from '~/features/goals/goals.store';
 
 const AssetsView = lazy(() => import("~/features/assets/components/AssetsView").then(m => ({ default: m.AssetsView })));
 
@@ -11,6 +12,7 @@ export default function AssetsRoute() {
 
   useEffect(() => {
     usePortfolioStore.getState().fetchPortfolio();
+    useGoalsStore.getState().fetchGoals();
   }, []);
 
   useEffect(() => {

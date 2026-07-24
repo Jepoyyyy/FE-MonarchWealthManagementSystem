@@ -12,6 +12,8 @@ export default [
     index("routes/user/dashboard.tsx"),
     route("products", "routes/user/products.tsx"),
     route("assets", "routes/user/assets.tsx"),
+    route("assets/:id", "routes/user/asset-detail.tsx", { id: "assets-detail" }),
+    route("user/assets/:id", "routes/user/asset-detail.tsx", { id: "user-assets-detail" }),
     route("goals", "routes/user/goals.tsx"),
     route("recommendations", "routes/user/recommendations.tsx"),
     route("progress", "routes/user/progress.tsx"),

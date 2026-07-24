@@ -27,6 +27,8 @@ export function ConfirmModal({
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
       className="fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-200"
       style={{ background: "rgba(13,33,55,0.6)", backdropFilter: "blur(6px)" }}
       onClick={() => onOpenChange(false)}

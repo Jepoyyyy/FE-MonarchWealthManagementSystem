@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
-import { Outlet, redirect, useNavigate } from "react-router";
+import { Outlet, redirect, useNavigate, Navigate } from "react-router";
 import { Toaster, toast } from "sonner";
 import { AppLayout } from '~/shared/layouts';
 import type { AppUser, Product, Asset, Goal, FinancialProfile, AuditLog } from "~/types";
@@ -105,7 +105,7 @@ export default function Layout() {
   }, []);
 
   if (!syncedUser) {
-    return null;
+    return <Navigate to="/login" replace />;
   }
 
   return (
@@ -128,7 +128,6 @@ export default function Layout() {
           } satisfies LayoutContextType
         }
       />
-      <Toaster richColors position="top-right" duration={3000} />
     </AppLayout>
   );
 }

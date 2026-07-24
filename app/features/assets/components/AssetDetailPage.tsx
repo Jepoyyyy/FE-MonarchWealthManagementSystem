@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { ChevronRight, Trash2, Info, ArrowUpRight, ArrowDownRight, Plus } from "lucide-react";
 import type { Asset, Product, Goal } from "~/types";
 import { GOAL_TYPE_CONFIG } from '~/features/goals/goals.config';
@@ -51,9 +52,8 @@ export function AssetDetailPage({
     handleSave,
   } = useAssetDetail({ asset, product, onSave, onBack });
 
-
-
-  return (
+  const [isGoalOpen, setIsGoalOpen] = useState(false);
+  const selectedGoal = goals.find((g) => g.id === goalId);  return (
     <div className="space-y-6">
       <Btn
         variant="unstyled"
@@ -87,6 +87,7 @@ export function AssetDetailPage({
             onClick={() => setShowConfirmDelete(true)}
             className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-red-500 transition-colors"
             title="Remove asset"
+            aria-label="Remove asset"
           >
             <Trash2 size={16} />
           </Btn>
@@ -123,25 +124,58 @@ export function AssetDetailPage({
         />
       )}
 
-      <div className="bg-card rounded-xl border border-border p-5">
-        <label className="text-sm font-medium block mb-1.5 text-foreground">Link to Goal</label>
-        <select
-          value={goalId}
-          onChange={(e) => setGoalId(e.target.value)}
-          className="w-full px-3 py-2.5 rounded-md border text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-          style={{
-            borderColor: goalId ? "var(--accent)" : "var(--border)",
-            background: "var(--input-background)",
-            color: "var(--foreground)",
-          }}
+      <div className="bg-card rounded-xl border border-border p-5 relative">
+        <label htmlFor="goal-select" className="text-sm font-medium block mb-1.5 text-foreground">Link to Goal</label>
+        <button
+          id="goal-select"
+          type="button"
+          role="combobox"
+          aria-label="Link to Goal"
+          aria-expanded={isGoalOpen}
+          aria-controls="goal-options"
+          onClick={() => setIsGoalOpen(!isGoalOpen)}
+          className="w-full flex items-center justify-between px-3 py-2.5 rounded-md border text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 bg-background text-foreground border-border"
         >
-          <option value="">No goal linked</option>
-          {goals.map((g) => (
-            <option key={g.id} value={g.id}>
-              {GOAL_TYPE_CONFIG[g.type].icon} {g.name}
-            </option>
-          ))}
-        </select>
+          <span>
+            {selectedGoal ? `${GOAL_TYPE_CONFIG[selectedGoal.type]?.icon || "🎯"} ${selectedGoal.name}` : "No goal linked"}
+          </span>
+          <ChevronRight size={16} className={`transition-transform ${isGoalOpen ? "rotate-90" : ""}`} />
+        </button>
+
+        {isGoalOpen && (
+          <div
+            id="goal-options"
+            role="listbox"
+            className="absolute left-0 right-0 top-full mt-1 z-20 bg-card border border-border rounded-md shadow-lg py-1 max-h-48 overflow-y-auto"
+          >
+            {goals.map((g) => (
+              <div
+                key={g.id}
+                role="option"
+                aria-selected={goalId === g.id}
+                onClick={() => {
+                  setGoalId(g.id);
+                  setIsGoalOpen(false);
+                }}
+                className="px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground cursor-pointer flex items-center gap-2"
+              >
+                <span>{GOAL_TYPE_CONFIG[g.type]?.icon || "🎯"}</span>
+                <span>{g.name}</span>
+              </div>
+            ))}
+            <div
+              role="option"
+              aria-selected={!goalId}
+              onClick={() => {
+                setGoalId("");
+                setIsGoalOpen(false);
+              }}
+              className="px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground cursor-pointer flex items-center gap-2"
+            >
+              No goal linked
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
@@ -261,20 +295,22 @@ export function AssetDetailPage({
       <TransactionHistoryTable assetId={asset.id} />
 
       {/* Action buttons */}
-      <div className="flex gap-3">
-        <Btn variant="secondary" className="flex-1" onClick={() => setShowConfirmCancel(true)}>
-          Batal
-        </Btn>
-        <Btn className="flex-1" onClick={handleSave} disabled={!hasChanges}>
-          Simpan Perubahan
-        </Btn>
-      </div>
+      {!showTxModal && (
+        <div className="flex gap-3">
+          <Btn variant="secondary" className="flex-1" onClick={() => setShowConfirmCancel(true)}>
+            Cancel
+          </Btn>
+          <Btn className="flex-1" onClick={handleSave} disabled={!hasChanges}>
+            Save Changes
+          </Btn>
+        </div>
+      )}
 
       {/* Confirmation and Deletion Modals */}
       <ConfirmModal
         open={showConfirmDelete}
         onOpenChange={setShowConfirmDelete}
-        title="Remove this Asset"
+        title="Confirm Delete"
         message="This asset and it's related history will be removed"
         confirmLabel="Yes"
         onConfirm={() => {
@@ -286,9 +322,9 @@ export function AssetDetailPage({
       <ConfirmModal
         open={showConfirmCancel}
         onOpenChange={setShowConfirmCancel}
-        title="Cancel the change you made ?"
-        message="Any change to link goals and lot/amount selled or purchased will be lost."
-        confirmLabel="Yes"
+        title="Unsaved Changes"
+        message="Are you sure you want to leave without saving your modifications?"
+        confirmLabel="Yes, Exit"
         onConfirm={onBack}
       />
     </div>

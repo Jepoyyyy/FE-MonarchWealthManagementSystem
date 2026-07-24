@@ -13,12 +13,14 @@ export function InputField({
   icon,
   rightElement,
   className = "",
+  id,
   ...props
 }: InputFieldProps) {
+  const inputId = id || (label ? `input-${label.toLowerCase().replace(/[^a-z0-9]/g, "-")}` : undefined);
   return (
     <div className="flex flex-col gap-1.5 w-full">
       {label && (
-        <label className="text-sm font-medium text-foreground">
+        <label htmlFor={inputId} className="text-sm font-medium text-foreground">
           {label}
         </label>
       )}
@@ -29,6 +31,8 @@ export function InputField({
           </span>
         )}
         <input
+          id={inputId}
+          aria-label={props["aria-label"] || label}
           className={`w-full ${icon ? "pl-10" : "px-3"} ${rightElement ? "pr-28" : "pr-3"} py-2.5 rounded-md border text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary border-border ${className}`}
           style={{ background: "var(--input-background)", color: "var(--foreground)" }}
           {...props}

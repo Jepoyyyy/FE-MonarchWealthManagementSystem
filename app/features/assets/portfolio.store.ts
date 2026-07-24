@@ -23,19 +23,32 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
     set({ loading: true, error: null });
     try {
       const products = useProductsStore.getState().products;
-      const [assetsRes, pnlRes, progressRes] = await Promise.all([
+      const results = await Promise.allSettled([
         AssetApi.list(products),
         AssetApi.fetchPnL(),
         GoalApi.fetchProgress(),
       ]);
+
+      if (results[0].status === "rejected") {
+        const err = results[0].reason;
+        const msg = err instanceof Error ? err.message : (typeof err === "string" ? err : "Error loading assets");
+        set({ error: msg || "Error loading assets", loading: false });
+        return;
+      }
+
+      const assetsRes = results[0].value;
+      const pnlRes = results[1].status === "fulfilled" ? results[1].value : { data: [] };
+      const progressRes = results[2].status === "fulfilled" ? results[2].value : { data: [] };
+
       set({
         assets: assetsRes.data,
         pnlData: pnlRes.data,
         goalProgress: progressRes.data,
         loading: false,
+        error: null,
       });
     } catch (err: unknown) {
-      set({ error: err instanceof Error ? err.message : "Failed to load portfolio", loading: false });
+      set({ error: err instanceof Error ? err.message : "Error loading assets", loading: false });
     }
   },
 }));

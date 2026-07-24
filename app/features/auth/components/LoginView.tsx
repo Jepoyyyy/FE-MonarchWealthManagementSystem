@@ -89,7 +89,7 @@ export function LoginView({ onLogin, onNavigate }: LoginViewProps) {
         <h2 className="text-2xl font-bold text-foreground" style={{ fontFamily: "var(--font-serif)" }}>
           Welcome back
         </h2>
-        <p className="text-muted-foreground text-sm mt-1">Sign in to your account to continue</p>
+        <p className="text-muted-foreground text-sm mt-1">Sign in or Login to your account to continue</p>
       </div>
       <form onSubmit={submit} className="flex flex-col gap-4">
         <InputField

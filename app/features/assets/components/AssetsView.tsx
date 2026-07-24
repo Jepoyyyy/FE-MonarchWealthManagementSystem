@@ -35,8 +35,9 @@ export function AssetsView({
   const assets = usePortfolioStore((s) => s.assets);
   const pnlData = usePortfolioStore((s) => s.pnlData);
   const pnlLoading = usePortfolioStore((s) => s.loading);
+  const error = usePortfolioStore((s) => s.error);
 
-  const myAssets = (assets || []).filter((a) => a.userId === user.id);
+  const myAssets = (assets || []).filter((a) => !a.userId || a.userId === user.id);
 
   // Shared parallelized data refresh helper
   const refreshAllData = useCallback(async () => {
@@ -103,8 +104,11 @@ export function AssetsView({
       await refreshAllData();
       toast.success("Asset Updated Successfully");
     } catch (err: any) {
-      if (!handleGlobalApiError(err)) {
-        toast.error("Failed to Update asset", { description: err.message || "Unknown error" });
+      const isNetworkError = !err.response && (err.code === "ERR_NETWORK" || err.message?.includes("Network Error"));
+      if (isNetworkError) {
+        toast.error("Network error while saving", { description: "Please check network connection" });
+      } else if (!handleGlobalApiError(err)) {
+        toast.error("Error saving changes", { description: err.message || "Unable to save changes" });
       }
     }
   };
@@ -115,8 +119,11 @@ export function AssetsView({
       await refreshAllData();
       toast.success(" Deleted Successfully");
     } catch (err: any) {
-      if (!handleGlobalApiError(err)) {
-        toast.error("Failed to Delete asset", { description: err.message || "Unknown error" });
+      const status = err?.response?.status;
+      if (status === 409) {
+        toast.error("Conflict: Asset already deleted", { description: "This asset has already been deleted or modified" });
+      } else if (!handleGlobalApiError(err)) {
+        toast.error("Error deleting asset", { description: "Unable to delete asset" });
       }
     }
   };
@@ -191,7 +198,23 @@ export function AssetsView({
         }
       />
 
-      {pnlLoading ? (
+      {error ? (
+        <div className="flex flex-col items-center justify-center p-12 space-y-4 text-center bg-card rounded-xl border border-border">
+          <div className="text-red-500 text-4xl">⚠️</div>
+          <h3 className="text-lg font-semibold text-foreground">Assets Unavailable</h3>
+          <p className="text-sm text-muted-foreground">
+            Error loading assets: {error}
+          </p>
+          <Btn
+            onClick={() => {
+              usePortfolioStore.getState().fetchPortfolio();
+            }}
+            size="sm"
+          >
+            Retry
+          </Btn>
+        </div>
+      ) : pnlLoading ? (
         <div className="space-y-6" data-testid="assets-loading">
           {/* Skeleton stat cards */}
           <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
