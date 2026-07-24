@@ -62,7 +62,7 @@ function mapAsset(asset: any, products: any[]): Asset {
 
 export const AssetApi = {
   list: async (products: any[]) => {
-    const res = await api.get<any>("/api/v1/me/assets", { timeout: 4000 });
+    const res = await api.get<any>("/api/v1/me/assets", { timeout: 10000 });
     if (typeof res.data === "string") {
       throw new Error("Invalid server response: Invalid JSON or string response received");
     }
