@@ -32,13 +32,13 @@ export function RecommendationsView({
 }: RecommendationsViewProps) {
   const myAssets = assets.filter((a) => a.userId === user.id);
   const [trackingProduct, setTrackingProduct] = useState<Product | null>(null);
-  const { recommendations, loading } = useRecommendationsStore();
+  const { recommendations, loading, error } = useRecommendationsStore();
 
   useEffect(() => {
     useRecommendationsStore.getState().fetchRecommendations();
   }, []);
 
-  const { health, loading: healthLoading } = useHealthScore();
+  const { health, loading: healthLoading, error: healthError } = useHealthScore();
   const recs = recommendations;
 
   const emergencyScore = health?.components?.find((c) => c.componentName === "emergency")?.score ?? 0;
@@ -115,7 +115,7 @@ export function RecommendationsView({
               className="text-2xl font-bold mb-1"
               style={{ fontFamily: "var(--font-serif)", color: scoreColor }}
             >
-              {totalScore >= 70 ? "Healthy" : totalScore >= 45 ? "Needs attention" : "Action required"}
+              {totalScore >= 70 ? "Healthy" : totalScore >= 45 ? "Needs attention" : "Needs action"}
             </p>
             <p className="text-xs text-muted-foreground leading-relaxed">
               {highCount > 0
@@ -184,8 +184,18 @@ export function RecommendationsView({
         </div>
       </div>
 
+      {healthError && (
+        <div className="bg-destructive/10 border border-destructive text-destructive p-4 rounded-xl text-sm font-medium">
+          Failed to load health score: {healthError}
+        </div>
+      )}
+
       {/* Rec list */}
-      {loading && recs.length === 0 ? (
+      {error ? (
+        <div className="bg-destructive/10 border border-destructive text-destructive p-6 rounded-xl text-center font-medium">
+          Error loading recommendations: {error}
+        </div>
+      ) : loading && recs.length === 0 ? (
         <div className="space-y-4" data-testid="recommendations-loading">
           {/* Skeleton recommendation cards */}
           {[1, 2, 3].map((i) => (

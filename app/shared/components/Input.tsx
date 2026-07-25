@@ -17,6 +17,11 @@ export function InputField({
   ...props
 }: InputFieldProps) {
   const inputId = id || (label ? `input-${label.toLowerCase().replace(/[^a-z0-9]/g, "-")}` : undefined);
+  let computedType = props.type;
+  if (props.type === "date" && typeof props.value === "string" && props.value !== "" && isNaN(Date.parse(props.value))) {
+    computedType = "text";
+  }
+
   return (
     <div className="flex flex-col gap-1.5 w-full">
       {label && (
@@ -32,6 +37,7 @@ export function InputField({
         )}
         <input
           id={inputId}
+          type={computedType}
           aria-label={props["aria-label"] || label}
           className={`w-full ${icon ? "pl-10" : "px-3"} ${rightElement ? "pr-28" : "pr-3"} py-2.5 rounded-md border text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary border-border ${className}`}
           style={{ background: "var(--input-background)", color: "var(--foreground)" }}

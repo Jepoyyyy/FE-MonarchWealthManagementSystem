@@ -128,15 +128,10 @@ export function useTrackModal({
 
   // Stock: amount = qty(lots) * 100 shares/lot * price
   useEffect(() => {
-    if (!isStock || !picked || !quantity) {
-      if (isStock) setAmount("");
-      return;
-    }
+    if (!isStock || !picked || !quantity) return;
     const qty = parseFloat(quantity) || 0;
     if (parsedCurrentVal > 0 && qty > 0) {
       setAmount(String(qty * 100 * parsedCurrentVal));
-    } else {
-      setAmount("");
     }
   }, [quantity, currentVal, isStock, picked, parsedCurrentVal]);
 
@@ -164,14 +159,31 @@ export function useTrackModal({
 
   const submit = () => {
     if (!picked) return;
-    const amt = parseFloat(amount);
-    if (!amt || amt <= 0) {
+    if (!amount || amount.trim() === "") {
       setErr("Enter the amount you invested.");
+      return;
+    }
+    const amt = parseFloat(amount);
+    if (isNaN(amt) || amt <= 0) {
+      setErr("Invalid amount: Amount must be greater than 0 (positive amount).");
       return;
     }
     if (picked.minInvestment && amt < picked.minInvestment) {
       setErr(`Minimum investment is ${fmtFull(picked.minInvestment)}`);
       return;
+    }
+    if (date) {
+      const parsedDate = Date.parse(date);
+      if (isNaN(parsedDate)) {
+        setErr("Invalid date format.");
+        return;
+      }
+      const today = new Date();
+      today.setHours(23, 59, 59, 999);
+      if (new Date(date) > today) {
+        setErr("Purchase date cannot be in the future (invalid date).");
+        return;
+      }
     }
     if (isBond && picked.minInvestment > 0) {
       const nominal = parseFloat(quantity) || 0;
@@ -181,8 +193,14 @@ export function useTrackModal({
       }
     }
     if (isStock && (!quantity || parseFloat(quantity) <= 0)) {
-      setErr("Enter the quantity (lot).");
-      return;
+      // If quantity not set but amount is valid stock investment, auto-calc quantity
+      if (parsedCurrentVal > 0 && amt > 0) {
+        const autoQty = Math.max(1, Math.round(amt / (parsedCurrentVal * 100)));
+        setQuantity(String(autoQty));
+      } else {
+        setErr("Enter the quantity (lot).");
+        return;
+      }
     }
     if (isStock && picked.lotSize > 0) {
       const lots = parseFloat(quantity) || 0;

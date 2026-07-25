@@ -65,26 +65,16 @@ export function TrackFormStep({
         </div>
       )}
 
-      {/* Amount Invested — Stock: ReadOnly, others: Editable */}
+      {/* Amount Invested */}
       <div>
-        {isStock ? (
-          <InputField
-            label="Amount Invested (IDR)"
-            type="number" value={amount}
-            readOnly
-            placeholder="Auto-calculated"
-            icon={<DollarSign size={14} />}
-            rightElement="[ Auto-Calc ]"
-          />
-        ) : (
-          <InputField
-            label="Amount Invested (IDR)"
-            type="number" value={amount}
-            onChange={e => setAmount(e.target.value)}
-            placeholder="e.g. 10000000"
-            icon={<DollarSign size={14} />}
-          />
-        )}
+        <InputField
+          label="Amount Invested (IDR)"
+          type="number"
+          value={amount}
+          onChange={e => setAmount(e.target.value)}
+          placeholder="e.g. 10000000"
+          icon={<DollarSign size={14} />}
+        />
         {picked && picked.minInvestment > 0 && (
           <div className="flex flex-col gap-1 mt-1">
             <p className="text-xs text-muted-foreground">

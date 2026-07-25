@@ -9,19 +9,17 @@ interface RecommendationsState {
   fetchRecommendations: () => Promise<void>;
 }
 
-export const useRecommendationsStore = create<RecommendationsState>((set, get) => ({
+export const useRecommendationsStore = create<RecommendationsState>((set) => ({
   recommendations: [],
   loading: false,
   error: null,
   fetchRecommendations: async () => { 
-    if (get().loading) return;
-
     set({ loading: true, error: null });
     try {
       const res = await RecommendationApi.generate();
-      set({ recommendations: res.data, loading: false });
+      set({ recommendations: res.data, loading: false, error: null });
     } catch (err: any) {
-      set({ error: err.message || "Failed to load recommendations", loading: false });
+      set({ error: err.message || "Failed to load recommendations", loading: false, recommendations: [] });
     }
   },
 }));

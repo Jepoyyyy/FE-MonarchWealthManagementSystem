@@ -35,10 +35,20 @@ function fromRecommendationResponse(data: any): Recommendation {
 export const RecommendationApi = {
   health: () => api.get<HealthScoreDTO>("/api/v1/me/health"),
   generate: async () => {
-    const res = await api.post<any[]>("/api/v1/me/recommendations");
+    const res = await api.post<any>("/api/v1/me/recommendations");
+    if (typeof res.data === "string") {
+      throw new Error("Invalid server response: Invalid JSON or string response received");
+    }
+    const rawList = Array.isArray(res.data)
+      ? res.data
+      : Array.isArray(res.data?.result)
+      ? res.data.result
+      : Array.isArray(res.data?.data)
+      ? res.data.data
+      : [];
     return {
       ...res,
-      data: (res.data || []).map(fromRecommendationResponse),
+      data: rawList.map(fromRecommendationResponse),
     };
   },
 };

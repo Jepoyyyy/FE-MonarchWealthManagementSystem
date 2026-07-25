@@ -94,7 +94,7 @@ export const AssetApi = {
   },
 
   create: async (data: Omit<Asset, "id">, products: any[]) => {
-    const res = await api.post<any>("/api/v1/me/assets", toAssetPayload(data, products));
+    const res = await api.post<any>("/api/v1/me/assets", toAssetPayload(data, products), { timeout: 5000 });
     return {
       ...res,
       data: mapAsset(res.data, products),
