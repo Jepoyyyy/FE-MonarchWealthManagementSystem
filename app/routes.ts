@@ -17,6 +17,7 @@ export default [
     route("goals", "routes/user/goals.tsx"),
     route("recommendations", "routes/user/recommendations.tsx"),
     route("progress", "routes/user/progress.tsx"),
+    route("user/progress", "routes/user/progress.tsx", { id: "user-progress" }),
     // Admin Routes
     route("admin", "routes/admin/dashboard.tsx"),
     route("admin/products", "routes/admin/products.tsx"),

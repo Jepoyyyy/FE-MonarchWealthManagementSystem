@@ -39,7 +39,7 @@ export function AdminDashboardView({ users, products, assets }: AdminDashboardVi
   }, [dashData, assets]);
 
   const activeUsers = useMemo(() => {
-    return dashData ? dashData.active_user_count : users.filter((u) => u.role === "user" && u.status === "active").length;
+    return dashData ? dashData.active_user_count : users.filter((u) => u.role === "user" && u.status === "ACTIVE").length;
   }, [dashData, users]);
 
   const visibleProducts = useMemo(() => {

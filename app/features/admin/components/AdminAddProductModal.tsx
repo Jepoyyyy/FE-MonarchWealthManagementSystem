@@ -102,8 +102,10 @@ export function AdminAddProductModal({ open, onClose, onSubmit }: Props) {
               required
             />
             <div className="flex flex-col gap-1.5 w-full">
-              <label className="text-sm font-medium text-foreground">Type</label>
+              <label htmlFor="input-type" className="text-sm font-medium text-foreground">Type</label>
               <select
+                id="input-type"
+                aria-label="Type"
                 className="w-full border border-border rounded-md px-3 py-2.5 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary"
                 style={{ background: "var(--input-background)", color: "var(--foreground)" }}
                 value={form.type}
@@ -174,8 +176,10 @@ export function AdminAddProductModal({ open, onClose, onSubmit }: Props) {
           </div>
 
           <div className="flex flex-col gap-1.5 w-full">
-            <label className="text-sm font-medium text-foreground">Description</label>
+            <label htmlFor="input-description" className="text-sm font-medium text-foreground">Description</label>
             <textarea
+              id="input-description"
+              aria-label="Description"
               className="w-full border border-border rounded-md px-3 py-2.5 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary bg-background text-foreground"
               style={{ background: "var(--input-background)", color: "var(--foreground)" }}
               placeholder="Product Description"

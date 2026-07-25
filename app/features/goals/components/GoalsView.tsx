@@ -47,7 +47,7 @@ export function GoalsView({
   const [showFinProfileModal, setShowFinProfileModal] = useState(false);
 
   // Data layer
-  const { goals, fetchGoals } = useGoalsStore();
+  const { goals, error: goalsError, fetchGoals } = useGoalsStore();
   const fetchPortfolio = usePortfolioStore((s) => s.fetchPortfolio);
   const portfolioLoading = usePortfolioStore((s) => s.loading);
   const isLoading = portfolioLoading;
@@ -60,7 +60,7 @@ export function GoalsView({
     goals,
     summary.surplus,
     fetchGoals,
-    (msg) => toast.error("Gagal mengalokasi surplus", { description: msg })
+    (msg) => toast.error("Failed to allocate surplus", { description: msg })
   );
 
   const operations = useGoalOperations(
@@ -184,6 +184,12 @@ export function GoalsView({
           </div>
         }
       />
+
+      {goalsError && (
+        <div className="p-4 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive flex items-center gap-2" role="alert">
+          <p className="text-sm font-medium">Failed to load goals. Please check your connection.</p>
+        </div>
+      )}
 
       {isLoading && (
         <div className="space-y-6" data-testid="goals-loading">

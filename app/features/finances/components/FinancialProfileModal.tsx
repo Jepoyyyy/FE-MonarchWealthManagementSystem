@@ -94,7 +94,7 @@ export function FinancialProfileModal({ open, onClose, onSave, initialData }: Fi
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" role="dialog" aria-modal="true" aria-label="Financial Profile Modal">
       <div 
         className="bg-card rounded-xl border border-border shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
@@ -120,11 +120,13 @@ export function FinancialProfileModal({ open, onClose, onSave, initialData }: Fi
           <div className="p-6 space-y-6">
             {/* Monthly Income */}
             <div className="bg-primary/5 rounded-xl p-5 border border-primary/20">
-              <label className="text-sm font-semibold text-foreground flex items-center gap-2 mb-2">
+              <label htmlFor="fin-monthly-income" className="text-sm font-semibold text-foreground flex items-center gap-2 mb-2">
                 <DollarSign size={16} className="text-primary" />
                 Monthly Income
               </label>
               <input
+                id="fin-monthly-income"
+                aria-label="Monthly Income"
                 type="number"
                 step="0.01"
                 value={formData.monthlyIncome || ""}
@@ -141,11 +143,13 @@ export function FinancialProfileModal({ open, onClose, onSave, initialData }: Fi
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {expenseCategories.map(({ key, label, icon: Icon, placeholder }) => (
                   <div key={key}>
-                    <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5 mb-1.5">
+                    <label htmlFor={`fin-expense-${key}`} className="text-xs font-medium text-muted-foreground flex items-center gap-1.5 mb-1.5">
                       <Icon size={14} />
                       {label}
                     </label>
                     <input
+                      id={`fin-expense-${key}`}
+                      aria-label={label}
                       type="number"
                       step="0.01"
                       value={formData[key as keyof FinancialProfileData] || ""}

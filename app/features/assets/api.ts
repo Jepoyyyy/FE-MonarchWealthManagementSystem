@@ -94,7 +94,7 @@ export const AssetApi = {
   },
 
   create: async (data: Omit<Asset, "id">, products: any[]) => {
-    const res = await api.post<any>("/api/v1/me/assets", toAssetPayload(data, products), { timeout: 5000 });
+    const res = await api.post<any>("/api/v1/me/assets", toAssetPayload(data, products), { timeout: 10000 });
     return {
       ...res,
       data: mapAsset(res.data, products),
@@ -110,7 +110,18 @@ export const AssetApi = {
 
   delete: (id: string) => api.delete(`/api/v1/me/assets/${id}`),
   addTransaction: (id: string, data: { action: string, units?: number, amount?: number }) => api.post(`/api/v1/me/assets/${id}/transactions`, data),
-  fetchPnL: () => api.get<AssetsPnLResponse[]>("/api/v1/me/assets/pnl"),
+  fetchPnL: async () => {
+    const res = await api.get<any>("/api/v1/me/assets/pnl");
+    let list: AssetsPnLResponse[] = [];
+    if (Array.isArray(res.data)) {
+      list = res.data;
+    } else if (res.data?.result && Array.isArray(res.data.result)) {
+      list = res.data.result;
+    } else if (res.data?.data && Array.isArray(res.data.data)) {
+      list = res.data.data;
+    }
+    return { ...res, data: list };
+  },
   fetchLogs: () => api.get<TransactionHistory[]>("/api/v1/me/assets/transaction-logs"),
   fetchAssetTransactions: async (assetId: string) => {
     const res = await api.get<any>(`/api/v1/me/assets/${assetId}/transactions`);

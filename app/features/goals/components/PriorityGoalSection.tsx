@@ -20,7 +20,7 @@ export function PriorityGoalSection({
   onDelete,
 }: PriorityGoalSectionProps) {
   return (
-    <div className="mb-5">
+    <div className="mb-5" data-priority="true">
       <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
         <Star size={12} className="text-amber-500" /> Priority Goal
       </h3>

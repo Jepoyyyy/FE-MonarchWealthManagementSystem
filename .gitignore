@@ -13,8 +13,7 @@ CLAUDE.md
 /test-result/
 /test/
 *.md
-/tests/
-playwright.config.ts
+
 
 # React Router
 /.react-router/
@@ -23,3 +22,5 @@ playwright.config.ts
 # Playwright
 /playwright-report/
 /test-results/
+.playwright-mcp/
+

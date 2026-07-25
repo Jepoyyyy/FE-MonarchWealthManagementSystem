@@ -19,7 +19,7 @@ export function MonthlyContributionInput({
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
-        <label className="text-sm font-medium text-foreground">
+        <label htmlFor="monthly-contribution" className="text-sm font-medium text-foreground">
           Monthly Contribution (IDR)
         </label>
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -58,6 +58,8 @@ export function MonthlyContributionInput({
           <Calculator size={14} />
         </span>
         <input
+          id="monthly-contribution"
+          aria-label="Monthly Contribution (IDR)"
           type="number"
           value={monthly}
           onChange={(e) => setMonthly(e.target.value)}

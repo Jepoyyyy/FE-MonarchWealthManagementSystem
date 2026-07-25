@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { AppUser, RiskProfile } from '~/types';
+import type { AppUser, RiskProfile, UserStatus } from '~/types';
 
 interface AuthState {
   token: string | null;
@@ -35,7 +35,7 @@ export const useAuthStore = create<AuthState>()(
           email: user.email || "",
           password: user.password || "",
           role: mappedRole,
-          status: user.status || "active",
+          status: (user.status || "active").toUpperCase() as UserStatus,
           riskProfile: user.riskProfile || user.risk_profile || null,
           questionnaireCompleted: user.questionnaireCompleted ?? false,
           createdAt: user.createdAt || new Date().toISOString(),

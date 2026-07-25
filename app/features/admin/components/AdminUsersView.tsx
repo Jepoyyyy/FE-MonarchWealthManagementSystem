@@ -57,11 +57,16 @@ export function AdminUsersView({
         page,
         size: 10,
         search: debouncedSearch || undefined,
-        status: statusFilter || undefined,
+        status: statusFilter ? statusFilter.toLowerCase() : undefined,
       });
       const paged = res.data;
-      const content = Array.isArray(paged) ? paged : paged?.content ?? [];
-      setUsers(content);
+      const content = Array.isArray(paged) ? paged : paged?.content ?? (paged as any)?.data?.content ?? [];
+      // Convert status to uppercase for frontend use
+      const mappedContent = content.map(user => ({
+        ...user,
+        status: user.status.toUpperCase() as UserStatus
+      }));
+      setUsers(mappedContent);
       setTotalPages(paged?.totalPages ?? 1);
       setTotalUsers(paged?.totalElements ?? content.length);
     } catch (err: any) {
@@ -87,17 +92,17 @@ export function AdminUsersView({
   const toggleStatus = async (id: string, next: UserStatus) => {
     const u = users.find((us) => us.id === id)!;
     try {
-      await AdminApi.updateUser(id, { status: next });
+      await AdminApi.updateUser(id, { status: next.toLowerCase() });
       addLog({
         userId: adminUser.id,
         userName: adminUser.name,
-        action: next === "suspended" ? "SUSPEND_USER" : "ACTIVATE_USER",
+        action: next === "SUSPENDED" ? "SUSPEND_USER" : "ACTIVATE_USER",
         details: `User '${u.name}' status changed to ${next}`,
         timestamp: new Date().toISOString(),
         category: "admin",
       });
-      toast.success(`User ${next === "active" ? "diaktifkan" : "disuspend"}`, {
-        description: `${u.name} sekarang ${next === "active" ? "aktif" : "disuspend"}`,
+      toast.success(`User ${next === "ACTIVE" ? "activated" : "suspended"}`, {
+        description: `${u.name} is now ${next === "ACTIVE" ? "active" : "suspended"}`,
       });
       fetchUsers();
       fetchDashboardStats();
@@ -108,8 +113,8 @@ export function AdminUsersView({
     }
   };
 
-  const activeCount = dashboardStats ? dashboardStats.active : users.filter((u) => u.status === "active").length;
-  const suspendedCount = dashboardStats ? dashboardStats.suspended : users.filter((u) => u.status === "suspended").length;
+  const activeCount = dashboardStats ? dashboardStats.active : users.filter((u) => u.status === "ACTIVE").length;
+  const suspendedCount = dashboardStats ? dashboardStats.suspended : users.filter((u) => u.status === "SUSPENDED").length;
   const displayTotalUsers = dashboardStats ? dashboardStats.total : totalUsers;
 
   return (
@@ -147,9 +152,9 @@ export function AdminUsersView({
           className="px-3 py-2 text-sm rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
         >
           <option value="">All statuses</option>
-          <option value="active">Active</option>
-          <option value="suspended">Suspended</option>
-          <option value="disabled">Disabled</option>
+          <option value="ACTIVE">Active</option>
+          <option value="SUSPENDED">Suspended</option>
+          <option value="DISABLED">Disabled</option>
         </select>
       </div>
 
@@ -225,7 +230,7 @@ export function AdminUsersView({
                     </td>
                     <td className="px-4 py-3">
                       <Badge className={statusBadge(u.status)}>
-                        {u.status.charAt(0).toUpperCase() + u.status.slice(1)}
+                        {u.status.toUpperCase()}
                       </Badge>
                     </td>
                     <td className="px-4 py-3 flex items-center gap-2">
@@ -234,15 +239,15 @@ export function AdminUsersView({
                       </Btn>
                       <Btn
                         size="sm"
-                        variant={u.status === "active" ? "danger" : "secondary"}
+                        variant={u.status === "ACTIVE" ? "danger" : "secondary"}
                         onClick={() =>
                           setConfirmUserToggle({
                             id: u.id,
-                            next: u.status === "active" ? "suspended" : "active",
+                            next: u.status === "ACTIVE" ? "SUSPENDED" : "ACTIVE",
                           })
                         }
                       >
-                        {u.status === "active" ? (
+                        {u.status === "ACTIVE" ? (
                           <>
                             <UserX size={13} /> Suspend
                           </>
@@ -297,7 +302,7 @@ export function AdminUsersView({
               <div className="space-y-4 text-xs">
                 <Row label="User ID" value={detail.id} />
                 <Row label="Role" value={detail.role} />
-                <Row label="Status" value={<Badge className={statusBadge(detail.status)}>{detail.status}</Badge>} />
+                <Row label="Status" value={<Badge className={statusBadge(detail.status)}>{detail.status.toUpperCase()}</Badge>} />
                 <Row
                   label="Risk Profile"
                   value={detail.riskProfile ? <RiskBadge profile={detail.riskProfile} showDot /> : "Not set"}
@@ -318,14 +323,14 @@ export function AdminUsersView({
         <ConfirmModal
           open={!!confirmUserToggle}
           onOpenChange={() => setConfirmUserToggle(null)}
-          title={confirmUserToggle.next === "suspended" ? "Suspend user ini?" : "Aktifkan user ini?"}
+          title={confirmUserToggle.next === "SUSPENDED" ? "Suspend this user?" : "Activate this user?"}
           message={
-            confirmUserToggle.next === "suspended"
-              ? "User tidak bisa login sampai diaktifkan lagi."
-              : "User akan bisa login kembali."
+            confirmUserToggle.next === "SUSPENDED"
+              ? "User will not be able to login until reactivated."
+              : "User will be able to login again."
           }
-          confirmLabel={confirmUserToggle.next === "suspended" ? "Ya, suspend" : "Ya, aktifkan"}
-          confirmVariant={confirmUserToggle.next === "suspended" ? "danger" : "primary"}
+          confirmLabel={confirmUserToggle.next === "SUSPENDED" ? "Yes, suspend" : "Yes, activate"}
+          confirmVariant={confirmUserToggle.next === "SUSPENDED" ? "danger" : "primary"}
           onConfirm={() => toggleStatus(confirmUserToggle.id, confirmUserToggle.next)}
         />
       )}

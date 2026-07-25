@@ -49,7 +49,7 @@ export function useGoalOperations(
         onSuccess("Goal Updated Successfully", `"${data.name}"`);
         await fetchGoals();
       } catch (err: any) {
-        onError("Fail to Update goal", err.message);
+        onError("Failed to update goal", err.message);
         throw err;
       }
     },
@@ -63,7 +63,7 @@ export function useGoalOperations(
         await fetchGoals();
         onSuccess("Goal Deleted Successfully");
       } catch (err: any) {
-        onError("Fail to Delete goal", err.message);
+        onError("Failed to delete goal", err.message);
       }
     },
     [fetchGoals, onSuccess, onError]
@@ -79,7 +79,7 @@ export function useGoalOperations(
         onSuccess("Priority goal Updated", `"${goal.name}" now become priority`);
         await fetchGoals();
       } catch (err: any) {
-        onError("Fail to Update Priority", err.message);
+        onError("Failed to update priority", err.message);
       }
     },
     [fetchGoals, onSuccess, onError]

@@ -91,7 +91,16 @@ export const GoalApi = {
     };
   },
   fetchProgress: async () => {
-    return api.get<GoalProgressResponse[]>("/api/v1/me/goals/progress");
+    const res = await api.get<any>("/api/v1/me/goals/progress");
+    let list: GoalProgressResponse[] = [];
+    if (Array.isArray(res.data)) {
+      list = res.data;
+    } else if (res.data?.result && Array.isArray(res.data.result)) {
+      list = res.data.result;
+    } else if (res.data?.data && Array.isArray(res.data.data)) {
+      list = res.data.data;
+    }
+    return { ...res, data: list };
   },
   projections: async () => {
     const res = await api.get<any[]>("/api/v1/me/goals/projections");

@@ -29,6 +29,8 @@ export function ConfirmModal({
     <div
       role="dialog"
       aria-modal="true"
+      aria-label="Confirm Modal"
+      data-testid="confirm-modal"
       className="fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-200"
       style={{ background: "rgba(13,33,55,0.6)", backdropFilter: "blur(6px)" }}
       onClick={() => onOpenChange(false)}
@@ -54,7 +56,7 @@ export function ConfirmModal({
             className="flex-1 order-2 sm:order-1"
             onClick={() => onOpenChange(false)}
           >
-            Batal
+            Cancel
           </Btn>
           <Btn
             variant={confirmVariant}
@@ -64,7 +66,7 @@ export function ConfirmModal({
               onOpenChange(false);
             }}
           >
-            {confirmLabel ?? "Ya, lanjutkan"}
+            {confirmLabel ?? "Yes, proceed"}
           </Btn>
         </div>
       </div>

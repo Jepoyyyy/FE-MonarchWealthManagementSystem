@@ -26,14 +26,14 @@ export const AdminApi = {
     if (params.sort) query.set('sort', params.sort);
     if (params.search) query.set('search', params.search);
     if (params.status) query.set('status', params.status);
-    return api.get<Page<AdminUserDetail>>(`/api/v1/users?${query.toString()}`);
+    return api.get<Page<AdminUserDetail>>(`/api/v1/admin/users?${query.toString()}`);
   },
 
   getUserById: (id: string) =>
-    api.get<AdminUserDetail>(`/api/v1/users/${id}`),
+    api.get<AdminUserDetail>(`/api/v1/admin/users/${id}`),
 
   updateUser: (id: string, dto: UserUpdateDTO) =>
-    api.put<AdminUserDetail>(`/api/v1/users/${id}`, dto),
+    api.put<AdminUserDetail>(`/api/v1/admin/users/${id}`, dto),
 
   // Audit logs
   getAuditLogs: (params: AuditQueryParams = {}) => {

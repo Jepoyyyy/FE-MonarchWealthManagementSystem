@@ -1,7 +1,18 @@
 export type RiskProfile = "risk_averse" | "moderate" | "risk_taker";
-export type ProductType = "Money Market" | "Bank Deposit" | "Bond" | "Mutual Fund" | "Stock" | "Balanced Fund" | "Sukuk";
+export type ProductType =
+  | "Money Market"
+  | "Bank Deposit"
+  | "Bond"
+  | "Bonds"
+  | "Mutual Fund"
+  | "Mutual Funds"
+  | "Stock"
+  | "Stocks"
+  | "Balanced Fund"
+  | "Sukuk"
+  | "SBN";
 export type UserRole = "user" | "admin";
-export type UserStatus = "active" | "suspended" | "pending";
+export type UserStatus = "ACTIVE" | "SUSPENDED" | "PENDING";
 
 export type View =
   | "login" | "register" | "questionnaire"

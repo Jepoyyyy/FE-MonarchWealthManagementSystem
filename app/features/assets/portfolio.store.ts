@@ -29,23 +29,26 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
         GoalApi.fetchProgress(),
       ]);
 
+      const assetsRes = results[0].status === "fulfilled" ? results[0].value : null;
+      const pnlRes = results[1].status === "fulfilled" ? results[1].value : null;
+      const progressRes = results[2].status === "fulfilled" ? results[2].value : null;
+
+      const assetsData = assetsRes && Array.isArray(assetsRes.data) ? assetsRes.data : [];
+      const pnlData = pnlRes && Array.isArray(pnlRes.data) ? pnlRes.data : [];
+      const goalProgressData = progressRes && Array.isArray(progressRes.data) ? progressRes.data : [];
+
+      let errorMsg: string | null = null;
       if (results[0].status === "rejected") {
         const err = results[0].reason;
-        const msg = err instanceof Error ? err.message : (typeof err === "string" ? err : "Error loading assets");
-        set({ error: msg || "Error loading assets", loading: false });
-        return;
+        errorMsg = err instanceof Error ? err.message : (typeof err === "string" ? err : "Error loading assets");
       }
 
-      const assetsRes = results[0].value;
-      const pnlRes = results[1].status === "fulfilled" ? results[1].value : { data: [] };
-      const progressRes = results[2].status === "fulfilled" ? results[2].value : { data: [] };
-
       set({
-        assets: assetsRes.data,
-        pnlData: pnlRes.data,
-        goalProgress: progressRes.data,
+        assets: assetsData,
+        pnlData: pnlData,
+        goalProgress: goalProgressData,
         loading: false,
-        error: null,
+        error: errorMsg,
       });
     } catch (err: unknown) {
       set({ error: err instanceof Error ? err.message : "Error loading assets", loading: false });

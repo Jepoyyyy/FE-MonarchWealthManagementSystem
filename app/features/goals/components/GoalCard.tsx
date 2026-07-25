@@ -61,9 +61,11 @@ export function GoalCard({
 
   return (
     <div
-      className={`bg-card rounded-xl border-2 transition-all ${
-        goal.isPriority ? "shadow-lg" : "border-border hover:border-primary/20"
+      className={`goal-card bg-card rounded-xl border-2 transition-all ${
+        goal.isPriority ? "priority-goal-card shadow-lg" : "border-border hover:border-primary/20"
       }`}
+      data-testid="goal-card"
+      data-priority={goal.isPriority ? "true" : "false"}
       style={goal.isPriority ? { borderColor: goal.color } : {}}
     >
       {goal.isPriority && (
@@ -96,6 +98,7 @@ export function GoalCard({
             {!goal.isPriority && (
               <Btn
                 variant="unstyled"
+                aria-label="Set as priority"
                 onClick={() => onSetPriority(goal.id)}
                 className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-amber-500 transition-colors"
                 title="Set as priority"
@@ -105,15 +108,19 @@ export function GoalCard({
             )}
             <Btn
               variant="unstyled"
+              aria-label="Edit goal"
               onClick={() => onEdit(goal)}
               className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground transition-colors"
+              title="Edit goal"
             >
               <Edit3 size={14} />
             </Btn>
             <Btn
               variant="unstyled"
+              aria-label="Delete goal"
               onClick={() => setShowConfirmDelete(true)}
               className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-red-500 transition-colors"
+              title="Delete goal"
             >
               <Trash2 size={14} />
             </Btn>
@@ -134,7 +141,14 @@ export function GoalCard({
               <span className="text-muted-foreground font-normal">/ {fmt(goal.targetAmount)}</span>
             </span>
           </div>
-          <div className="w-full rounded-full h-2 bg-muted">
+          <div
+            className="progress-bar w-full rounded-full h-2 bg-muted"
+            role="progressbar"
+            aria-valuenow={progress}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            data-testid="progress"
+          >
             <div
               className="h-2 rounded-full transition-all"
               style={{ width: `${progress}%`, background: goal.color }}
@@ -298,9 +312,9 @@ export function GoalCard({
         <ConfirmModal
           open={showConfirmDelete}
           onOpenChange={setShowConfirmDelete}
-          title="Hapus goal ini?"
-          message={`"${goal.name}" akan dihapus permanen.`}
-          confirmLabel="Ya, hapus"
+          title="Delete this goal?"
+          message={`"${goal.name}" will be permanently deleted.`}
+          confirmLabel="Delete"
           onConfirm={() => onDelete(goal.id)}
         />
       )}

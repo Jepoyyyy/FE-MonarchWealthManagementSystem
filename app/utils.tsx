@@ -41,10 +41,14 @@ export const typeLabel = (t: ProductType) =>
     "Money Market": "Money Market",
     "Bank Deposit": "Bank Deposit",
     "Bond": "Bond",
+    "Bonds": "Bonds",
     "Mutual Fund": "Mutual Fund",
+    "Mutual Funds": "Mutual Funds",
     "Stock": "Stock",
+    "Stocks": "Stocks",
     "Balanced Fund": "Balanced Fund",
     "Sukuk": "Sukuk",
+    "SBN": "SBN",
   }[t]);
 
 
@@ -83,9 +87,9 @@ export const categoryBadge = (c: string) =>
 
 export const statusBadge = (s: UserStatus) =>
   ({
-    active: "bg-emerald-100 text-emerald-700 border-emerald-200",
-    suspended: "bg-red-100 text-red-700 border-red-200",
-    pending: "bg-amber-100 text-amber-700 border-amber-200",
+    ACTIVE: "bg-emerald-100 text-emerald-700 border-emerald-200",
+    SUSPENDED: "bg-red-100 text-red-700 border-red-200",
+    PENDING: "bg-amber-100 text-amber-700 border-amber-200",
   }[s]);
 
 // Goal utilities

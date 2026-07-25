@@ -9,7 +9,7 @@ export const AuthService = {
       email,
       password: pass,
       role: "user",
-      status: "active",
+      status: "ACTIVE",
       riskProfile: null,
       questionnaireCompleted: false,
       createdAt: new Date().toISOString().split("T")[0],

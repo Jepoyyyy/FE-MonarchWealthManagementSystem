@@ -114,6 +114,9 @@ export function GoalFormModal({
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{ background: "rgba(13,33,55,0.75)", backdropFilter: "blur(4px)" }}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Goal Form Modal"
     >
       <div className="bg-card rounded-2xl w-full max-w-lg shadow-2xl border border-border flex flex-col max-h-[90vh]">
         <div className="flex items-center justify-between p-6 pb-0">
@@ -125,6 +128,7 @@ export function GoalFormModal({
           </h3>
           <Btn
             variant="unstyled"
+            aria-label="Close"
             onClick={() => {
               if (dirty) setShowConfirmCancel(true);
               else onClose();
@@ -144,6 +148,7 @@ export function GoalFormModal({
                   <Btn
                     variant="unstyled"
                     key={t}
+                    data-goal-type={t}
                     onClick={() => selectType(t)}
                     className="p-4 rounded-xl border-2 text-left hover:shadow-sm transition-all border-border bg-muted hover:border-primary/50"
                   >
@@ -205,7 +210,7 @@ export function GoalFormModal({
               </div>
 
               {/* Monthly Contribution */}
-              {isPriority && (
+              {!autoDisabled && (
                 <MonthlyContributionInput
                   monthly={monthly}
                   setMonthly={setMonthly}
@@ -220,7 +225,14 @@ export function GoalFormModal({
                   <p className="text-sm font-medium text-foreground">Set as Priority Goal</p>
                   <p className="text-xs text-muted-foreground">Highlight this goal above others</p>
                 </div>
-                <Btn variant="unstyled" type="button" onClick={() => setIsPriority((s) => !s)}>
+                <Btn
+                  variant="unstyled"
+                  type="button"
+                  role="switch"
+                  aria-checked={isPriority}
+                  aria-label="Set as Priority Goal"
+                  onClick={() => setIsPriority((s) => !s)}
+                >
                   {isPriority ? (
                     <ToggleRight size={28} style={{ color: "var(--accent)" }} />
                   ) : (
@@ -255,7 +267,7 @@ export function GoalFormModal({
               )}
 
               {err && (
-                <p className="text-xs text-red-500 flex items-center gap-1">
+                <p className="text-xs text-red-500 flex items-center gap-1" role="alert">
                   <AlertTriangle size={12} />
                   {err}
                 </p>
@@ -286,9 +298,9 @@ export function GoalFormModal({
           <ConfirmModal
             open={showConfirmCancel}
             onOpenChange={setShowConfirmCancel}
-            title="Batalkan perubahan?"
-            message={dirty ? "Perubahan yang belum disimpan akan hilang." : "Tutup form ini?"}
-            confirmLabel="Ya, batalkan"
+            title="Discard changes?"
+            message={dirty ? "Unsaved changes will be lost." : "Close this form?"}
+            confirmLabel="Yes, discard"
             onConfirm={onClose}
           />
         )}

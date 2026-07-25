@@ -69,7 +69,7 @@ export function ProgressView({ user, products, goals, finProfile }: ProgressView
     });
   }, [goalProgress, totalValue, avgMonthlyIncome]);
 
-  if (loading || !goalProgress || goalProgress.length === 0) {
+  if (loading || !goalProgress) {
     return (
       <div className="space-y-6">
         <PageHeader
@@ -133,8 +133,15 @@ export function ProgressView({ user, products, goals, finProfile }: ProgressView
   };
 
   const goalETAs = goalProgress.map((gp) => {
-    const goal = goals.find(g => g.id === gp.goal_id);
-    if (!goal) return null;
+    const goal = goals.find(g => g.id === gp.goal_id) || {
+      id: gp.goal_id,
+      name: gp.goal_name || "Goal",
+      type: (gp.goal_type || "savings") as any,
+      targetAmount: gp.target_amount,
+      currentSaved: gp.current_saved,
+      monthlyContribution: gp.monthly_contribution,
+      isPriority: gp.is_priority || false,
+    };
     
     const remaining = gp.target_amount - gp.current_saved;
     const etaMonths = gp.projected_eta_months;
@@ -147,7 +154,7 @@ export function ProgressView({ user, products, goals, finProfile }: ProgressView
       currentSaved: gp.current_saved,
       avgMonthlyGrowth: gp.avg_monthly_growth,
     };
-  }).filter(Boolean) as {
+  }) as {
     goal: Goal;
     adjTarget: number;
     remaining: number;
@@ -251,7 +258,7 @@ export function ProgressView({ user, products, goals, finProfile }: ProgressView
       </Suspense>
 
       {/* Per-goal ETA table */}
-      {goals.length > 0 && (
+      {goalETAs.length > 0 && (
         <div className="bg-card rounded-xl border border-border overflow-x-auto">
           <div className="px-5 py-4 border-b border-border">
             <h3 className="font-semibold text-foreground">Goal Timeline</h3>
@@ -275,7 +282,8 @@ export function ProgressView({ user, products, goals, finProfile }: ProgressView
             <tbody>
               {goalETAs.map(({ goal: g, adjTarget, remaining, etaMonths }) => {
                 const reachable = etaMonths > 0 && etaMonths <= 1200;
-                const rowStatus = !reachable ? "danger" : etaMonths > GOAL_MAX_MONTHS[g.type] ? "warning" : "good";
+                const maxMonths = GOAL_MAX_MONTHS[g.type] || 60;
+                const rowStatus = !reachable ? "danger" : etaMonths > maxMonths ? "warning" : "good";
                 const rowColor = { danger: "#ef4444", warning: "#f59e0b", good: "#10b981" }[rowStatus];
                 return (
                   <tr
@@ -284,7 +292,7 @@ export function ProgressView({ user, products, goals, finProfile }: ProgressView
                   >
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-2">
-                        <span>{GOAL_TYPE_CONFIG[g.type].icon}</span>
+                        <span>{GOAL_TYPE_CONFIG[g.type]?.icon || "🎯"}</span>
                         <div>
                           <p className="text-xs font-semibold text-foreground">{g.name}</p>
                           {g.isPriority && (
@@ -334,8 +342,11 @@ export function ProgressView({ user, products, goals, finProfile }: ProgressView
         <h3 className="font-semibold mb-4 text-foreground">Position Breakdown</h3>
         <div className="flex flex-col gap-3">
           {pnlData.map((pnl) => {
-            const p = products.find((pr) => pr.id === pnl.productId);
-            if (!p) return null;
+            const p = products.find((pr) => String(pr.id) === String(pnl.productId)) || {
+              id: pnl.productId,
+              name: (pnl as any).name || (pnl as any).productName || `Product ${pnl.productId}`,
+              type: ((pnl as any).type || (pnl as any).productType || "Stock") as any,
+            };
             const ret = pnl.potential_pnl_percent;
             const share = totalValue > 0 ? (pnl.currentValue / totalValue) * 100 : 0;
             return (

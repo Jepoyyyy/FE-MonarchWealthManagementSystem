@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import type { Page } from '@playwright/test';
 
 export interface PerformanceMetric {
   testId: string;
@@ -12,7 +13,61 @@ export interface PerformanceMetric {
 }
 
 export class PerformanceCollector {
+  private page?: Page;
   private metrics: PerformanceMetric[] = [];
+  private metricMap: Record<string, number> = {};
+  private startTime: number = 0;
+
+  constructor(page?: Page) {
+    this.page = page;
+  }
+
+  recordMetric(name: string, value: number) {
+    const duration = Math.round(value);
+    this.metricMap[name] = duration;
+    this.metrics.push({
+      testId: name,
+      scenario: name,
+      duration: duration,
+      threshold: 0,
+      passed: true,
+      timestamp: new Date().toISOString(),
+    });
+  }
+
+  getReport(): Record<string, number> {
+    return { ...this.metricMap };
+  }
+
+  async start(): Promise<void> {
+    this.startTime = Date.now();
+  }
+
+  async stop(): Promise<Record<string, unknown>> {
+    const duration = Date.now() - this.startTime;
+    let browserMetrics: Record<string, unknown> = {};
+    if (this.page) {
+      try {
+        browserMetrics = await this.page.evaluate(() => {
+          const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+          const paint = performance.getEntriesByType('paint');
+          return {
+            loadEventEnd: nav?.loadEventEnd || 0,
+            domContentLoadedEventEnd: nav?.domContentLoadedEventEnd || 0,
+            responseEnd: nav?.responseEnd || 0,
+            firstPaint: paint.find((p) => p.name === 'first-paint')?.startTime || 0,
+            firstContentfulPaint: paint.find((p) => p.name === 'first-contentfulpaint')?.startTime || 0,
+          };
+        });
+      } catch {
+        // ignore evaluation error if page navigated or closed
+      }
+    }
+    return {
+      duration,
+      ...browserMetrics,
+    };
+  }
 
   record(
     testId: string,
