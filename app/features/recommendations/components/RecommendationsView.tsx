@@ -50,7 +50,7 @@ export function RecommendationsView({
   const scoreColor = totalScore >= 70 ? "#10b981" : totalScore >= 45 ? "#f59e0b" : "#ef4444";
 
   const saveTracked = async (data: Omit<Asset, "id">) => {
-    const p = products.find((pr) => pr.id === data.productId)!;
+    const p = products.find((pr) => String(pr.id) === String(data.productId)) || (data as any).product;
     try {
       await AssetApi.create(data as any, products);
       addLog({

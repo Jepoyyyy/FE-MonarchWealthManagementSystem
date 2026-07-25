@@ -214,7 +214,8 @@ export function useTrackModal({
       platform: platform.trim() || undefined,
       notes: notes.trim() || undefined,
       tenorMonths: isDeposit ? tenorMonths : undefined,
-    });
+      product: picked,
+    } as any);
   };
 
   return {

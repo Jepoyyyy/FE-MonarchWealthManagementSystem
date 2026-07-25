@@ -1,30 +1,30 @@
 import { api } from '~/shared/api/client';
 import type { Asset, AssetsPnLResponse, TransactionHistory } from "~/types";
 
-function toDateArray(dateStr: string | undefined): number[] | undefined {
+function formatPurchaseDate(dateStr: string | undefined): string | undefined {
   if (!dateStr) return undefined;
-  const [y, m, d] = dateStr.split("-").map(Number);
-  return [y, m, d, 0, 0, 0];
+  if (dateStr.includes(" ")) return dateStr;
+  return `${dateStr} 00:00:00`;
 }
 
 function mapQty(asset: any, products: any[]) {
-  const p = products.find(prod => prod.id === asset.productId);
+  const targetId = asset.product_id ?? asset.productId;
+  const p = products.find(prod => String(prod.id) === String(targetId)) || asset.product;
   const units = asset.units ?? asset.quantity ?? 0;
-  // Use actual product lot size instead of hardcoded 100
-  const lotSize = p?.lotSize || 1;
-  return p?.type === "Stock" ? units / lotSize : units;
+  const isStock = p?.type === "Stock" || p?.type === "stock";
+  const lotSize = p?.lotSize || (isStock ? 100 : 1);
+  return isStock ? units / lotSize : units;
 }
 
 function toAssetPayload(data: Omit<Asset, "id">, products: any[]) {
-  const p = products.find(prod => prod.id === data.productId);
-  const isStock = p?.type === "Stock";
-  // Use actual product lot size instead of hardcoded 100
-  const lotSize = p?.lotSize || 1;
+  const p = products.find(prod => String(prod.id) === String(data.productId)) || (data as any).product;
+  const isStock = p?.type === "Stock" || p?.type === "stock";
+  const lotSize = p?.lotSize || (isStock ? 100 : 1);
   const units = isStock && data.quantity ? data.quantity * lotSize : data.quantity;
   return {
-    product_id: data.productId,
+    product_id: p?.id ?? (Number(data.productId) || data.productId),
     amount: data.amount,
-    purchase_date: toDateArray(data.purchaseDate),
+    purchase_date: formatPurchaseDate(data.purchaseDate),
     // Remove current_value - backend calculates this (units × current_price)
     units: units,
     goal_id: data.goalId,
@@ -37,7 +37,7 @@ function toAssetPayload(data: Omit<Asset, "id">, products: any[]) {
 function mapAsset(asset: any, products: any[]): Asset {
   const rawType = asset.type;
   const normalizedType = (rawType === "deposit" || rawType === "Deposit") ? "Bank Deposit" : rawType;
-  const p = products.find(prod => prod.id === (asset.product_id ?? asset.productId));
+  const p = products.find(prod => String(prod.id) === String(asset.product_id ?? asset.productId));
   const camel = {
     id: asset.id,
     userId: asset.user_id ?? asset.userId,
