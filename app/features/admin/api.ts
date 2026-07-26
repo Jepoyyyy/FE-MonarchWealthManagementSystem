@@ -1,6 +1,6 @@
 import { api } from '~/shared/api/client';
-import type { AppUser, AuditLog, Page, AdminUserDetail, Product } from '~/types';
-import type { AdminProductCreateDTO, AdminProductUpdateDTO } from './admin.types';
+import type { AuditLog, Page, AdminUserDetail, Product } from '~/types';
+import type { AdminProductUpdateDTO } from './admin.types';
 
 export interface UserUpdateDTO {
   status: string;
@@ -67,9 +67,6 @@ export const AdminApi = {
     return api.get<Page<Product>>(`/api/v1/admin/products?${query.toString()}`);
   },
 
-  createProduct: (dto: AdminProductCreateDTO) =>
-    api.post<Product>('/api/v1/admin/products', dto),
-
   updateAdminProduct: (id: string, dto: AdminProductUpdateDTO) =>
-    api.put<Product>(`/api/v1/admin/products/${id}`, dto),
+    api.put<Product>(`/api/v1/products/${id}`, dto),
 };

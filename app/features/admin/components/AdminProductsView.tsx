@@ -13,8 +13,6 @@ import { Pagination } from "~/shared/components/Pagination";
 import { Input } from "~/shared/components/Input";
 import { AdminApi } from "~/features/admin/api";
 import { useDebounce } from "~/shared/hooks/useDebounce";
-import { AdminAddProductModal } from "./AdminAddProductModal";
-import type { AdminProductCreateDTO } from "~/features/admin/admin.types";
 import { PRODUCT_TYPE_OPTIONS } from "~/constants/productTypes";
 
 interface AdminProductsViewProps {
@@ -35,7 +33,6 @@ export function AdminProductsView({ addLog, adminUser, toast }: AdminProductsVie
   const debouncedSearch = useDebounce(search, 400);
 
   const [toggleConfirm, setToggleConfirm] = useState<{ id: string; name: string; next: boolean } | null>(null);
-  const [addOpen, setAddOpen] = useState(false);
 
   const fetchProducts = useCallback(async () => {
     try {
@@ -70,7 +67,7 @@ export function AdminProductsView({ addLog, adminUser, toast }: AdminProductsVie
     if (!toggleConfirm) return;
     const { id, name, next } = toggleConfirm;
     try {
-      await AdminApi.updateAdminProduct(id, { visible: next });
+      await AdminApi.updateAdminProduct(id, { visibility: next });
       addLog({
         userId: adminUser.id,
         userName: adminUser.name,
@@ -79,29 +76,15 @@ export function AdminProductsView({ addLog, adminUser, toast }: AdminProductsVie
         timestamp: new Date().toISOString(),
         category: "admin",
       });
-      toast.success(`Product ${next ? "ditampilkan" : "disembunyikan"}`, {
-        description: `"${name}" sekarang ${next ? "visible" : "hidden"}`,
+      toast.success(`Product ${next ? "visible" : "hidden"}`, {
+        description: `"${name}" noe ${next ? "visible" : "hidden"}`,
       });
       fetchProducts();
     } catch (err: any) {
-      toast.error("Gagal mengubah visibilitas", { description: err.message });
+      toast.error("Failed to Change Visibility", { description: err.message });
     } finally {
       setToggleConfirm(null);
     }
-  };
-
-  const doCreate = async (dto: AdminProductCreateDTO) => {
-    await AdminApi.createProduct(dto);
-    addLog({
-      userId: adminUser.id,
-      userName: adminUser.name,
-      action: "CREATE_PRODUCT",
-      details: `Product '${dto.name}' (${dto.code}) created`,
-      timestamp: new Date().toISOString(),
-      category: "admin",
-    });
-    toast.success("Product created", { description: dto.name });
-    fetchProducts();
   };
 
   const visibleCount = products.filter((p) => p.visible).length;
@@ -136,13 +119,6 @@ export function AdminProductsView({ addLog, adminUser, toast }: AdminProductsVie
             </option>
           ))}
         </select>
-        <Btn
-          variant="primary"
-          className="ml-auto flex items-center gap-1.5"
-          onClick={() => setAddOpen(true)}
-        >
-          <Plus size={14} /> Add Product
-        </Btn>
       </div>
 
       {loading ? (
@@ -264,8 +240,6 @@ export function AdminProductsView({ addLog, adminUser, toast }: AdminProductsVie
           onConfirm={doToggle}
         />
       )}
-
-      <AdminAddProductModal open={addOpen} onClose={() => setAddOpen(false)} onSubmit={doCreate} />
     </div>
   );
 }
