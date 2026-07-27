@@ -151,11 +151,6 @@ export function LoginView({ onLogin, onNavigate }: LoginViewProps) {
             Create one
           </Btn>
         </p>
-        <div className="mt-4 p-3 rounded-lg text-xs text-muted-foreground" style={{ background: "var(--muted)" }}>
-          <p className="font-medium mb-1">Demo accounts:</p>
-          <p>Admin: admin@wms.id / Admin123!</p>
-          <p>User: budi@example.com / User123!</p>
-        </div>
       </div>
     </AuthShell>
   );
