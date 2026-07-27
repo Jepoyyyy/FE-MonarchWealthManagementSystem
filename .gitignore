@@ -14,7 +14,7 @@ CLAUDE.md
 /tests/
 *.md
 *.html
-
+generate_playwright_ppt.py
 
 # React Router
 /.react-router/
