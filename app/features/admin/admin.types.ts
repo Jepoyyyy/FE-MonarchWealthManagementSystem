@@ -39,16 +39,5 @@ export interface AdminDashboardDTO {
 }
 
 export interface AdminProductUpdateDTO {
-  name?: string;
-  issuer?: string;
-  type?: string;
-  riskLevel?: number;
-  annualReturn?: number;
-  minInvestment?: number;
-  currentPrice?: number;
-  description?: string;
-  tenor?: string;
-  lotSize?: number;
-  isFractionalAllowed?: boolean;
   visibility?: boolean;
 }

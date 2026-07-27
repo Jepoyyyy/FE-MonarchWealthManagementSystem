@@ -107,7 +107,7 @@ export function AssetsView({
             payload.units = txQty; // transaction by units
           }
         } else if (ptype === "Bond" || ptype === "Sukuk") {
-          payload.units = txQty; // nominal pokok
+          payload.units = txQty; // principal amount
         } else {
           payload.amount = data.amount; // Bank Deposit
         }

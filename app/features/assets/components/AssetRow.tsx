@@ -115,7 +115,7 @@ export function AssetRow({ asset, goals, onSelect, onRemove, onAssignGoal }: Ass
             variant="unstyled"
             onClick={() => setConfirmRemoveId(asset.id)}
             className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-red-500 transition-all flex items-center justify-center"
-            title="Hapus"
+            title="Delete"
           >
             <Trash2 size={14} />
           </Btn>
@@ -125,9 +125,9 @@ export function AssetRow({ asset, goals, onSelect, onRemove, onAssignGoal }: Ass
       <ConfirmModal
         open={!!confirmRemoveId}
         onOpenChange={() => setConfirmRemoveId(null)}
-        title="Hapus posisi ini?"
-        message="Data investasi ini akan dihapus permanen."
-        confirmLabel="Ya, hapus"
+        title="Delete this position?"
+        message="This investment position will be permanently deleted."
+        confirmLabel="Yes, delete"
         onConfirm={async () => {
           await onRemove(asset.id);
           setConfirmRemoveId(null);

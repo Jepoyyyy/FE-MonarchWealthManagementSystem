@@ -179,7 +179,7 @@ export function TrackFormStep({
             </div>
           ) : isBond ? (
             <InputField
-              label="Nominal Pokok (IDR)"
+              label="Principal Amount (IDR)"
               type="number" value={quantity}
               readOnly
               placeholder="Auto-calculated"

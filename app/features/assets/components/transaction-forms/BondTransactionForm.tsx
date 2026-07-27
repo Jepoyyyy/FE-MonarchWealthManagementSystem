@@ -48,7 +48,7 @@ export function BondTransactionForm({ type, currentPrice, onClose, onSubmit }: B
   return (
     <div className="flex flex-col gap-4">
       <InputField
-        label="Nominal Pokok / Quantity (IDR)"
+        label="Principal Amount / Quantity (IDR)"
         type="number"
         value={qty}
         onChange={(e) => setQty(e.target.value)}

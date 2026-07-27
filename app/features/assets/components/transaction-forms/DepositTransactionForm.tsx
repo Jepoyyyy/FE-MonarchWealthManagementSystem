@@ -18,7 +18,7 @@ export function DepositTransactionForm({ type, rate, onClose, onSubmit }: Deposi
 
   const handleSubmit = () => {
     if (!amt || parsedAmt <= 0) {
-      setErr("Masukkan jumlah yang valid.");
+      setErr("Enter a valid amount.");
       return;
     }
     onSubmit({ amount: parsedAmt, currentValue: parsedAmt });

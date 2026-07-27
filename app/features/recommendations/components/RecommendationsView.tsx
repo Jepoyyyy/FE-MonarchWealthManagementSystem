@@ -61,11 +61,11 @@ export function RecommendationsView({
         timestamp: new Date().toISOString(),
         category: "portfolio",
       });
-      toast.success("Rekomendasi ditindaklanjuti", { description: `${p.name} — ${fmtFull(data.amount)}` });
+      toast.success("Recommendation executed", { description: `${p.name} — ${fmtFull(data.amount)}` });
       setTrackingProduct(null);
     } catch (err: any) {
       if (!handleGlobalApiError(err)) {
-        toast.error("Gagal menyimpan aset", { description: err.message });
+        toast.error("Failed to save asset", { description: err.message });
       }
     }
   };

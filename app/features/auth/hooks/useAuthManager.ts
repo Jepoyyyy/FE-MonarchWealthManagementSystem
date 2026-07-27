@@ -76,7 +76,7 @@ export function useAuthManager(
       setResultProfile({ profile, score });
       setShowResult(true);
     } catch (err: any) {
-      toast.error("Gagal menyimpan profil", { description: err.message });
+      toast.error("Failed to save profile", { description: err.message });
     }
   };
 

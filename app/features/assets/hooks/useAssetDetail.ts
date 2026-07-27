@@ -55,7 +55,7 @@ export function useAssetDetail({
     onBack();
   };
 
-  const qtyLabel = isStock ? "Owned Lot" : isMF ? "Owned Units" : isBond ? "Nominal Pokok" : "Quantity";
+  const qtyLabel = isStock ? "Owned Lot" : isMF ? "Owned Units" : isBond ? "Principal Amount" : "Quantity";
 
   return {
     goalId,

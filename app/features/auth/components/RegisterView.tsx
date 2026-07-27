@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { Mail, Lock, Eye, EyeOff, AlertTriangle, UserIcon, Shield } from "lucide-react";
-import type { View } from "~/types";
+import type { AppUser, View } from "~/types";
 import { AuthShell } from '~/features/auth/components/AuthShell';
 import { InputField } from '~/shared/components/Input';
 import { Btn } from '~/shared/components/Button';
@@ -9,6 +9,7 @@ import { AuthApi } from '~/features/auth/api';
 import { getBackendErrorMessage, extractValidationErrors } from '~/shared/api/errors';
 
 interface RegisterViewProps {
+  onRegister?: (user: AppUser) => void;
   onNavigate?: (v: View | string) => void;
 }
 

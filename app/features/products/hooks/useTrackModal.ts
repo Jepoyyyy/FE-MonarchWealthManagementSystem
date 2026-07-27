@@ -188,7 +188,7 @@ export function useTrackModal({
     if (isBond && picked.minInvestment > 0) {
       const nominal = parseFloat(quantity) || 0;
       if (nominal % picked.minInvestment !== 0) {
-        setErr(`Nominal must be a multiple of ${fmtFull(picked.minInvestment)}`);
+        setErr(`Principal amount must be a multiple of ${fmtFull(picked.minInvestment)}`);
         return;
       }
     }

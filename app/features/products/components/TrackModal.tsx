@@ -221,9 +221,9 @@ export function TrackModal({
         <ConfirmModal
           open={showConfirmCancelTrack}
           onOpenChange={setShowConfirmCancelTrack}
-          title="Batalkan tracking?"
-          message="Data yang sudah diisi akan hilang."
-          confirmLabel="Ya, batalkan"
+          title="Cancel tracking?"
+          message="The data you entered will be lost."
+          confirmLabel="Yes, cancel"
           onConfirm={onClose}
         />
       )}
