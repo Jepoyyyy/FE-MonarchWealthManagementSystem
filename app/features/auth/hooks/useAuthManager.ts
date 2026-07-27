@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { ProfilerApi } from '~/features/profiler';
 import { riskLabel } from "~/utils";
 import { useAuthStore } from '~/features/auth/auth.store';
+import { clearAppStores } from "~/hooks/useAppInitialization";
 import type { AppUser, AuditLog, RiskProfile, View } from "~/types";
 
 export function useAuthManager(
@@ -87,7 +88,7 @@ export function useAuthManager(
     } catch (err) {
       // Ignore network errors on logout
     } finally {
-      useAuthStore.getState().clearAuth();
+      clearAppStores();
       if (currentUser) {
         addLog({
           userId: currentUser.id,

@@ -14,6 +14,37 @@ export interface UseAppInitializationReturn {
   refetch: () => Promise<void>;
 }
 
+export function clearAppStores(): void {
+  useAuthStore.getState().clearAuth();
+  useDashboardStore.setState({ dashData: null, loading: false, error: null, lastFetched: null });
+  useGoalsStore.setState({ goals: [], loading: false, error: null, lastFetched: null });
+  usePortfolioStore.setState({
+    assets: [],
+    pnlData: [],
+    goalProgress: [],
+    loading: false,
+    loadingProgress: false,
+    error: null,
+    lastFetched: null,
+    lastProgressFetched: null,
+  });
+  useProductsStore.setState({
+    products: [],
+    loading: false,
+    error: null,
+    page: 0,
+    totalPages: 0,
+    totalElements: 0,
+    isFirst: true,
+    isLast: true,
+    lastFetched: null,
+  });
+
+  [useAuthStore, useDashboardStore, useGoalsStore, usePortfolioStore, useProductsStore].forEach(
+    (store) => store.persist.clearStorage()
+  );
+}
+
 export async function invalidateAppStores(force = true): Promise<void> {
   const user = useAuthStore.getState().user;
   if (!user) return;

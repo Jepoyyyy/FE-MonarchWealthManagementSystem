@@ -29,8 +29,20 @@ test.describe('Logout Flow - UI (LO01 - LO07)', () => {
 
     await expect(page).toHaveURL('/login');
 
-    const authAfter = await getAuthFromStorage(page);
-    expect(authAfter).toBeNull();
+    const storageAfter = await page.evaluate(() => ({
+      auth: localStorage.getItem('wms-auth'),
+      dashboard: localStorage.getItem('dashboard-storage'),
+      portfolio: localStorage.getItem('portfolio-storage'),
+      products: localStorage.getItem('products-storage'),
+      goals: localStorage.getItem('goals-storage'),
+    }));
+    expect(storageAfter).toEqual({
+      auth: null,
+      dashboard: null,
+      portfolio: null,
+      products: null,
+      goals: null,
+    });
   });
 
   test('LO03: Accessing protected route after logout redirects to login', async ({ page, authenticatedUser }) => {

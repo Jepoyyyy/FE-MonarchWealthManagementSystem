@@ -8,7 +8,7 @@ import { useProductsStore } from '~/features/products';
 import { usePortfolioStore } from '~/features/assets/portfolio.store';
 import { useGoalsStore } from '~/features/goals/goals.store';
 import { useAuthStore } from '~/features/auth/auth.store';
-import { useAppInitialization } from '~/hooks/useAppInitialization';
+import { clearAppStores, useAppInitialization } from '~/hooks/useAppInitialization';
 import { useBackgroundRefresh } from '~/hooks/useBackgroundRefresh';
 import type { Route } from "./+types/layout";
 
@@ -74,7 +74,7 @@ export default function Layout() {
     } catch (err) {
       // Ignore network errors on logout
     } finally {
-      useAuthStore.getState().clearAuth();
+      clearAppStores();
       if (currentUser) {
         addLog({
           userId: currentUser.id,
