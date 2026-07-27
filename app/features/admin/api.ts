@@ -68,5 +68,5 @@ export const AdminApi = {
   },
 
   updateAdminProduct: (id: string, dto: AdminProductUpdateDTO) =>
-    api.put<Product>(`/api/v1/products/${id}`, dto),
+    api.put<Product>(`/api/v1/admin/products/${id}`, dto),
 };

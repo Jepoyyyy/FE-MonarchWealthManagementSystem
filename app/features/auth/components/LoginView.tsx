@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { Mail, Lock, Eye, EyeOff, AlertTriangle } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, AlertTriangle, Shield } from "lucide-react";
 import type { AppUser, View } from "~/types";
 import { AuthShell } from '~/features/auth/components/AuthShell';
 import { InputField } from '~/shared/components/Input';
 import { Btn } from '~/shared/components/Button';
-import { Shield } from "lucide-react";
 import { AuthApi } from '~/features/auth/api';
 import { getBackendErrorMessage, extractValidationErrors } from '~/shared/api/errors';
 import { useAuthStore } from '~/features/auth/auth.store';
