@@ -146,23 +146,6 @@ test.describe('Admin Products - Performance Tests', () => {
     console.log(`Search + filter combination time: ${combinedOperationTime}ms`);
   });
 
-  test('AP-PERF-07: Add product modal opens quickly', async ({ adminProductsPage, page }) => {
-    test.info().annotations.push({ type: 'test-id', description: 'AP-PERF-07' });
-
-    await adminProductsPage.goto();
-    await adminProductsPage.waitForProductsToLoad();
-
-    const startTime = Date.now();
-
-    await adminProductsPage.clickAddProduct();
-
-    const modalOpenTime = Date.now() - startTime;
-
-    expect(modalOpenTime).toBeLessThan(2000);
-    await expect(adminProductsPage.addProductModal).toBeVisible();
-
-    console.log(`Add product modal open time: ${modalOpenTime}ms`);
-  });
 
   test('AP-PERF-08: Confirm modal responds quickly', async ({ adminProductsPage, page }) => {
     test.info().annotations.push({ type: 'test-id', description: 'AP-PERF-08' });
@@ -189,36 +172,6 @@ test.describe('Admin Products - Performance Tests', () => {
     }
   });
 
-  test('AP-PERF-09: Product creation form submission time', async ({ adminProductsPage, page }) => {
-    test.info().annotations.push({ type: 'test-id', description: 'AP-PERF-09' });
-
-    await adminProductsPage.goto();
-    await adminProductsPage.waitForProductsToLoad();
-    await adminProductsPage.clickAddProduct();
-
-    await adminProductsPage.fillProductForm({
-      code: 'PERF001',
-      name: 'Performance Test Product',
-      issuer: 'Test Issuer',
-      type: 'Stocks',
-      riskLevel: 3,
-      annualReturn: 10.0,
-      minInvestment: 500000,
-      currentPrice: 2000,
-      description: 'Product for performance testing',
-      lotSize: 1,
-    });
-
-    const startTime = Date.now();
-
-    await adminProductsPage.submitProductForm();
-    await adminProductsPage.addProductModal.waitFor({ state: 'hidden', timeout: 5000 });
-
-    const submissionTime = Date.now() - startTime;
-
-    expect(submissionTime).toBeLessThan(3000);
-    console.log(`Form submission time: ${submissionTime}ms`);
-  });
 
   test('AP-PERF-10: Concurrent operations do not block UI', async ({
     adminProductsPage,

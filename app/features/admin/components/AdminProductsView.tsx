@@ -77,7 +77,7 @@ export function AdminProductsView({ addLog, adminUser, toast }: AdminProductsVie
         category: "admin",
       });
       toast.success(`Product ${next ? "visible" : "hidden"}`, {
-        description: `"${name}" noe ${next ? "visible" : "hidden"}`,
+        description: `"${name}" is now ${next ? "visible" : "hidden"}`,
       });
       fetchProducts();
     } catch (err: any) {
@@ -229,13 +229,13 @@ export function AdminProductsView({ addLog, adminUser, toast }: AdminProductsVie
         <ConfirmModal
           open={!!toggleConfirm}
           onOpenChange={() => setToggleConfirm(null)}
-          title={toggleConfirm.next ? "Tampilkan produk?" : "Sembunyikan produk?"}
+          title={toggleConfirm.next ? "Show Product?" : "Hide Product?"}
           message={
             toggleConfirm.next
-              ? "Produk akan tersedia untuk semua user."
-              : "Produk tidak akan terlihat oleh user."
+              ? "Product will be visible to all users."
+              : "Product will be hidden from users."
           }
-          confirmLabel={toggleConfirm.next ? "Ya, tampilkan" : "Ya, sembunyikan"}
+          confirmLabel={toggleConfirm.next ? "Yes, Show" : "Yes, Hide"}
           confirmVariant={toggleConfirm.next ? "primary" : "danger"}
           onConfirm={doToggle}
         />

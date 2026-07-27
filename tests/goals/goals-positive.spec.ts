@@ -313,7 +313,7 @@ test.describe('Goals Page - Positive Tests', () => {
   test('GPT-014: Loading state displays while fetching goals', async ({ goalsPage, page }) => {
     // Delay the API response to see loading state
     await page.route('**/api/v1/me/goals', async (route) => {
-      await page.waitForTimeout(1000);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       await route.continue();
     });
 
@@ -328,5 +328,6 @@ test.describe('Goals Page - Positive Tests', () => {
     // Wait for loading to complete
     await goalsPage.waitForPageLoad();
     await expect(goalsPage.pageHeading).toBeVisible();
+    await page.unroute('**/api/v1/me/goals');
   });
 });

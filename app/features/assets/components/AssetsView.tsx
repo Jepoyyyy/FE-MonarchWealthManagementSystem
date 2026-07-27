@@ -246,7 +246,7 @@ export function AssetsView({
         <StatCard label="Total Cost Basis" value={fmt(totalCost)} icon={<DollarSign size={16} />} />
         <StatCard
           label="Unrealized P&L"
-          value={fmt(Math.abs(totalGain))}
+          value={fmt(totalGain)}
           sub={totalGain >= 0 ? "Gain" : "Loss"}
           icon={<Percent size={16} />}
           trend={totalGain >= 0 ? "up" : "down"}

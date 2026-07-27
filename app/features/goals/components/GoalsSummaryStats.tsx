@@ -51,7 +51,7 @@ export function GoalsSummaryStats({
         value={portfolioReturn !== null ? `${portfolioReturn}%` : "—"}
         sub={portfolioReturn !== null ? "weighted avg. · live" : "No holdings yet"}
         icon={<TrendingUp size={16} />}
-        trend={portfolioReturn !== null ? "up" : "neutral"}
+        trend={portfolioReturn !== null ? (portfolioReturn >= 0 ? "up" : "down") : "neutral"}
       />
     </div>
   );

@@ -106,12 +106,12 @@ export class AdminProductsPage {
 
     // Confirm Modal
     this.confirmModal = page.locator('[role="dialog"], .modal').filter({
-      hasText: /tampilkan produk|sembunyikan produk/i
+      hasText: /show product|hide product|tampilkan produk|sembunyikan produk/i
     });
     this.confirmModalTitle = this.confirmModal.getByRole('heading').first();
     this.confirmModalMessage = this.confirmModal.locator('p').first();
-    this.confirmButton = this.confirmModal.getByRole('button', { name: /ya/i });
-    this.cancelConfirmButton = this.confirmModal.getByRole('button', { name: /cancel/i });
+    this.confirmButton = this.confirmModal.getByRole('button', { name: /yes|ya/i });
+    this.cancelConfirmButton = this.confirmModal.getByRole('button', { name: /cancel|batal/i });
 
     // Error Message
     this.errorMessage = page.locator('.bg-red-500\\/10, .text-red-500').first();

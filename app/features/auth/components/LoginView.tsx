@@ -40,7 +40,7 @@ export function LoginView({ onLogin, onNavigate }: LoginViewProps) {
     setLoading(true);
     
     try {
-      const res = await AuthApi.login({ email, password: pass });
+      const res = await AuthApi.login({ email: email.trim().toLowerCase(), password: pass });
       const { accessToken, refreshToken, user: authUser } = res.data;
 
       // Save to Zustand store

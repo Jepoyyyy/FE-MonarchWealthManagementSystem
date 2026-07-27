@@ -7,12 +7,14 @@ export const fmt = (n: number | undefined | null) => {
   if (abs >= 1e9) return `IDR ${sign}${(abs / 1e9).toFixed(2)}B`;
   if (abs >= 1e6) return `IDR ${sign}${(abs / 1e6).toFixed(2)}M`;
   if (abs >= 1e3) return `IDR ${sign}${(abs / 1e3).toFixed(0)}K`;
-  return `IDR ${n.toLocaleString()}`;
+  return `IDR ${sign}${abs.toLocaleString()}`;
 };
 
 export const fmtFull = (n: number | undefined | null) => {
   if (n === undefined || n === null || isNaN(n) || !isFinite(n)) return 'IDR 0';
-  return `IDR ${n.toLocaleString("id-ID")}`;
+  const abs = Math.abs(n);
+  const sign = n < 0 ? "-" : "";
+  return `IDR ${sign}${abs.toLocaleString("id-ID")}`;
 };
 
 export const fmtPct = (n: number | undefined | null) => {

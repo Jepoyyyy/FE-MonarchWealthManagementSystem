@@ -184,13 +184,13 @@ export function ProgressView({ user, products, goals, finProfile }: ProgressView
         <StatCard
           label="Total Return"
           value={fmtPct(retPct)}
-          sub={fmt(Math.abs(portfolioGain))}
+          sub={fmt(portfolioGain)}
           icon={<Percent size={16} />}
           trend={retPct >= 0 ? "up" : "down"}
         />
         <StatCard
           label="Avg Monthly Income"
-          value={avgMonthlyIncome > 0 ? fmt(avgMonthlyIncome) : "—"}
+          value={avgMonthlyIncome !== 0 ? fmt(avgMonthlyIncome) : "—"}
           sub={`over ${monthsHeld} month${monthsHeld !== 1 ? "s" : ""}`}
           icon={<TrendingUp size={16} />}
           trend={avgMonthlyIncome >= 0 ? "up" : "down"}

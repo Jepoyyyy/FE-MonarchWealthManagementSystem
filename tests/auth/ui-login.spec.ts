@@ -160,6 +160,9 @@ test.describe('Login Flow - UI (L01 - L17)', () => {
     test.info().annotations.push({ type: 'test-id', description: 'L15' });
 
     const userData = generateTestUser();
+    const authApi = new AuthApiClient(page.request);
+    await authApi.register(userData);
+
     await loginPage.goto();
     await loginPage.login(userData.email, userData.password);
 

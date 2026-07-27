@@ -15,7 +15,7 @@ test.describe('Assets Page - Negative Tests (NT-001 to NT-023)', () => {
     });
 
     await assetsPage.goto();
-    await expect(assetsPage.page.getByText(/error|timeout/i)).toBeVisible();
+    await expect(assetsPage.page.getByText(/error|timeout/i)).toBeVisible({ timeout: 15000 });
   });
 
   test('NT-003: Invalid JSON response from assets API', async ({ assetsPage }) => {

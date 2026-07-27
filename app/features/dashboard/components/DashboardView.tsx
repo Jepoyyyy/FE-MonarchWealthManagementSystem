@@ -150,7 +150,7 @@ export function DashboardView({ user, products, onNavigate }: DashboardViewProps
         <StatCard label="Total Invested" value={fmt(totalCost)} icon={<DollarSign size={16} />} />
         <StatCard
           label="Unrealized P&L"
-          value={fmt(Math.abs(pnl))}
+          value={fmt(pnl)}
           sub={pnl >= 0 ? "Profit" : "Loss"}
           icon={<TrendingUp size={16} />}
           trend={pnl >= 0 ? "up" : "down"}
