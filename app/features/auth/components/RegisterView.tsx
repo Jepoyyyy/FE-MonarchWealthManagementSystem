@@ -14,7 +14,7 @@ interface RegisterViewProps {
   onNavigate?: (v: View | string) => void;
 }
 
-export function RegisterView({ onRegister, onNavigate }: RegisterViewProps) {
+export function RegisterView({ onNavigate }: RegisterViewProps) {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

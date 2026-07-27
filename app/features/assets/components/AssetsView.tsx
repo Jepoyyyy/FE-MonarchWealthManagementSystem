@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Plus, Wallet, DollarSign, Percent, Briefcase, ArrowUpRight, ArrowDownRight } from "lucide-react";
+import { Plus, Wallet, DollarSign, Percent, Briefcase, ArrowUpRight, ArrowDownRight, RotateCw } from "lucide-react";
 import type { AppUser, Product, Asset, Goal, AuditLog } from "~/types";
 import { fmt, fmtPct } from "~/utils";
 import { PageHeader } from '~/shared/components/PageHeader';
@@ -32,6 +32,7 @@ export function AssetsView({
   const [detailAssetId, setDetailAssetId] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [loadingProduct, setLoadingProduct] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const assets = usePortfolioStore((s) => s.assets);
   const pnlData = usePortfolioStore((s) => s.pnlData);
   const pnlLoading = usePortfolioStore((s) => s.loading);
@@ -39,13 +40,23 @@ export function AssetsView({
 
   const myAssets = (assets || []).filter((a) => !a.userId || a.userId === user.id);
 
-  // Shared parallelized data refresh helper
+  // Shared parallelized data refresh helper (forced refresh)
   const refreshAllData = useCallback(async () => {
     await Promise.all([
-      usePortfolioStore.getState().fetchPortfolio(),
-      useGoalsStore.getState().fetchGoals()
+      usePortfolioStore.getState().fetchPortfolio(true),
+      useGoalsStore.getState().fetchGoals(true)
     ]);
   }, []);
+
+  const handleRefresh = useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      await refreshAllData();
+      toast.success("Assets refreshed");
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [refreshAllData]);
 
   // Only use pnlData when fully loaded and available
   const hasPnlData = pnlData.length > 0 && !pnlLoading;
@@ -192,9 +203,20 @@ export function AssetsView({
         title="My Assets"
         subtitle="Record and track investments made through any platform"
         action={
-          <Btn onClick={() => setShowAdd(true)} size="sm">
-            <Plus size={14} /> Track Investment
-          </Btn>
+          <div className="flex items-center gap-2">
+            <Btn
+              variant="secondary"
+              size="sm"
+              onClick={handleRefresh}
+              disabled={isRefreshing}
+              title="Refresh data"
+            >
+              <RotateCw size={14} className={isRefreshing ? "animate-spin" : ""} /> Refresh
+            </Btn>
+            <Btn onClick={() => setShowAdd(true)} size="sm">
+              <Plus size={14} /> Track Investment
+            </Btn>
+          </div>
         }
       />
 

@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { Outlet, redirect, useNavigate, Navigate } from "react-router";
 import { Toaster, toast } from "sonner";
 import { AppLayout } from '~/shared/layouts';
@@ -7,6 +7,8 @@ import { useProductsStore } from '~/features/products';
 import { usePortfolioStore } from '~/features/assets/portfolio.store';
 import { useGoalsStore } from '~/features/goals/goals.store';
 import { useAuthStore } from '~/features/auth/auth.store';
+import { useAppInitialization } from '~/hooks/useAppInitialization';
+import { useBackgroundRefresh } from '~/hooks/useBackgroundRefresh';
 import type { Route } from "./+types/layout";
 
 export interface LayoutContextType {
@@ -40,6 +42,9 @@ clientLoader.hydrate = true as const;
 export default function Layout() {
   const navigate = useNavigate();
   const currentUser = useAuthStore((s) => s.user);
+  const { isInitialized, isLoading, error, refetch } = useAppInitialization();
+  useBackgroundRefresh();
+
   const [users, setUsers] = useState<AppUser[]>([]);
   const assets = usePortfolioStore((s) => s.assets);
   const [logs, setLogs] = useState<AuditLog[]>([]);
@@ -47,19 +52,10 @@ export default function Layout() {
   const [finProfile, setFinProfile] = useState<FinancialProfile | null>(null);
 
   const products = useProductsStore((s) => s.products);
-  useEffect(() => {
-    useProductsStore.getState().fetchProducts();
-  }, []);
 
   const addLog = useCallback((l: Omit<AuditLog, "id">) => {
     setLogs((prev) => [{ ...l, id: `l${Date.now()}` }, ...prev]);
   }, []);
-
-  useEffect(() => {
-    if (currentUser && currentUser.role !== "admin") {
-      usePortfolioStore.getState().fetchPortfolio();
-    }
-  }, [currentUser]);
 
   // Sync user total assets - local fallback
   const syncedUser = useMemo(() => {
@@ -108,6 +104,29 @@ export default function Layout() {
     return <Navigate to="/login" replace />;
   }
 
+  if (!isInitialized && isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-900 text-white p-4" data-testid="app-initial-loading">
+        <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mb-4" />
+        <p className="text-lg font-medium text-slate-200">Loading your portfolio...</p>
+      </div>
+    );
+  }
+
+  if (!isInitialized && error) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-900 text-white p-4" data-testid="app-initial-error">
+        <p className="text-lg text-red-400 mb-4">{error}</p>
+        <button
+          onClick={() => refetch()}
+          className="px-4 py-2 bg-amber-500 hover:bg-amber-600 rounded text-slate-900 font-semibold transition-colors"
+        >
+          Retry Loading
+        </button>
+      </div>
+    );
+  }
+
   return (
     <AppLayout user={syncedUser} onLogout={handleLogout}>
       <Outlet
@@ -131,3 +150,4 @@ export default function Layout() {
     </AppLayout>
   );
 }
+

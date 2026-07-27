@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Plus, Edit3 } from "lucide-react";
+import { Plus, Edit3, RotateCw } from "lucide-react";
 import type { AppUser, Goal, FinancialProfile, Asset, Product } from "~/types";
 import { PageHeader } from "~/shared/components/PageHeader";
 import { Btn } from "~/shared/components/Button";
@@ -45,12 +45,26 @@ export function GoalsView({
   const [showAddGoal, setShowAddGoal] = useState(false);
   const [editGoal, setEditGoal] = useState<Goal | null>(null);
   const [showFinProfileModal, setShowFinProfileModal] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Data layer
   const { goals, error: goalsError, fetchGoals } = useGoalsStore();
   const fetchPortfolio = usePortfolioStore((s) => s.fetchPortfolio);
   const portfolioLoading = usePortfolioStore((s) => s.loading);
   const isLoading = portfolioLoading;
+
+  const handleRefresh = useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      await Promise.all([
+        useGoalsStore.getState().fetchGoals(true),
+        usePortfolioStore.getState().fetchPortfolio(true),
+      ]);
+      toast.success("Goals data refreshed");
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [toast]);
 
   // Custom hooks - business logic extraction
   const portfolio = usePortfolio(assets, products, user.id);
@@ -69,11 +83,8 @@ export function GoalsView({
     (msg, desc) => toast.error(msg, { description: desc })
   );
 
-  // Initial data fetch
+  // Initial data fetch - only FinancesApi.get is needed
   useEffect(() => {
-    useGoalsStore.getState().fetchGoals();
-    usePortfolioStore.getState().fetchPortfolio();
-
     FinancesApi.get()
       .then((response) => {
         const data = response.data;
@@ -175,6 +186,15 @@ export function GoalsView({
         title="Financial Goals"
         action={
           <div className="flex items-center gap-2">
+            <Btn
+              variant="secondary"
+              size="sm"
+              onClick={handleRefresh}
+              disabled={isRefreshing}
+              title="Refresh data"
+            >
+              <RotateCw size={14} className={isRefreshing ? "animate-spin" : ""} /> Refresh
+            </Btn>
             <Btn variant="secondary" size="sm" onClick={() => setShowFinProfileModal(true)}>
               <Edit3 size={14} /> Edit Profile
             </Btn>

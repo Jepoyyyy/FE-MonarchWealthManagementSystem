@@ -1,14 +1,13 @@
 import React, { useMemo, Suspense, useEffect, useState } from "react";
-import { Wallet, DollarSign, TrendingUp, Briefcase, ChevronRight } from "lucide-react";
+import { Wallet, DollarSign, TrendingUp, Briefcase, ChevronRight, RotateCw } from "lucide-react";
 import type { AppUser, Product, View } from "~/types";
-import type { UserDashboardDTO } from "~/types";
 import { maxRiskForProfile, riskLabel, fmt, fmtPct, fmtFull } from "~/utils";
 import { ProductTypeBadge } from '~/features/products/components/ProductTypeBadge';
 import { RiskLevelBadge } from '~/features/profile/components/RiskLevelBadge';
 import { PageHeader } from '~/shared/components/PageHeader';
 import { StatCard } from '~/features/dashboard/components/StatCard';
 import { Btn } from '~/shared/components/Button';
-import { DashboardApi } from '~/features/dashboard/api';
+import { useDashboardStore } from '~/features/dashboard/dashboard.store';
 import { toast } from "sonner";
 import { ConfirmModal } from '~/shared/components/ConfirmModal';
 
@@ -30,28 +29,27 @@ function parseNum(v: number | string | undefined | null): number {
 }
 
 export function DashboardView({ user, products, onNavigate }: DashboardViewProps) {
-  const [dashData, setDashData] = useState<UserDashboardDTO | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const dashData = useDashboardStore((s) => s.dashData);
+  const loading = useDashboardStore((s) => s.loading);
+  const error = useDashboardStore((s) => s.error);
+  const fetchDashboard = useDashboardStore((s) => s.fetchDashboard);
+
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
-    const load = async () => {
-      try {
-        setError(null);
-        const res = await DashboardApi.getUserDashboard();
-        setDashData(res.data);
-      } catch (err: any) {
-        const msg = err?.message || "Failed to load dashboard";
-        console.error("Dashboard error:", err);
-        setError(msg);
-        toast.error(msg);
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
-  }, []);
+    fetchDashboard();
+  }, [fetchDashboard]);
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    try {
+      await fetchDashboard(true);
+      toast.success("Dashboard refreshed");
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   const totalValue = parseNum(dashData?.portofolio?.value);
   const totalCost = parseNum(dashData?.portofolio?.invested);
@@ -61,10 +59,8 @@ export function DashboardView({ user, products, onNavigate }: DashboardViewProps
 
   const perfData = useMemo(() => {
     const raw = dashData?.performance ?? [];
-    // backend sends 0-padded months; take non-zero tail or all if no non-zero
     const lastNonZero = raw.reduce((acc, d, i) => (d.value > 0 ? i : acc), -1);
     const trimmed = lastNonZero >= 0 ? raw.slice(0, lastNonZero + 1) : raw;
-    // map month number to label for the chart
     const labels = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     return trimmed.map((d) => ({ month: labels[d.month] ?? String(d.month), value: d.value }));
   }, [dashData]);
@@ -95,19 +91,30 @@ export function DashboardView({ user, products, onNavigate }: DashboardViewProps
           year: "numeric",
         })}`}
         action={
-          user.riskProfile && (
+          <div className="flex items-center gap-2">
             <Btn
               variant="secondary"
               size="sm"
-              onClick={() => setShowConfirmModal(true)}
+              onClick={handleRefresh}
+              disabled={isRefreshing}
+              title="Refresh data"
             >
-              Change Risk Profile
+              <RotateCw size={14} className={isRefreshing ? "animate-spin" : ""} /> Refresh
             </Btn>
-          )
+            {user.riskProfile && (
+              <Btn
+                variant="secondary"
+                size="sm"
+                onClick={() => setShowConfirmModal(true)}
+              >
+                Change Risk Profile
+              </Btn>
+            )}
+          </div>
         }
       />
 
-      {loading && (
+      {loading && !dashData && (
         <div className="space-y-6" data-testid="dashboard-loading">
           {/* Skeleton stat cards */}
           <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
@@ -126,18 +133,18 @@ export function DashboardView({ user, products, onNavigate }: DashboardViewProps
           </div>
         </div>
       )}
-      {error && (
+      {error && !dashData && (
         <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl p-4 text-sm" data-testid="dashboard-error">
           {error}
           <button
-            onClick={() => window.location.reload()}
+            onClick={() => fetchDashboard(true)}
             className="ml-3 underline text-red-800 hover:no-underline"
           >
             Retry
           </button>
         </div>
       )}
-      {!loading && !error && <>
+      {(dashData || (!loading && !error)) && <>
       {/* Stats grid */}
       <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
         <StatCard
@@ -159,30 +166,34 @@ export function DashboardView({ user, products, onNavigate }: DashboardViewProps
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
-        {/* Performance Chart */}
-        <Suspense fallback={<div className="lg:col-span-2 h-64 bg-muted animate-pulse rounded-xl" />}>
-          {perfData.length > 0 && perfData.some((d) => d.value > 0) ? (
-            <DashboardPerfChart data={perfData} pnlPct={pnlPct} fmt={fmtFull} />
-          ) : (
-            <div className="lg:col-span-2 bg-card rounded-xl p-4 md:p-6 border border-border flex items-center justify-center text-muted-foreground text-sm">
-              Start investing to see your portfolio performance.
-            </div>
-          )}
-        </Suspense>
+        {/* Performance Chart with isolated Suspense */}
+        <div className="lg:col-span-2">
+          <Suspense fallback={<div className="h-64 bg-muted animate-pulse rounded-xl border border-border" />}>
+            {perfData.length > 0 && perfData.some((d) => d.value > 0) ? (
+              <DashboardPerfChart data={perfData} pnlPct={pnlPct} fmt={fmtFull} />
+            ) : (
+              <div className="bg-card rounded-xl p-4 md:p-6 border border-border flex items-center justify-center text-muted-foreground text-sm h-64">
+                Start investing to see your portfolio performance.
+              </div>
+            )}
+          </Suspense>
+        </div>
 
-        {/* Allocation Pie */}
-        <Suspense fallback={<div className="h-64 bg-muted animate-pulse rounded-xl" />}>
-          {pieData.length > 0 && totalValue > 0 ? (
-            <DashboardPieChart data={pieData} />
-          ) : (
-            <div className="bg-card rounded-xl p-4 md:p-6 border border-border flex items-center justify-center text-muted-foreground text-sm">
-              No assets yet.
-            </div>
-          )}
-        </Suspense>
+        {/* Allocation Pie with isolated Suspense */}
+        <div>
+          <Suspense fallback={<div className="h-64 bg-muted animate-pulse rounded-xl border border-border" />}>
+            {pieData.length > 0 && totalValue > 0 ? (
+              <DashboardPieChart data={pieData} />
+            ) : (
+              <div className="bg-card rounded-xl p-4 md:p-6 border border-border flex items-center justify-center text-muted-foreground text-sm h-64">
+                No assets yet.
+              </div>
+            )}
+          </Suspense>
+        </div>
       </div>
 
-            {/* Recommendations widget */}
+      {/* Recommendations widget */}
       <div className="bg-card rounded-xl p-4 md:p-6 border border-border" data-testid="recommended-section">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -235,3 +246,4 @@ export function DashboardView({ user, products, onNavigate }: DashboardViewProps
     </div>
   );
 }
+
