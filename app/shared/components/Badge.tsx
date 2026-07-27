@@ -1,6 +1,6 @@
 interface BadgeProps {
   children: React.ReactNode;
-  variant?: "default" | "good" | "secondary" | "destructive" | "outline";
+  variant?: "default" | "good" | "secondary" | "destructive" | "outline" | "custom";
   className?: string;
   style?: React.CSSProperties;
 }
@@ -11,6 +11,7 @@ const variantClasses: Record<NonNullable<BadgeProps["variant"]>, string> = {
   secondary:   "bg-gray-100 text-gray-700 border-gray-200",
   destructive: "bg-red-100 text-red-700 border-red-200",
   outline:     "bg-transparent text-gray-700 border-gray-300",
+  custom:      "",
 };
 
 export function Badge({ children, variant = "secondary", className = "", style }: BadgeProps) {

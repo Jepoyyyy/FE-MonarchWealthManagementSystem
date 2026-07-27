@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback } from "react";
 import { Outlet, redirect, useNavigate, Navigate } from "react-router";
 import { Toaster, toast } from "sonner";
 import { AppLayout } from '~/shared/layouts';
+import { ConfirmModal } from '~/shared/components/ConfirmModal';
 import type { AppUser, Product, Asset, Goal, FinancialProfile, AuditLog } from "~/types";
 import { useProductsStore } from '~/features/products';
 import { usePortfolioStore } from '~/features/assets/portfolio.store';
@@ -50,6 +51,7 @@ export default function Layout() {
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const goals = useGoalsStore((s) => s.goals);
   const [finProfile, setFinProfile] = useState<FinancialProfile | null>(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const products = useProductsStore((s) => s.products);
 
@@ -100,6 +102,10 @@ export default function Layout() {
     }
   }, []);
 
+  const handleChangeRiskProfile = () => {
+    setShowConfirmModal(true);
+  };
+
   if (!syncedUser) {
     return <Navigate to="/login" replace />;
   }
@@ -128,26 +134,41 @@ export default function Layout() {
   }
 
   return (
-    <AppLayout user={syncedUser} onLogout={handleLogout}>
-      <Outlet
-        context={
-          {
-            currentUser: syncedUser,
-            setCurrentUser,
-            users,
-            setUsers,
-            products,
-            assets,
-            goals,
-            finProfile,
-            setFinProfile,
-            logs,
-            addLog,
-            toast,
-          } satisfies LayoutContextType
-        }
+    <>
+      <AppLayout user={syncedUser} onLogout={handleLogout} onChangeRiskProfile={handleChangeRiskProfile}>
+        <Outlet
+          context={
+            {
+              currentUser: syncedUser,
+              setCurrentUser,
+              users,
+              setUsers,
+              products,
+              assets,
+              goals,
+              finProfile,
+              setFinProfile,
+              logs,
+              addLog,
+              toast,
+            } satisfies LayoutContextType
+          }
+        />
+      </AppLayout>
+
+      <ConfirmModal
+        open={showConfirmModal}
+        onOpenChange={setShowConfirmModal}
+        title="Change Risk Profile?"
+        message="You will need to retake the risk assessment questionnaire. Your current risk profile will be replaced with the new results."
+        confirmLabel="Retake Assessment"
+        confirmVariant="primary"
+        onConfirm={() => {
+          setShowConfirmModal(false);
+          navigate("/questionnaire");
+        }}
       />
-    </AppLayout>
+    </>
   );
 }
 

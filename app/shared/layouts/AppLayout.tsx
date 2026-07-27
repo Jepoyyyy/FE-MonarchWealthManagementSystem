@@ -8,15 +8,16 @@ interface AppLayoutProps {
   children: React.ReactNode;
   user: AppUser;
   onLogout: () => void;
+  onChangeRiskProfile?: () => void;
 }
 
-export function AppLayout({ children, user, onLogout }: AppLayoutProps) {
+export function AppLayout({ children, user, onLogout, onChangeRiskProfile }: AppLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="flex h-screen bg-gray-50 text-gray-900 overflow-hidden">
       {/* Sidebar Navigation */}
-      <Sidebar user={user} onLogout={onLogout} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar user={user} onLogout={onLogout} onChangeRiskProfile={onChangeRiskProfile} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Main Viewport Wrapper */}
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">

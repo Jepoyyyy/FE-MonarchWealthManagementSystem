@@ -34,7 +34,6 @@ export function DashboardView({ user, products, onNavigate }: DashboardViewProps
   const error = useDashboardStore((s) => s.error);
   const fetchDashboard = useDashboardStore((s) => s.fetchDashboard);
 
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
@@ -91,26 +90,15 @@ export function DashboardView({ user, products, onNavigate }: DashboardViewProps
           year: "numeric",
         })}`}
         action={
-          <div className="flex items-center gap-2">
-            <Btn
-              variant="secondary"
-              size="sm"
-              onClick={handleRefresh}
-              disabled={isRefreshing}
-              title="Refresh data"
-            >
-              <RotateCw size={14} className={isRefreshing ? "animate-spin" : ""} /> Refresh
-            </Btn>
-            {user.riskProfile && (
-              <Btn
-                variant="secondary"
-                size="sm"
-                onClick={() => setShowConfirmModal(true)}
-              >
-                Change Risk Profile
-              </Btn>
-            )}
-          </div>
+          <Btn
+            variant="secondary"
+            size="sm"
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+            title="Refresh data"
+          >
+            <RotateCw size={14} className={isRefreshing ? "animate-spin" : ""} /> Refresh
+          </Btn>
         }
       />
 
@@ -239,16 +227,6 @@ export function DashboardView({ user, products, onNavigate }: DashboardViewProps
         </div>
       </div>
       </>}
-
-      <ConfirmModal
-        open={showConfirmModal}
-        onOpenChange={setShowConfirmModal}
-        title="Change Risk Profile?"
-        message="You will need to retake the risk assessment questionnaire. Your current risk profile will be replaced with the new results."
-        confirmLabel="Retake Assessment"
-        confirmVariant="primary"
-        onConfirm={() => onNavigate("/questionnaire")}
-      />
     </div>
   );
 }

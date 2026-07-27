@@ -21,11 +21,12 @@ import { navigationItems, adminNavigationItems } from "~/config/navigation";
 interface SidebarProps {
   user: AppUser;
   onLogout: () => void;
+  onChangeRiskProfile?: () => void;
   isOpen?: boolean;
   onClose?: () => void;
 }
 
-export function Sidebar({ user, onLogout, isOpen = false, onClose }: SidebarProps) {
+export function Sidebar({ user, onLogout, onChangeRiskProfile, isOpen = false, onClose }: SidebarProps) {
   const userInitials = user.name
     .split(" ")
     .map((n) => n[0])
@@ -94,6 +95,14 @@ export function Sidebar({ user, onLogout, isOpen = false, onClose }: SidebarProp
               <div className="mt-1">
                 <RiskBadge profile={user.riskProfile} showDot />
               </div>
+              {onChangeRiskProfile && (
+                <button
+                  onClick={onChangeRiskProfile}
+                  className="mt-2 text-xs text-gray-300 hover:text-white transition-colors underline"
+                >
+                  Change Risk Profile
+                </button>
+              )}
             </div>
           )
         )}

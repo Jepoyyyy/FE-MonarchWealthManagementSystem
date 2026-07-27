@@ -32,7 +32,7 @@ export function RiskBadge({ profile, showDot = false, className = "" }: RiskBadg
   const dotClass = riskDotClasses[p] ?? "bg-gray-400";
 
   return (
-    <Badge variant="outline" className={`${badgeClass} ${className}`}>
+    <Badge variant="custom" className={`${badgeClass} ${className}`}>
       {showDot && <span className={`w-1.5 h-1.5 rounded-full mr-1 ${dotClass}`} />}
       {label}
     </Badge>
