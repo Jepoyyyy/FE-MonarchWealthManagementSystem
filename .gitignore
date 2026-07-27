@@ -11,7 +11,7 @@ CHANGES.md
 CLAUDE.md
 /graphify-out/
 /test-result/
-/test/
+/tests/
 *.md
 *.html
 
