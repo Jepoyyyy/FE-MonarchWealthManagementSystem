@@ -185,8 +185,14 @@ export function DashboardView({ user, products, onNavigate }: DashboardViewProps
             {pieData.length > 0 && totalValue > 0 ? (
               <DashboardPieChart data={pieData} />
             ) : (
-              <div className="bg-card rounded-xl p-4 md:p-6 border border-border flex items-center justify-center text-muted-foreground text-sm h-64">
-                No assets yet.
+              <div className="bg-card rounded-xl p-4 md:p-6 border border-border flex flex-col justify-between min-h-[320px]">
+                <h3 className="font-semibold text-foreground">Portfolio Composition</h3>
+                <div className="flex flex-col items-center justify-center text-center gap-3 my-auto py-6">
+                  <p className="text-sm text-muted-foreground">No assets in portfolio yet.</p>
+                  <Btn size="sm" variant="primary" onClick={() => onNavigate("/products")}>
+                    Browse Products <ChevronRight size={14} />
+                  </Btn>
+                </div>
               </div>
             )}
           </Suspense>
