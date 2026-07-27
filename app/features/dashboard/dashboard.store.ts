@@ -11,6 +11,7 @@ interface DashboardState {
   error: string | null;
   lastFetched: number | null;
   fetchDashboard: (force?: boolean) => Promise<void>;
+  invalidateCache: () => void;
   backgroundRefresh: () => Promise<void>;
 }
 
@@ -21,6 +22,8 @@ export const useDashboardStore = create<DashboardState>()(
       loading: false,
       error: null,
       lastFetched: null,
+
+      invalidateCache: () => set({ lastFetched: null }),
 
       fetchDashboard: async (force = false) => {
         const { lastFetched, loading } = get();

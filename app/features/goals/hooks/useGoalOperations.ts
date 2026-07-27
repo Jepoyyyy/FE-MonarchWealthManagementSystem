@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import type { Goal } from "~/types";
 import { GoalApi } from "~/features/goals/api";
 import { mapGoalToDto, validateGoalData } from "~/features/goals/goals.mappers";
+import { invalidateAppStores } from "~/hooks/useAppInitialization";
 
 interface GoalOperations {
   addGoal: (data: Omit<Goal, "id">) => Promise<void>;
@@ -11,7 +12,7 @@ interface GoalOperations {
 }
 
 export function useGoalOperations(
-  fetchGoals: () => Promise<void>,
+  fetchGoals: (force?: boolean) => Promise<void>,
   onSuccess: (message: string, description?: string) => void,
   onError: (message: string, description?: string) => void
 ): GoalOperations {
@@ -27,13 +28,13 @@ export function useGoalOperations(
       try {
         await GoalApi.create(mapGoalToDto(data));
         onSuccess("Goal added", `"${data.name}" — target ${data.targetAmount}`);
-        await fetchGoals();
+        await invalidateAppStores(true);
       } catch (err: any) {
         onError("Failed to add goal", err.message);
         throw err;
       }
     },
-    [fetchGoals, onSuccess, onError]
+    [onSuccess, onError]
   );
 
   const updateGoal = useCallback(
@@ -47,26 +48,26 @@ export function useGoalOperations(
       try {
         await GoalApi.update(id, mapGoalToDto(data));
         onSuccess("Goal Updated Successfully", `"${data.name}"`);
-        await fetchGoals();
+        await invalidateAppStores(true);
       } catch (err: any) {
         onError("Failed to update goal", err.message);
         throw err;
       }
     },
-    [fetchGoals, onSuccess, onError]
+    [onSuccess, onError]
   );
 
   const deleteGoal = useCallback(
     async (id: string) => {
       try {
         await GoalApi.delete(id);
-        await fetchGoals();
+        await invalidateAppStores(true);
         onSuccess("Goal Deleted Successfully");
       } catch (err: any) {
         onError("Failed to delete goal", err.message);
       }
     },
-    [fetchGoals, onSuccess, onError]
+    [onSuccess, onError]
   );
 
   const setPriority = useCallback(
@@ -77,13 +78,14 @@ export function useGoalOperations(
       try {
         await GoalApi.update(id, mapGoalToDto({ ...goal, isPriority: true }));
         onSuccess("Priority goal Updated", `"${goal.name}" now become priority`);
-        await fetchGoals();
+        await invalidateAppStores(true);
       } catch (err: any) {
         onError("Failed to update priority", err.message);
       }
     },
-    [fetchGoals, onSuccess, onError]
+    [onSuccess, onError]
   );
 
   return { addGoal, updateGoal, deleteGoal, setPriority };
 }
+

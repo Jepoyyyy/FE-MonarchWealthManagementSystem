@@ -11,6 +11,7 @@ interface GoalsState {
   error: string | null;
   lastFetched: number | null;
   fetchGoals: (force?: boolean) => Promise<void>;
+  invalidateCache: () => void;
   backgroundRefresh: () => Promise<void>;
 }
 
@@ -21,6 +22,8 @@ export const useGoalsStore = create<GoalsState>()(
       loading: false,
       error: null,
       lastFetched: null,
+
+      invalidateCache: () => set({ lastFetched: null }),
 
       fetchGoals: async (force = false) => {
         const { lastFetched, loading } = get();

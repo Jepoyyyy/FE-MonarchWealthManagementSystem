@@ -12,9 +12,13 @@ interface PortfolioState {
   pnlData: AssetsPnLResponse[];
   goalProgress: GoalProgressResponse[];
   loading: boolean;
+  loadingProgress: boolean;
   error: string | null;
   lastFetched: number | null;
+  lastProgressFetched: number | null;
   fetchPortfolio: (force?: boolean) => Promise<void>;
+  fetchGoalProgress: (force?: boolean) => Promise<void>;
+  invalidateCache: () => void;
   backgroundRefresh: () => Promise<void>;
 }
 
@@ -25,8 +29,12 @@ export const usePortfolioStore = create<PortfolioState>()(
       pnlData: [],
       goalProgress: [],
       loading: false,
+      loadingProgress: false,
       error: null,
       lastFetched: null,
+      lastProgressFetched: null,
+
+      invalidateCache: () => set({ lastFetched: null, lastProgressFetched: null }),
 
       fetchPortfolio: async (force = false) => {
         const { lastFetched, loading } = get();
@@ -43,16 +51,13 @@ export const usePortfolioStore = create<PortfolioState>()(
           const results = await Promise.allSettled([
             AssetApi.list(products),
             AssetApi.fetchPnL(),
-            GoalApi.fetchProgress(),
           ]);
 
           const assetsRes = results[0].status === "fulfilled" ? results[0].value : null;
           const pnlRes = results[1].status === "fulfilled" ? results[1].value : null;
-          const progressRes = results[2].status === "fulfilled" ? results[2].value : null;
 
           const assetsData = assetsRes && Array.isArray(assetsRes.data) ? assetsRes.data : [];
           const pnlData = pnlRes && Array.isArray(pnlRes.data) ? pnlRes.data : [];
-          const goalProgressData = progressRes && Array.isArray(progressRes.data) ? progressRes.data : [];
 
           let errorMsg: string | null = null;
           if (results[0].status === "rejected") {
@@ -63,7 +68,6 @@ export const usePortfolioStore = create<PortfolioState>()(
           set({
             assets: assetsData,
             pnlData: pnlData,
-            goalProgress: goalProgressData,
             loading: false,
             error: errorMsg,
             lastFetched: Date.now(),
@@ -73,27 +77,46 @@ export const usePortfolioStore = create<PortfolioState>()(
         }
       },
 
+      fetchGoalProgress: async (force = false) => {
+        const { lastProgressFetched, loadingProgress } = get();
+        if (loadingProgress) return;
+
+        const now = Date.now();
+        if (!force && lastProgressFetched && now - lastProgressFetched < CACHE_TTL) {
+          return;
+        }
+
+        set({ loadingProgress: true });
+        try {
+          const progressRes = await GoalApi.fetchProgress();
+          const list = Array.isArray(progressRes.data) ? progressRes.data : [];
+          set({
+            goalProgress: list,
+            loadingProgress: false,
+            lastProgressFetched: Date.now(),
+          });
+        } catch (err) {
+          set({ loadingProgress: false });
+        }
+      },
+
       backgroundRefresh: async () => {
         try {
           const products = useProductsStore.getState().products;
           const results = await Promise.allSettled([
             AssetApi.list(products),
             AssetApi.fetchPnL(),
-            GoalApi.fetchProgress(),
           ]);
 
           const assetsRes = results[0].status === "fulfilled" ? results[0].value : null;
           const pnlRes = results[1].status === "fulfilled" ? results[1].value : null;
-          const progressRes = results[2].status === "fulfilled" ? results[2].value : null;
 
           const assetsData = assetsRes && Array.isArray(assetsRes.data) ? assetsRes.data : get().assets;
           const pnlData = pnlRes && Array.isArray(pnlRes.data) ? pnlRes.data : get().pnlData;
-          const goalProgressData = progressRes && Array.isArray(progressRes.data) ? progressRes.data : get().goalProgress;
 
           set({
             assets: assetsData,
             pnlData: pnlData,
-            goalProgress: goalProgressData,
             lastFetched: Date.now(),
           });
         } catch (err) {
@@ -108,7 +131,9 @@ export const usePortfolioStore = create<PortfolioState>()(
         pnlData: state.pnlData,
         goalProgress: state.goalProgress,
         lastFetched: state.lastFetched,
+        lastProgressFetched: state.lastProgressFetched,
       }),
     }
   )
-);
+);
+

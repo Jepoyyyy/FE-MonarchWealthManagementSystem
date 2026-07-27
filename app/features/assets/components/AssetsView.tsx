@@ -15,6 +15,8 @@ import { useGoalsStore } from '~/features/goals/goals.store';
 import { handleGlobalApiError } from '~/shared/api';
 import { toast } from 'sonner';
 
+import { useDashboardStore } from '~/features/dashboard/dashboard.store';
+
 interface AssetsViewProps {
   user: AppUser;
   products: Product[];
@@ -42,9 +44,10 @@ export function AssetsView({
 
   // Shared parallelized data refresh helper (forced refresh)
   const refreshAllData = useCallback(async () => {
+    useDashboardStore.getState().invalidateCache();
     await Promise.all([
       usePortfolioStore.getState().fetchPortfolio(true),
-      useGoalsStore.getState().fetchGoals(true)
+      useGoalsStore.getState().fetchGoals(true),
     ]);
   }, []);
 

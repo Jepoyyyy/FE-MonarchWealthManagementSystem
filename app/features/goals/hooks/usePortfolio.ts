@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { Asset, Product } from "~/types";
+import type { Asset, AssetsPnLResponse } from "~/types";
 import { calculatePortfolioValue, calculateWeightedReturn } from "~/features/goals/goals.calculations";
 
 interface PortfolioMetrics {
@@ -10,7 +10,7 @@ interface PortfolioMetrics {
 
 export function usePortfolio(
   allAssets: Asset[],
-  products: Product[],
+  pnlData: AssetsPnLResponse[],
   userId: string
 ): PortfolioMetrics {
   const userAssets = useMemo(
@@ -24,8 +24,8 @@ export function usePortfolio(
   );
 
   const weightedReturn = useMemo(
-    () => calculateWeightedReturn(userAssets, products, totalValue),
-    [userAssets, products, totalValue]
+    () => calculateWeightedReturn(userAssets, pnlData),
+    [userAssets, pnlData]
   );
 
   return { assets: userAssets, totalValue, weightedReturn };

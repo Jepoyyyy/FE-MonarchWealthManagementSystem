@@ -14,6 +14,28 @@ export interface UseAppInitializationReturn {
   refetch: () => Promise<void>;
 }
 
+export async function invalidateAppStores(force = true): Promise<void> {
+  const user = useAuthStore.getState().user;
+  if (!user) return;
+
+  const fetchTasks: Promise<void>[] = [
+    useProductsStore.getState().fetchProducts(undefined, force),
+  ];
+
+  if (user.role !== "admin") {
+    // Lazily invalidate background stores so they refresh next time their view is visited
+    useDashboardStore.getState().invalidateCache();
+    usePortfolioStore.getState().invalidateCache();
+
+    fetchTasks.push(
+      usePortfolioStore.getState().fetchPortfolio(force),
+      useGoalsStore.getState().fetchGoals(force)
+    );
+  }
+
+  await Promise.allSettled(fetchTasks);
+}
+
 export function useAppInitialization(): UseAppInitializationReturn {
   const user = useAuthStore((s) => s.user);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -61,3 +83,4 @@ export function useAppInitialization(): UseAppInitializationReturn {
 
   return { isInitialized, isLoading, error, refetch: () => initData(true) };
 }
+

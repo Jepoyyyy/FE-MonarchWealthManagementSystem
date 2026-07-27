@@ -17,6 +17,8 @@ import { useFinancialSummary } from "~/features/goals/hooks/useFinancialSummary"
 import { useAutoAllocation } from "~/features/goals/hooks/useAutoAllocation";
 import { useGoalOperations } from "~/features/goals/hooks/useGoalOperations";
 
+import { invalidateAppStores } from '~/hooks/useAppInitialization';
+
 // UI components
 import { GoalsSummaryStats } from "~/features/goals/components/GoalsSummaryStats";
 import { EmptyGoalsState } from "~/features/goals/components/EmptyGoalsState";
@@ -29,7 +31,6 @@ interface GoalsViewProps {
   finProfile: FinancialProfile;
   setFinProfile: React.Dispatch<React.SetStateAction<FinancialProfile>>;
   assets: Asset[];
-  products: Product[];
   toast: any;
 }
 
@@ -38,7 +39,6 @@ export function GoalsView({
   finProfile,
   setFinProfile,
   assets,
-  products,
   toast,
 }: GoalsViewProps) {
   // UI state
@@ -50,16 +50,14 @@ export function GoalsView({
   // Data layer
   const { goals, error: goalsError, fetchGoals } = useGoalsStore();
   const fetchPortfolio = usePortfolioStore((s) => s.fetchPortfolio);
+  const pnlData = usePortfolioStore((s) => s.pnlData);
   const portfolioLoading = usePortfolioStore((s) => s.loading);
   const isLoading = portfolioLoading;
 
   const handleRefresh = useCallback(async () => {
     setIsRefreshing(true);
     try {
-      await Promise.all([
-        useGoalsStore.getState().fetchGoals(true),
-        usePortfolioStore.getState().fetchPortfolio(true),
-      ]);
+      await invalidateAppStores(true);
       toast.success("Goals data refreshed");
     } finally {
       setIsRefreshing(false);
@@ -67,7 +65,7 @@ export function GoalsView({
   }, [toast]);
 
   // Custom hooks - business logic extraction
-  const portfolio = usePortfolio(assets, products, user.id);
+  const portfolio = usePortfolio(assets, pnlData, user.id);
   const summary = useFinancialSummary(finProfile, goals);
 
   const autoAlloc = useAutoAllocation(
@@ -125,7 +123,7 @@ export function GoalsView({
 
   // Financial profile save handler
   const handleSaveFinProfile = useCallback(
-    (data: any) => {
+    async (data: any) => {
       setFinProfile({
         monthlyIncome: data.monthlyIncome,
         expenses: {
@@ -139,10 +137,10 @@ export function GoalsView({
           other: data.other,
         },
       });
-      fetchGoals();
+      await invalidateAppStores(true);
       toast.success("Financial profile updated successfully");
     },
-    [setFinProfile, fetchGoals, toast]
+    [setFinProfile, toast]
   );
 
   // Goal form handlers
@@ -155,7 +153,7 @@ export function GoalsView({
     if (nextIsAutoAlloc && !data.isPriority && summary.surplus > 0 && autoAlloc.priorityGoal) {
       const nextPrimaryPct = Math.round((autoAlloc.priorityGoal.monthlyContribution / summary.surplus) * 100);
       await GoalApi.autoAllocate(nextPrimaryPct);
-      await fetchGoals();
+      await invalidateAppStores(true);
     }
   };
 
@@ -282,7 +280,6 @@ export function GoalsView({
           onClose={() => setShowAddGoal(false)}
           surplus={summary.surplus}
           monthlyIncome={finProfile.monthlyIncome}
-          portfolioReturn={portfolio.weightedReturn}
           isAutoAlloc={autoAlloc.isActive}
           autoMonthlyAmount={
             autoAlloc.isActive && summary.surplus > 0
@@ -299,7 +296,6 @@ export function GoalsView({
           onClose={() => setEditGoal(null)}
           surplus={summary.surplus}
           monthlyIncome={finProfile.monthlyIncome}
-          portfolioReturn={portfolio.weightedReturn}
           isAutoAlloc={autoAlloc.isActive}
           autoMonthlyAmount={
             autoAlloc.isActive && !editGoal.isPriority && summary.surplus > 0

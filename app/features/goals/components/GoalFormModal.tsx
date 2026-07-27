@@ -15,7 +15,6 @@ interface GoalFormModalProps {
   onClose: () => void;
   surplus: number;
   monthlyIncome: number;
-  portfolioReturn: number | null;
   isAutoAlloc?: boolean;
   autoMonthlyAmount?: number;
 }
@@ -26,7 +25,6 @@ export function GoalFormModal({
   onClose,
   surplus,
   monthlyIncome,
-  portfolioReturn,
   isAutoAlloc,
   autoMonthlyAmount,
 }: GoalFormModalProps) {

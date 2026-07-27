@@ -11,6 +11,8 @@ import { useProductsStore } from '~/features/products/products.store';
 import { AssetApi } from '~/features/assets/api';
 import { useDebounce } from '~/shared/hooks/useDebounce';
 
+import { invalidateAppStores } from '~/hooks/useAppInitialization';
+
 interface ProductsViewProps {
   user: AppUser;
   addLog: (l: Omit<AuditLog, "id">) => void;
@@ -60,6 +62,7 @@ export function ProductsView({ user, addLog, toast }: ProductsViewProps) {
     }
     try {
       await AssetApi.create(data, products);
+      await invalidateAppStores(true);
       try {
         addLog({
           userId: user.id,

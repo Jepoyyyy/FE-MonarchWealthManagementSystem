@@ -19,11 +19,12 @@ interface ProgressViewProps {
 }
 
 export function ProgressView({ user, products, goals, finProfile }: ProgressViewProps) {
-  const { assets: myAssets, pnlData, goalProgress, loading, fetchPortfolio } = usePortfolioStore();
+  const { assets: myAssets, pnlData, goalProgress, loading, fetchPortfolio, fetchGoalProgress } = usePortfolioStore();
 
   useEffect(() => {
     fetchPortfolio();
-  }, [fetchPortfolio]);
+    fetchGoalProgress();
+  }, [fetchPortfolio, fetchGoalProgress]);
 
   const totalValue = pnlData.reduce((s, a) => s + a.currentValue, 0);
   const totalCost = pnlData.reduce((s, a) => s + (a.units * a.avg_price), 0);

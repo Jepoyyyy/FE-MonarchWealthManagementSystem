@@ -1,4 +1,4 @@
-import type { Asset, Goal, Product } from "~/types";
+import type { Asset, Goal, AssetsPnLResponse } from "~/types";
 
 /**
  * Calculate total portfolio value from user assets
@@ -8,25 +8,28 @@ export function calculatePortfolioValue(assets: Asset[]): number {
 }
 
 /**
- * Calculate weighted average return across portfolio
+ * Calculate weighted return rate from actual asset holdings and PnL
  * @returns Percentage as decimal (e.g., 8.5 for 8.5%) or null if no holdings
  */
 export function calculateWeightedReturn(
   assets: Asset[],
-  products: Product[],
-  portfolioValue: number
+  pnlData: AssetsPnLResponse[] = []
 ): number | null {
-  if (portfolioValue <= 0) return null;
+  if (!assets || assets.length === 0) return null;
 
-  const weightedSum = assets.reduce((sum, asset) => {
-    const product = products.find((p) => p.id === asset.productId);
-    if (!product) return sum;
+  if (pnlData && pnlData.length > 0) {
+    const totalValue = pnlData.reduce((s, a) => s + (a.currentValue || 0), 0);
+    const totalCost = pnlData.reduce((s, a) => s + (a.units * a.avg_price), 0);
+    if (totalCost <= 0) return null;
+    const returnPct = ((totalValue - totalCost) / totalCost) * 100;
+    return parseFloat(returnPct.toFixed(2));
+  }
 
-    const weight = asset.currentValue / portfolioValue;
-    return sum + weight * product.annualReturn;
-  }, 0);
-
-  return parseFloat(weightedSum.toFixed(2));
+  const totalValue = assets.reduce((s, a) => s + (a.currentValue || 0), 0);
+  const totalCost = assets.reduce((s, a) => s + (a.amount || 0), 0);
+  if (totalCost <= 0) return null;
+  const returnPct = ((totalValue - totalCost) / totalCost) * 100;
+  return parseFloat(returnPct.toFixed(2));
 }
 
 /**
