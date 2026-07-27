@@ -154,7 +154,6 @@ export function AdminUsersView({
           <option value="">All statuses</option>
           <option value="ACTIVE">Active</option>
           <option value="SUSPENDED">Suspended</option>
-          <option value="DISABLED">Disabled</option>
         </select>
       </div>
 
