@@ -3,6 +3,7 @@ import { persist } from "zustand/middleware";
 import { AssetApi } from '~/features/assets/api';
 import { GoalApi } from '~/features/goals/api';
 import { useProductsStore } from '~/features/products/products.store';
+import { useAuthStore } from '~/features/auth/auth.store';
 import type { Asset, AssetsPnLResponse, GoalProgressResponse } from "~/types";
 
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
@@ -53,6 +54,10 @@ export const usePortfolioStore = create<PortfolioState>()(
             AssetApi.fetchPnL(),
           ]);
 
+          if (!useAuthStore.getState().user) {
+            set({ loading: false, loadingProgress: false });
+            return;
+          }
           const assetsRes = results[0].status === "fulfilled" ? results[0].value : null;
           const pnlRes = results[1].status === "fulfilled" ? results[1].value : null;
 
@@ -79,6 +84,7 @@ export const usePortfolioStore = create<PortfolioState>()(
 
       fetchGoalProgress: async (force = false) => {
         const { lastProgressFetched, loadingProgress } = get();
+        if (!useAuthStore.getState().user) return;
         if (loadingProgress) return;
 
         const now = Date.now();
@@ -89,6 +95,10 @@ export const usePortfolioStore = create<PortfolioState>()(
         set({ loadingProgress: true });
         try {
           const progressRes = await GoalApi.fetchProgress();
+          if (!useAuthStore.getState().user) {
+            set({ loadingProgress: false });
+            return;
+          }
           const list = Array.isArray(progressRes.data) ? progressRes.data : [];
           set({
             goalProgress: list,
@@ -101,6 +111,7 @@ export const usePortfolioStore = create<PortfolioState>()(
       },
 
       backgroundRefresh: async () => {
+        if (!useAuthStore.getState().user) return;
         try {
           const products = useProductsStore.getState().products;
           const results = await Promise.allSettled([
