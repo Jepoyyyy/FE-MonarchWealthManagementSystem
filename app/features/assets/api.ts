@@ -60,6 +60,18 @@ function mapAsset(asset: any, products: any[]): Asset {
   } as Asset;
 }
 
+function mapTransactionHistory(tx: any): TransactionHistory {
+  return {
+    id: tx.id,
+    assetId: tx.asset_id ?? tx.assetId,
+    action: tx.action,
+    units: typeof tx.units === 'object' ? tx.units.parsedValue : tx.units,
+    pricePerUnit: typeof tx.price_per_unit === 'object' ? tx.price_per_unit.parsedValue : (tx.pricePerUnit ?? tx.price_per_unit),
+    totalAmount: typeof tx.total_amount === 'object' ? tx.total_amount.parsedValue : (tx.totalAmount ?? tx.total_amount),
+    transactionDate: tx.transaction_date ?? tx.transactionDate,
+  };
+}
+
 export const AssetApi = {
   list: async (products: any[]) => {
     const res = await api.get<any>("/api/v1/me/assets", { timeout: 10000 });
@@ -122,17 +134,30 @@ export const AssetApi = {
     }
     return { ...res, data: list };
   },
-  fetchLogs: () => api.get<TransactionHistory[]>("/api/v1/me/assets/transaction-logs"),
+  fetchLogs: async () => {
+    const res = await api.get<any>("/api/v1/me/assets/transaction-logs");
+    let rawList: any[] = [];
+    if (Array.isArray(res.data)) {
+      rawList = res.data;
+    } else if (res.data?.result && Array.isArray(res.data.result)) {
+      rawList = res.data.result;
+    } else if (res.data?.data && Array.isArray(res.data.data)) {
+      rawList = res.data.data;
+    }
+    const list = rawList.map(mapTransactionHistory);
+    return { ...res, data: list };
+  },
   fetchAssetTransactions: async (assetId: string) => {
     const res = await api.get<any>(`/api/v1/me/assets/${assetId}/transactions`);
-    let list: TransactionHistory[] = [];
+    let rawList: any[] = [];
     if (Array.isArray(res.data)) {
-      list = res.data;
+      rawList = res.data;
     } else if (res.data?.result && Array.isArray(res.data.result)) {
-      list = res.data.result;
+      rawList = res.data.result;
     } else if (res.data?.data && Array.isArray(res.data.data)) {
-      list = res.data.data;
+      rawList = res.data.data;
     }
+    const list = rawList.map(mapTransactionHistory);
     return { ...res, data: list };
   },
 };
