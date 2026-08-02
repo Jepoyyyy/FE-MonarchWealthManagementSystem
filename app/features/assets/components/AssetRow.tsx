@@ -35,9 +35,11 @@ export function AssetRow({ asset, goals, onSelect, onRemove, onAssignGoal }: Ass
     ? `${qty} Lot`
     : assetType === "Mutual Fund" || assetType === "Money Market" || assetType === "Balanced Fund"
       ? `${qty.toFixed(4)}`
-      : assetType === "Bank Deposit"
-        ? "—"
-        : fmt(Math.round(qty));
+      : assetType === "Bond" || assetType === "Sukuk"
+        ? `${qty.toFixed(4)}`
+        : assetType === "Bank Deposit"
+          ? "—"
+          : fmt(Math.round(qty));
 
   return (
     <>

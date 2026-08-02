@@ -127,8 +127,8 @@ export function TrackFormStep({
         />
       ) : null}
 
-      {/* Quantity — Stock: Editable Lot, MF/Bond: ReadOnly */}
-      {!isDeposit && (
+      {/* Quantity — Stock: Editable Lot, MF: ReadOnly, Bond: Hidden */}
+      {!isDeposit && !isBond && (
         <div>
           {isStock ? (
             <div>
@@ -177,15 +177,6 @@ export function TrackFormStep({
                 </div>
               )}
             </div>
-          ) : isBond ? (
-            <InputField
-              label="Principal Amount (IDR)"
-              type="number" value={quantity}
-              readOnly
-              placeholder="Auto-calculated"
-              icon={<Layers size={14} />}
-              rightElement="[ Auto-Calc ]"
-            />
           ) : null}
         </div>
       )}

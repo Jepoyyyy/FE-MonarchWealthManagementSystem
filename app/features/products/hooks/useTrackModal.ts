@@ -146,11 +146,8 @@ export function useTrackModal({
     const amt = parseFloat(amount) || 0;
     if (parsedCurrentVal > 0 && amt > 0) {
       setErr("");
-      if (isMF) setQuantity((amt / parsedCurrentVal).toFixed(4));
-      if (isBond && picked.minInvestment > 0) {
-        setQuantity(String(Math.round(amt / (parsedCurrentVal / 100) / picked.minInvestment) * picked.minInvestment));
-      } else if (isBond) {
-        setQuantity((amt / (parsedCurrentVal / 100)).toFixed(4));
+      if (isMF || isBond) {
+        setQuantity((amt / parsedCurrentVal).toFixed(4));
       }
     } else {
       setQuantity("");
@@ -182,13 +179,6 @@ export function useTrackModal({
       today.setHours(23, 59, 59, 999);
       if (new Date(date) > today) {
         setErr("Purchase date cannot be in the future (invalid date).");
-        return;
-      }
-    }
-    if (isBond && picked.minInvestment > 0) {
-      const nominal = parseFloat(quantity) || 0;
-      if (nominal % picked.minInvestment !== 0) {
-        setErr(`Principal amount must be a multiple of ${fmtFull(picked.minInvestment)}`);
         return;
       }
     }
