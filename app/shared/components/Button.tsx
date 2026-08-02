@@ -1,5 +1,5 @@
 interface BtnProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "ghost" | "danger" | "accent" | "unstyled";
+  variant?: "primary" | "secondary" | "ghost" | "danger" | "accent" | "unstyled" | "filter";
   size?: "sm" | "md" | "lg" | "none";
 }
 
@@ -10,6 +10,7 @@ const variantClasses: Record<NonNullable<BtnProps["variant"]>, string> = {
   danger:    "bg-red-600 text-white hover:bg-red-500",
   accent:    "bg-amber-600 text-white hover:bg-amber-500",
   unstyled:  "bg-transparent text-current border-0 p-0 shadow-none hover:bg-transparent",
+  filter:     "bg-black text-current border-0 p-0 shadow-none"
 };
 
 const sizeClasses: Record<NonNullable<BtnProps["size"]>, string> = {

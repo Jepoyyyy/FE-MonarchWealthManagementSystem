@@ -46,12 +46,12 @@ export function ProductSelectorStep({
         <div className="flex gap-1.5 flex-wrap">
           {types.map((t) => (
             <Btn
-              variant="unstyled"
+              variant="filter"
               key={t.id}
               onClick={() => setTypeFilter(t.id)}
               className={`px-2.5 py-1 rounded-md text-xs font-medium border transition-all ${
                 typeFilter === t.id
-                  ? "bg-primary text-primary-foreground border-primary"
+                  ? "bg-black text-primary-foreground border-primary"
                   : "bg-card border-border text-muted-foreground hover:border-primary/40"
               }`}
             >

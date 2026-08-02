@@ -4,14 +4,10 @@ export const PRODUCT_TYPE_LABELS: Record<ProductType, string> = {
   "Money Market": "Money Market",
   "Bank Deposit": "Bank Deposit",
   "Bond": "Bond",
-  "Bonds": "Bonds",
   "Mutual Fund": "Mutual Fund",
-  "Mutual Funds": "Mutual Funds",
   "Stock": "Stock",
-  "Stocks": "Stocks",
   "Balanced Fund": "Balanced Fund",
   "Sukuk": "Sukuk",
-  "SBN": "SBN",
 };
 
 export const PRODUCT_TYPE_OPTIONS: Array<{ id: ProductType | "all"; label: string }> = [
@@ -19,28 +15,20 @@ export const PRODUCT_TYPE_OPTIONS: Array<{ id: ProductType | "all"; label: strin
   { id: "Money Market", label: PRODUCT_TYPE_LABELS["Money Market"] },
   { id: "Bank Deposit", label: PRODUCT_TYPE_LABELS["Bank Deposit"] },
   { id: "Bond", label: PRODUCT_TYPE_LABELS.Bond },
-  { id: "Bonds", label: PRODUCT_TYPE_LABELS.Bonds },
   { id: "Mutual Fund", label: PRODUCT_TYPE_LABELS["Mutual Fund"] },
-  { id: "Mutual Funds", label: PRODUCT_TYPE_LABELS["Mutual Funds"] },
   { id: "Stock", label: PRODUCT_TYPE_LABELS.Stock },
-  { id: "Stocks", label: PRODUCT_TYPE_LABELS.Stocks },
   { id: "Balanced Fund", label: PRODUCT_TYPE_LABELS["Balanced Fund"] },
   { id: "Sukuk", label: PRODUCT_TYPE_LABELS.Sukuk },
-  { id: "SBN", label: PRODUCT_TYPE_LABELS.SBN },
 ];
 
 export const PRODUCT_TYPE_ICONS: Record<ProductType, string> = {
   "Money Market": "💰",
   "Bank Deposit": "🏦",
   "Bond": "📜",
-  "Bonds": "📜",
   "Mutual Fund": "📈",
-  "Mutual Funds": "📈",
   "Stock": "📊",
-  "Stocks": "📊",
   "Balanced Fund": "⚖️",
   "Sukuk": "🕌",
-  "SBN": "📜",
 };
 
 export const RISK_LEVEL_LABELS: Record<number, string> = {

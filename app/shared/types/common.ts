@@ -3,14 +3,10 @@ export type ProductType =
   | "Money Market"
   | "Bank Deposit"
   | "Bond"
-  | "Bonds"
   | "Mutual Fund"
-  | "Mutual Funds"
   | "Stock"
-  | "Stocks"
   | "Balanced Fund"
-  | "Sukuk"
-  | "SBN";
+  | "Sukuk";
 export type UserRole = "user" | "admin";
 export type UserStatus = "ACTIVE" | "SUSPENDED" | "PENDING";
 

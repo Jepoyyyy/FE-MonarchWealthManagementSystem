@@ -9,7 +9,6 @@ import { Pagination } from "~/shared/components/Pagination";
 import { AdminApi } from "~/features/admin";
 import { useDebounce } from "~/shared/hooks/useDebounce";
 
-// ── types ────────────────────────────────────────────────────────────────────
 interface FieldChange {
   field: string;
   old_value: unknown;
@@ -20,7 +19,6 @@ interface AdminAuditViewProps {
   logs?: AuditLog[];
 }
 
-// ── helpers ──────────────────────────────────────────────────────────────────
 const actionIcon = (action: string) => {
   if (action.includes("LOGIN")) return <UserCheck size={14} className="text-blue-500" />;
   if (action.includes("SUSPEND") || action.includes("HIDE") || action.includes("FAILED"))
@@ -50,7 +48,6 @@ const CATEGORY_OPTIONS = [
   { id: "FINANCES", label: "FINANCES" },
 ];
 
-// ── component ────────────────────────────────────────────────────────────────
 export function AdminAuditView({ logs: propLogs }: AdminAuditViewProps = {}) {
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [totalPages, setTotalPages] = useState(0);
@@ -124,16 +121,11 @@ export function AdminAuditView({ logs: propLogs }: AdminAuditViewProps = {}) {
               style={{ borderColor: "var(--border)", background: "var(--card)", color: "var(--foreground)" }}
             />
           </div>
-          {search && (
-            <Btn size="sm" variant="ghost" onClick={() => setSearch("")}>
-              Clear
-            </Btn>
-          )}
         </div>
         <div className="flex gap-2 flex-wrap">
           {CATEGORY_OPTIONS.map((c) => (
             <Btn
-              variant="unstyled"
+              variant="filter"
               key={c.id}
               onClick={() => setCategory(c.id)}
               className={`px-3 py-2 rounded-lg text-xs font-medium border transition-all ${

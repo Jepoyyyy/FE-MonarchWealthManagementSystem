@@ -90,7 +90,6 @@ export function AssetsView({
   const updateAsset = async (id: string, data: Partial<Asset>, txType?: "buy" | "sell", txQty?: number, txPrice?: number, txMethod?: "amount" | "units") => {
     try {
       if (txType && txQty !== undefined && txPrice !== undefined) {
-        // Derive productId from store assets (not stale closure myAssets)
         const storeAssets = usePortfolioStore.getState().assets;
         const asset = storeAssets.find(a => a.id === id);
         const p = (asset ? products.find((prod) => prod.id === asset.productId) : undefined) || selectedProduct;

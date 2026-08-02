@@ -43,14 +43,10 @@ export const typeLabel = (t: ProductType) =>
     "Money Market": "Money Market",
     "Bank Deposit": "Bank Deposit",
     "Bond": "Bond",
-    "Bonds": "Bonds",
     "Mutual Fund": "Mutual Fund",
-    "Mutual Funds": "Mutual Funds",
     "Stock": "Stock",
-    "Stocks": "Stocks",
     "Balanced Fund": "Balanced Fund",
     "Sukuk": "Sukuk",
-    "SBN": "SBN",
   }[t]);
 
 

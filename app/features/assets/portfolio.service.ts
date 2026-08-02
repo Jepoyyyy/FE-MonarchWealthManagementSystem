@@ -5,14 +5,10 @@ const BUY_MULT: Record<ProductType, number> = {
   "Money Market": 1,
   "Bank Deposit": 1,
   "Bond": 1 / 100,
-  "Bonds": 1 / 100,
   "Mutual Fund": 1,
-  "Mutual Funds": 1,
   "Stock": 100,
-  "Stocks": 100,
   "Balanced Fund": 1,
   "Sukuk": 1 / 100,
-  "SBN": 1 / 100,
 };
 
 export const PortfolioService = {

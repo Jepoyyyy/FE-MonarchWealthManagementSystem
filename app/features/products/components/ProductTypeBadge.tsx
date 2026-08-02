@@ -11,14 +11,10 @@ const typeIcons: Record<ProductType, string> = {
   "Money Market": "💰",
   "Bank Deposit": "🏦",
   Bond: "📜",
-  Bonds: "📜",
   "Mutual Fund": "📈",
-  "Mutual Funds": "📈",
   Stock: "📊",
-  Stocks: "📊",
   "Balanced Fund": "⚖️",
   Sukuk: "🕌",
-  SBN: "📜",
 };
 
 export function ProductTypeBadge({ type, className = "" }: ProductTypeBadgeProps) {
