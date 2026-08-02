@@ -140,7 +140,7 @@ export function DashboardView({ user, products, onNavigate }: DashboardViewProps
           value={fmt(totalValue)}
           sub={`${fmtPct(pnlPct)} all time`}
           icon={<Wallet size={16} />}
-          trend={pnl >= 0 ? "up" : "down"}
+          trend={pnl === 0 ? "neutral" : pnl > 0 ? "up" : "down"}
         />
         <StatCard label="Total Invested" value={fmt(totalCost)} icon={<DollarSign size={16} />} />
         <StatCard
@@ -148,7 +148,7 @@ export function DashboardView({ user, products, onNavigate }: DashboardViewProps
           value={fmt(pnl)}
           sub={pnl >= 0 ? "Profit" : "Loss"}
           icon={<TrendingUp size={16} />}
-          trend={pnl >= 0 ? "up" : "down"}
+          trend={pnl === 0 ? "neutral" : pnl > 0 ? "up" : "down"}
         />
         <StatCard label="Holdings" value={String(assetCount)} sub="active positions" icon={<Briefcase size={16} />} trend="neutral" />
       </div>

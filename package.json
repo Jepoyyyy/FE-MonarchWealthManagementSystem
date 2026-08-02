@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "react-router dev",
+    "dev": "react-router dev --port 5174",
     "build": "react-router build",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "npx react-router typegen && tsc",

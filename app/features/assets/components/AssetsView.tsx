@@ -266,7 +266,7 @@ export function AssetsView({
           value={fmt(totalValue)}
           sub={`${fmtPct(totalRetPct)} total return`}
           icon={<Wallet size={16} />}
-          trend={totalValue >= totalCost ? "up" : "down"}
+          trend={totalValue === totalCost ? "neutral" : totalValue > totalCost ? "up" : "down"}
         />
         <StatCard label="Total Cost Basis" value={fmt(totalCost)} icon={<DollarSign size={16} />} />
         <StatCard
@@ -274,7 +274,7 @@ export function AssetsView({
           value={fmt(totalGain)}
           sub={totalGain >= 0 ? "Gain" : "Loss"}
           icon={<Percent size={16} />}
-          trend={totalGain >= 0 ? "up" : "down"}
+          trend={totalGain === 0 ? "neutral" : totalGain > 0 ? "up" : "down"}
         />
       </div>
 
